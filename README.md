@@ -1,18 +1,18 @@
-#Apache OpenWhisk runtimes for swift
+# Apache OpenWhisk runtimes for swift
 [![Build Status](https://travis-ci.org/apache/incubator-openwhisk-runtime-swift.svg?branch=master)](https://travis-ci.org/apache/incubator-openwhisk-runtime-swift)
 
 
 ### Give it a try today
 To use as a docker action
 ```
-bx wsk action update myAction myAction.jar --docker openwhisk/action-swift-v3.1.1:1.0.0
+wsk action update myAction myAction.jar --docker openwhisk/action-swift-v3.1.1:1.0.0
 ```
 This works on any deployment of Apache OpenWhisk
 
 ### To use on deployment that contains the rutime as a kind
 To use as a kind action
 ```
-bx wsk action update myAction myAction.swift --kind swift:3.1.1
+wsk action update myAction myAction.swift --kind swift:3.1.1
 ```
 
 ### Local development
