@@ -10,6 +10,8 @@ include 'tests'
 
 include 'core:swift3.1.1Action'
 
+include 'core:swift4Action'
+
 rootProject.name = 'runtime-swift'
 
 gradle.ext.scala = [
