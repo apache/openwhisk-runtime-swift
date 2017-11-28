@@ -8,7 +8,6 @@ include 'whisktests'; project(':whisktests').projectDir = new File(owDirectory, 
 
 include 'tests'
 
-include 'core:swift3Action'
 include 'core:swift3.1.1Action'
 
 rootProject.name = 'runtime-swift'

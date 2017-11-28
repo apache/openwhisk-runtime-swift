@@ -14,7 +14,7 @@ IMAGE_PREFIX="testing"
 # Build runtime
 cd $ROOTDIR
 TERM=dumb ./gradlew \
-:core:swift3Action:distDocker :core:swift3.1.1Action:distDocker \
+:core:swift3.1.1Action:distDocker \
 -PdockerImagePrefix=${IMAGE_PREFIX}
 
 
