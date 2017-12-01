@@ -13,9 +13,7 @@ IMAGE_PREFIX=$1
 RUNTIME_VERSION=$2
 IMAGE_TAG=$3
 
-if [ ${RUNTIME_VERSION} == "3" ]; then
-  RUNTIME="swift3Action"
-elif [ ${RUNTIME_VERSION} == "3.1.1" ]; then
+if [ ${RUNTIME_VERSION} == "3.1.1" ]; then
   RUNTIME="swift3.1.1Action"
 fi
 
