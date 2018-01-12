@@ -18,7 +18,8 @@ RUN mkdir -p /swift4Action/spm-build/Sources/Action
 ADD epilogue.swift /swift4Action
 ADD buildandrecord.py /swift4Action
 ADD swift4runner.py /swift4Action
-ADD spm-build /swift4Action/spm-build
+ADD spm-build/Package.swift /swift4Action/spm-build
+ADD spm-build/_Whisk.swift /swift4Action/spm-build/Sources/Action
 
 # Build
 RUN touch /swift4Action/spm-build/Sources/Action/main.swift
