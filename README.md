@@ -2,41 +2,7 @@
 [![Build Status](https://travis-ci.org/apache/incubator-openwhisk-runtime-swift.svg?branch=master)](https://travis-ci.org/apache/incubator-openwhisk-runtime-swift)
 
 
-## Play with Swift 4 and Codable
-
-### Codable Async
-Create hello.swift with Codable interface Aysnc:
-```swift
-// Domain model/entity
-struct Employee: Codable {
-  let id: Int
-  let name: String
-}
-// codable main async function
-func main(input: Employee, respondWith: (Employee?, Error?) -> Void) -> Void {
-    respondWith(input, nil)
-}
-```
-
-Create docker action for swift4
-```
-bx wsk action update swift4 hello.swift --docker csantanapr/action-swift-v4
-```
-Invoke the Action
-```
-bx wsk action invoke swift4 -b
-```
-
-### Codable Sync
-You can also return a Codable Sync
-```swift
-// codable main sync function
-func main(input: Employee) -> Employee {
-    return input
-}
-```
-
-### Dictionary sync
+### Simple swift action hello.swift
 The traditional support for dictionary still works:
 ```swift
 func main(args: [String:Any]) -> [String:Any] {
@@ -48,7 +14,7 @@ func main(args: [String:Any]) -> [String:Any] {
 }
 ```
 
-### Packaging an action as a Swift executable
+### Packaging an action as a Swift executable using Swift 4
 
 When you create an OpenWhisk Swift action with a Swift source file, it has to be compiled into a binary before the action is run. Once done, subsequent calls to the action are much faster until the container holding your action is purged. This delay is known as the cold-start delay.
 
@@ -56,7 +22,7 @@ To avoid the cold-start delay, you can compile your Swift file into a binary and
 
 - Run an interactive Swift action container.
   ```
-  docker run --rm -it -v "$(pwd):/owexec" csantanapr/action-swift-v4 bash
+  docker run --rm -it -v "$(pwd):/owexec" openwhisk/action-swift-v4 bash
   ```
   This puts you in a bash shell within the Docker container.
 
@@ -68,9 +34,9 @@ To avoid the cold-start delay, you can compile your Swift file into a binary and
   cat /swift4Action/epilogue.swift >> /swift4Action/spm-build/Sources/Action/main.swift
   ```
   ```
-  echo '_run_main(mainFunction:main)' >> /swift4Action/spm-build/main.swift
+  echo '_run_main(mainFunction:main)' >> /swift4Action/spm-build/Sources/Action/main.swift
   ```
-  Copy any additional source files to `/swift4Action/spm-build/`
+  Copy any additional source files to `/swift4Action/spm-build/Sources/Action/`
 
 
 - (Optional) Create the `Package.swift` file to add dependencies.
@@ -154,7 +120,7 @@ and so you should include them in your own `Package.swift`.
 
 - Upload it to OpenWhisk with the action name helloSwifty:
   ```
-  wsk action update helloSwiftly hello.zip csantanapr/action-swift-v4
+  wsk action update helloSwiftly hello.zip openwhisk/action-swift-v4
   ```
 
 - To check how much faster it is, run
