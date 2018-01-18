@@ -19,6 +19,10 @@ import Foundation
 import Dispatch
 
 class Whisk {
+    
+    static var baseUrl = ProcessInfo.processInfo.environment["__OW_API_HOST"]
+    static var apiKey = ProcessInfo.processInfo.environment["__OW_API_KEY"]
+    
     class func invoke(actionNamed action : String, withParameters params : [String:Any], blocking: Bool = true) -> [String:Any] {
         let parsedAction = parseQualifiedName(name: action)
         let strBlocking = blocking ? "true" : "false"
@@ -57,11 +61,6 @@ class Whisk {
         
         invokeGroup.enter()
         queue.async {
-            /*
-             sendWhiskRequest(uriPath: path, params: params, method: method, group: invokeGroup) { result in
-             response = result
-             }
-             */
             postUrlSession(uriPath: path, params: params, method: method, group: invokeGroup) { result in
                 response = result
             }
@@ -80,148 +79,18 @@ class Whisk {
         return response
     }
     
-    /**
-     * Initializes with host, port and authKey determined from environment variables
-     * __OW_API_HOST and __OW_API_KEY, respectively.
-     */
-    private class func initializeCommunication() -> (httpType: String, host : String, port : Int16, authKey : String) {
-        let env = ProcessInfo.processInfo.environment
-        
-        var edgeHost : String!
-        if let edgeHostEnv : String = env["__OW_API_HOST"] {
-            edgeHost = "\(edgeHostEnv)"
-        } else {
-            fatalError("__OW_API_HOST environment variable was not set.")
-        }
-        
-        var protocolIndex = edgeHost.startIndex
-        
-        
-        var httpType = "http://"
-        var port : Int16 = 10001
-        var host = "172.17.0.1"
-        
-        /*
-         //default to https
-         var httpType = "https://"
-         var port : Int16 = 443
-         
-         // check if protocol is included in environment variable
-         if edgeHost.hasPrefix("https://") {
-         protocolIndex = edgeHost.index(edgeHost.startIndex, offsetBy: 8)
-         } else if edgeHost.hasPrefix("http://") {
-         protocolIndex = edgeHost.index(edgeHost.startIndex, offsetBy: 7)
-         httpType = "http://"
-         port = 80
-         }
-         
-         let hostname = edgeHost.substring(from: protocolIndex)
-         let hostComponents = hostname.components(separatedBy: ":")
-         
-         let host = hostComponents[0]
-         
-         if hostComponents.count == 2 {
-         port = Int16(hostComponents[1])!
-         }
-         */
-        var authKey = "authKey"
-        if let authKeyEnv : String = env["__OW_API_KEY"] {
-            authKey = authKeyEnv
-        }
-        
-        return (httpType, host, port, authKey)
-    }
     
-    /*
-     // actually do the call to the specified OpenWhisk URI path
-     private class func sendWhiskRequest(uriPath: String, params : [String:Any], method: String, group: DispatchGroup, callback : @escaping([String:Any]) -> Void) {
-     let communicationDetails = initializeCommunication()
-     
-     let loginData: Data = communicationDetails.authKey.data(using: String.Encoding.utf8, allowLossyConversion: false)!
-     let base64EncodedAuthKey  = loginData.base64EncodedString(options: NSData.Base64EncodingOptions(rawValue: 0))
-     
-     let headers = ["Content-Type" : "application/json",
-     "Authorization" : "Basic \(base64EncodedAuthKey)"]
-     
-     guard let encodedPath = uriPath.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed) else {
-     callback(["error": "Error encoding uri path to make openwhisk REST call."])
-     return
-     }
-     
-     // TODO vary the schema based on the port?
-     let requestOptions = [ClientRequest.Options.schema(communicationDetails.httpType),
-     ClientRequest.Options.method(method),
-     ClientRequest.Options.hostname(communicationDetails.host),
-     ClientRequest.Options.port(communicationDetails.port),
-     ClientRequest.Options.path(encodedPath),
-     ClientRequest.Options.headers(headers),
-     ClientRequest.Options.disableSSLVerification]
-     
-     let request = HTTP.request(requestOptions) { response in
-     
-     // exit group after we are done
-     defer {
-     group.leave()
-     }
-     
-     if response != nil {
-     do {
-     // this is odd, but that's just how KituraNet has you get
-     // the response as NSData
-     var jsonData = Data()
-     try response!.readAllData(into: &jsonData)
-     
-     switch WhiskJsonUtils.getJsonType(jsonData: jsonData) {
-     case .Dictionary:
-     if let resp = WhiskJsonUtils.jsonDataToDictionary(jsonData: jsonData) {
-     callback(resp)
-     } else {
-     callback(["error": "Could not parse a valid JSON response."])
-     }
-     case .Array:
-     if WhiskJsonUtils.jsonDataToArray(jsonData: jsonData) != nil {
-     callback(["error": "Response is an array, expecting dictionary."])
-     } else {
-     callback(["error": "Could not parse a valid JSON response."])
-     }
-     case .Undefined:
-     callback(["error": "Could not parse a valid JSON response."])
-     }
-     
-     } catch {
-     callback(["error": "Could not parse a valid JSON response."])
-     }
-     } else {
-     callback(["error": "Did not receive a response."])
-     }
-     }
-     
-     // turn params into JSON data
-     if let jsonData = WhiskJsonUtils.dictionaryToJsonString(jsonDict: params) {
-     request.write(from: jsonData)
-     request.end()
-     } else {
-     callback(["error": "Could not parse parameters."])
-     group.leave()
-     }
-     
-     }
-     */
     /**
-     * This function is currently unused but ready when we want to switch to using URLSession instead of KituraNet.
+     * Using new UrlSession
      */
     private class func postUrlSession(uriPath: String, params : [String:Any], method: String,group: DispatchGroup, callback : @escaping([String:Any]) -> Void) {
-        
-
-        
-        let communicationDetails = initializeCommunication()
         
         guard let encodedPath = uriPath.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed) else {
             callback(["error": "Error encoding uri path to make openwhisk REST call."])
             return
         }
         
-        let urlStr = "\(communicationDetails.httpType)\(communicationDetails.host):\(communicationDetails.port)\(encodedPath)"
+        let urlStr = "\(baseUrl!)\(encodedPath)"
         print("DEBUG urlStr \(urlStr)")
         if let url = URL(string: urlStr) {
             var request = URLRequest(url: url)
@@ -231,12 +100,9 @@ class Whisk {
                 request.addValue("application/json", forHTTPHeaderField: "Content-Type")
                 request.httpBody = try JSONSerialization.data(withJSONObject: params)
                 
-                let loginData: Data = communicationDetails.authKey.data(using: String.Encoding.utf8, allowLossyConversion: false)!
-                print("authKey:")
-                print(communicationDetails.authKey)
+                let loginData: Data = apiKey!.data(using: String.Encoding.utf8, allowLossyConversion: false)!
                 let base64EncodedAuthKey  = loginData.base64EncodedString(options: NSData.Base64EncodingOptions(rawValue: 0))
                 request.addValue("Basic \(base64EncodedAuthKey)", forHTTPHeaderField: "Authorization")
-                
                 let session = URLSession(configuration: URLSessionConfiguration.default)
                 
                 let task = session.dataTask(with: request, completionHandler: {data, response, error -> Void in
@@ -245,12 +111,6 @@ class Whisk {
                     defer {
                         group.leave()
                     }
-                    print(error)
-                    print(response)
-                    print(data)
-                    if let strData = String(data: data as! Data, encoding: .utf8) {
-                        print("Body: \(strData)")
-                    }
                     
                     if let error = error {
                         callback(["error":error.localizedDescription])
@@ -258,8 +118,9 @@ class Whisk {
                         
                         if let data = data {
                             do {
+                                //let outputStr  = String(data: data, encoding: String.Encoding.utf8) as String!
+                                //print(outputStr)
                                 let respJson = try JSONSerialization.jsonObject(with: data)
-                                print(respJson)
                                 if respJson is [String:Any] {
                                     callback(respJson as! [String:Any])
                                 } else {
@@ -289,15 +150,13 @@ class Whisk {
         
         if segments.count > 2 {
             return (segments[1], Array(segments[2..<segments.count]).joined(separator: delimiter))
-        } else {
-            // allow both "/theName" and "theName"
-            let name = qualifiedName.hasPrefix(delimiter) ? segments[1] : segments[0]
+        } else if segments.count == 2 {
+            // case "/action" or "package/action"
+            let name = qualifiedName.hasPrefix(delimiter) ? segments[1] : segments.joined(separator: delimiter)
             return (defaultNamespace, name)
+        } else {
+            return (defaultNamespace, segments[0])
         }
     }
-    /*
-    private class func urlSession(_ session: URLSession, task: URLSessionTask, didReceive challenge: URLAuthenticationChallenge, completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void) {
-            completionHandler(.useCredential,URLCredential(trust: challenge.protectionSpace.serverTrust!))
-    }
-    */
+    
 }
