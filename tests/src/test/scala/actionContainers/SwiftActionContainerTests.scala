@@ -68,7 +68,7 @@ abstract class SwiftActionContainerTests extends BasicActionRunnerTests with Wsk
 
   testEcho(Seq {
     (
-      "swift 4 echo",
+      "swift echo",
       """
         | import Foundation
         |
@@ -90,7 +90,7 @@ abstract class SwiftActionContainerTests extends BasicActionRunnerTests with Wsk
 
   testUnicode(Seq {
     (
-      "swift 4",
+      "swift",
       """
         | func main(args: [String: Any]) -> [String: Any] {
         |     if let str = args["delimiter"] as? String {
@@ -105,7 +105,7 @@ abstract class SwiftActionContainerTests extends BasicActionRunnerTests with Wsk
   })
 
   testEnv(Seq {
-    ("swift 4", envCode)
+    ("swift", envCode)
   }, enforceEmptyOutputStream)
 
 

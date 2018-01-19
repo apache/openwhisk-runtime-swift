@@ -28,7 +28,7 @@ import spray.json.JsString
 class Swift311ActionContainerTests extends SwiftActionContainerTests {
 
   override lazy val swiftContainerImageName = "action-swift-v3.1.1"
-  override lazy val swiftBinaryName = System.getProperty("user.dir") + "/dat/actions/swift3zip/build/Hello.zip"
+  override lazy val swiftBinaryName = System.getProperty("user.dir") + "/dat/build/swift311/HelloSwift3.zip"
 
 
   lazy val watsonCode = """
@@ -96,48 +96,48 @@ class Swift311ActionContainerTests extends SwiftActionContainerTests {
   it should "properly use KituraNet and Dispatch" in {
     val (out, err) = withActionContainer() { c =>
       val code = """
-                | import KituraNet
-                | import Foundation
-                | import Dispatch
-                | func main(args:[String: Any]) -> [String:Any] {
-                |       let retries = 3
-                |       var resp = [String:Any]()
-                |       var attempts = 0
-                |       if let url = args["getUrl"] as? String {
-                |           while attempts < retries {
-                |               let group = DispatchGroup()
-                |               let queue = DispatchQueue.global(qos: .default)
-                |               group.enter()
-                |               queue.async {
-                |                   HTTP.get(url, callback: { response in
-                |                       if let response = response {
-                |                           do {
-                |                               var jsonData = Data()
-                |                               try response.readAllData(into: &jsonData)
-                |                               if let dic = WhiskJsonUtils.jsonDataToDictionary(jsonData: jsonData) {
-                |                                   resp = dic
-                |                               } else {
-                |                                   resp = ["error":"response from server is not JSON"]
-                |                               }
-                |                           } catch {
-                |                              resp["error"] = error.localizedDescription
-                |                           }
-                |                       }
-                |                       group.leave()
-                |                   })
-                |               }
-                |            switch group.wait(timeout: DispatchTime.distantFuture) {
-                |                case DispatchTimeoutResult.success:
-                |                    resp["attempts"] = attempts
-                |                    return resp
-                |                case DispatchTimeoutResult.timedOut:
-                |                    attempts = attempts + 1
-                |            }
-                |        }
-                |     }
-                |     return ["status":"Exceeded \(retries) attempts, aborting."]
-                | }
-            """.stripMargin
+          | import KituraNet
+          | import Foundation
+          | import Dispatch
+          | func main(args:[String: Any]) -> [String:Any] {
+          |       let retries = 3
+          |       var resp = [String:Any]()
+          |       var attempts = 0
+          |       if let url = args["getUrl"] as? String {
+          |           while attempts < retries {
+          |               let group = DispatchGroup()
+          |               let queue = DispatchQueue.global(qos: .default)
+          |               group.enter()
+          |               queue.async {
+          |                   HTTP.get(url, callback: { response in
+          |                       if let response = response {
+          |                           do {
+          |                               var jsonData = Data()
+          |                               try response.readAllData(into: &jsonData)
+          |                               if let dic = WhiskJsonUtils.jsonDataToDictionary(jsonData: jsonData) {
+          |                                   resp = dic
+          |                               } else {
+          |                                   resp = ["error":"response from server is not JSON"]
+          |                               }
+          |                           } catch {
+          |                              resp["error"] = error.localizedDescription
+          |                           }
+          |                       }
+          |                       group.leave()
+          |                   })
+          |               }
+          |            switch group.wait(timeout: DispatchTime.distantFuture) {
+          |                case DispatchTimeoutResult.success:
+          |                    resp["attempts"] = attempts
+          |                    return resp
+          |                case DispatchTimeoutResult.timedOut:
+          |                    attempts = attempts + 1
+          |            }
+          |        }
+          |     }
+          |     return ["status":"Exceeded \(retries) attempts, aborting."]
+          | }
+      """.stripMargin
 
       val (initCode, _) = c.init(initPayload(code))
 

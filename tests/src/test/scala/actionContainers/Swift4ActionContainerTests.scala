@@ -25,7 +25,7 @@ import org.scalatest.junit.JUnitRunner
 class Swift4ActionContainerTests extends SwiftActionContainerTests {
 
   override lazy val swiftContainerImageName = "action-swift-v4"
-  override lazy val swiftBinaryName = System.getProperty("user.dir") + "/dat/actions/swift4zip/build/Hello.zip"
+  override lazy val swiftBinaryName = System.getProperty("user.dir") + "/dat/build/swift4/HelloSwift4.zip"
 
   val httpCode = """
        | import Dispatch
