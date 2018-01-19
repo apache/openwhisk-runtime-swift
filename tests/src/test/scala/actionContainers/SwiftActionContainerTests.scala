@@ -61,6 +61,9 @@ abstract class SwiftActionContainerTests extends BasicActionRunnerTests with Wsk
            | }
          """.stripMargin
 
+  val httpCode : String
+
+
   behavior of swiftContainerImageName
 
   testEcho(Seq {
@@ -200,6 +203,33 @@ abstract class SwiftActionContainerTests extends BasicActionRunnerTests with Wsk
       runCode should be(200)
       runRes.get shouldBe JsObject("greeting" -> (JsString("Hello stranger!")))
     }
+
+    checkStreams(out, err, {
+      case (o, e) =>
+        if (enforceEmptyOutputStream) o shouldBe empty
+        e shouldBe empty
+    })
+  }
+
+  it should "be able to do an http request" in {
+    val (out, err) = withActionContainer() { c =>
+
+
+      val (initCode, _) = c.init(initPayload(httpCode))
+
+      initCode should be(200)
+
+      val argss = List(JsObject("getUrl" -> JsString("https://openwhisk.ng.bluemix.net/api/v1")))
+
+      for (args <- argss) {
+        val (runCode, out) = c.run(runPayload(args))
+        runCode should be(200)
+      }
+    }
+
+    // in side try catch finally print (out file)
+    // in catch block an error has occurred, get docker logs and print
+    // throw
 
     checkStreams(out, err, {
       case (o, e) =>

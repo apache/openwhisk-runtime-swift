@@ -32,23 +32,66 @@ class Swift311ActionContainerTests extends SwiftActionContainerTests {
 
 
   lazy val watsonCode = """
-                | import AlchemyDataNewsV1
-                | import ConversationV1
-                | import DiscoveryV1
-                | import DocumentConversionV1
-                | import NaturalLanguageClassifierV1
-                | import NaturalLanguageUnderstandingV1
-                | import PersonalityInsightsV3
-                | import RetrieveAndRankV1
-                | import ToneAnalyzerV3
-                | import TradeoffAnalyticsV1
-                | import VisualRecognitionV3
-                |
-                | func main(args: [String:Any]) -> [String:Any] {
-                |     return ["message": "I compiled and was able to import Watson SDKs"]
-                | }
-            """.stripMargin
+        | import AlchemyDataNewsV1
+        | import ConversationV1
+        | import DiscoveryV1
+        | import DocumentConversionV1
+        | import NaturalLanguageClassifierV1
+        | import NaturalLanguageUnderstandingV1
+        | import PersonalityInsightsV3
+        | import RetrieveAndRankV1
+        | import ToneAnalyzerV3
+        | import TradeoffAnalyticsV1
+        | import VisualRecognitionV3
+        |
+        | func main(args: [String:Any]) -> [String:Any] {
+        |     return ["message": "I compiled and was able to import Watson SDKs"]
+        | }
+    """.stripMargin
 
+  val httpCode = """
+         | import KituraNet
+         | import Foundation
+         | import Dispatch
+         | func main(args:[String: Any]) -> [String:Any] {
+         |       let retries = 3
+         |       var resp = [String:Any]()
+         |       var attempts = 0
+         |       if let url = args["getUrl"] as? String {
+         |           while attempts < retries {
+         |               let group = DispatchGroup()
+         |               let queue = DispatchQueue.global(qos: .default)
+         |               group.enter()
+         |               queue.async {
+         |                   HTTP.get(url, callback: { response in
+         |                       if let response = response {
+         |                           do {
+         |                               var jsonData = Data()
+         |                               try response.readAllData(into: &jsonData)
+         |                               if let dic = WhiskJsonUtils.jsonDataToDictionary(jsonData: jsonData) {
+         |                                   resp = dic
+         |                               } else {
+         |                                   resp = ["error":"response from server is not JSON"]
+         |                               }
+         |                           } catch {
+         |                              resp["error"] = error.localizedDescription
+         |                           }
+         |                       }
+         |                       group.leave()
+         |                   })
+         |               }
+         |            switch group.wait(timeout: DispatchTime.distantFuture) {
+         |                case DispatchTimeoutResult.success:
+         |                    resp["attempts"] = attempts
+         |                    return resp
+         |                case DispatchTimeoutResult.timedOut:
+         |                    attempts = attempts + 1
+         |            }
+         |        }
+         |     }
+         |     return ["status":"Exceeded \(retries) attempts, aborting."]
+         | }
+       """.stripMargin
 
   it should "properly use KituraNet and Dispatch" in {
     val (out, err) = withActionContainer() { c =>
