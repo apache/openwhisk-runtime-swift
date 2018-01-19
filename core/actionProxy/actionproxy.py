@@ -47,10 +47,11 @@ class ActionRunner:
     # @param source the path where the source code will be located (if any)
     # @param binary the path where the binary will be located (may be the
     # same as source code path)
-    def __init__(self, source=None, binary=None):
+    def __init__(self, source=None, binary=None, zipdest=None):
         defaultBinary = '/action/exec'
         self.source = source if source else defaultBinary
         self.binary = binary if binary else defaultBinary
+        self.zipdest = zipdest if zipdest else os.path.dirname(self.source)
 
     def preinit(self):
         return
@@ -182,7 +183,7 @@ class ActionRunner:
             bytes = base64.b64decode(message['code'])
             bytes = io.BytesIO(bytes)
             archive = zipfile.ZipFile(bytes)
-            archive.extractall(os.path.dirname(self.source))
+            archive.extractall(self.zipdest)
             archive.close()
             return True
         except Exception as e:

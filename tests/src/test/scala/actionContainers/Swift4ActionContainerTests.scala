@@ -1,5 +1,7 @@
 package runtime.actionContainers
 
+import java.io.File
+
 import common.WskActorSystem
 import org.junit.runner.RunWith
 import org.scalatest.junit.JUnitRunner
@@ -13,6 +15,7 @@ class Swift4ActionContainerTests extends BasicActionRunnerTests with WskActorSys
   val enforceEmptyOutputStream = false
   lazy val swiftContainerImageName = "action-swift-v4"
   lazy val envCode = makeEnvCode("ProcessInfo.processInfo")
+  lazy val swiftBinaryName = System.getProperty("user.dir") + "/dat/actions/swift4zip/build/Hello.zip"
 
   def makeEnvCode(processInfo: String) = (
           """
@@ -181,8 +184,31 @@ class Swift4ActionContainerTests extends BasicActionRunnerTests with WskActorSys
     })
   }
 
+  it should "support pre-compiled binary in a zip file" in {
+    val zip = new File(swiftBinaryName).toPath
+    val code = ResourceHelpers.readAsBase64(zip)
 
-  // Helpers specific to swift actions
+    val (out, err) = withActionContainer() { c =>
+      val (initCode, initRes) = c.init(initPayload(code))
+      initCode should be(200)
+
+      val args = JsObject()
+      val (runCode, runRes) = c.run(runPayload(args))
+
+      runCode should be(200)
+      runRes.get shouldBe JsObject("greeting" -> (JsString("Hello stranger!")))
+    }
+
+    checkStreams(out, err, {
+      case (o, e) =>
+        if (enforceEmptyOutputStream) o shouldBe empty
+        e shouldBe empty
+    })
+  }
+
+
+
+        // Helpers specific to swift actions
   override def withActionContainer(env: Map[String, String] = Map.empty)(code: ActionContainer => Unit) = {
     withContainer(swiftContainerImageName, env)(code)
   }

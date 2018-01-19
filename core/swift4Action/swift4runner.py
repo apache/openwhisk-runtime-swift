@@ -37,7 +37,7 @@ BUILD_PROCESS = ['./swiftbuildandlink.sh']
 class Swift4Runner(ActionRunner):
 
     def __init__(self):
-        ActionRunner.__init__(self, DEST_SCRIPT_FILE, DEST_BIN_FILE)
+        ActionRunner.__init__(self, DEST_SCRIPT_FILE, DEST_BIN_FILE, DEST_SCRIPT_DIR)
 
     # remove pre-existing binary before receiving a new binary
     def preinit(self):
