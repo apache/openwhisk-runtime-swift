@@ -7,8 +7,6 @@ import org.junit.runner.RunWith
 import org.scalatest.junit.JUnitRunner
 import spray.json.{JsObject, JsString}
 import ActionContainer.withContainer
-
-
 @RunWith(classOf[JUnitRunner])
 abstract class SwiftActionContainerTests extends BasicActionRunnerTests with WskActorSystem {
 
@@ -19,8 +17,7 @@ abstract class SwiftActionContainerTests extends BasicActionRunnerTests with Wsk
   lazy val envCode = makeEnvCode("ProcessInfo.processInfo")
   lazy val swiftBinaryName = System.getProperty("user.dir") + "/dat/actions/swift4zip/build/Hello.zip"
 
-  def makeEnvCode(processInfo: String) = (
-          """
+  def makeEnvCode(processInfo: String) = ("""
           |func main(args: [String: Any]) -> [String: Any] {
           |     let env = """ + processInfo + """.environment
           |     var a = "???"
@@ -61,8 +58,7 @@ abstract class SwiftActionContainerTests extends BasicActionRunnerTests with Wsk
            | }
          """.stripMargin
 
-  val httpCode : String
-
+  val httpCode: String
 
   behavior of swiftContainerImageName
 
@@ -107,7 +103,6 @@ abstract class SwiftActionContainerTests extends BasicActionRunnerTests with Wsk
   testEnv(Seq {
     ("swift", envCode)
   }, enforceEmptyOutputStream)
-
 
   it should "support actions using non-default entry points" in {
     withActionContainer() { c =>
@@ -213,8 +208,6 @@ abstract class SwiftActionContainerTests extends BasicActionRunnerTests with Wsk
 
   it should "be able to do an http request" in {
     val (out, err) = withActionContainer() { c =>
-
-
       val (initCode, _) = c.init(initPayload(httpCode))
 
       initCode should be(200)
@@ -238,9 +231,7 @@ abstract class SwiftActionContainerTests extends BasicActionRunnerTests with Wsk
     })
   }
 
-
-
-        // Helpers specific to swift actions
+  // Helpers specific to swift actions
   override def withActionContainer(env: Map[String, String] = Map.empty)(code: ActionContainer => Unit) = {
     withContainer(swiftContainerImageName, env)(code)
   }

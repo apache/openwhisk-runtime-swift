@@ -17,19 +17,15 @@
 
 package runtime.actionContainers
 
-
 import org.junit.runner.RunWith
 import org.scalatest.junit.JUnitRunner
 import spray.json.JsObject
 import spray.json.JsString
-
-
 @RunWith(classOf[JUnitRunner])
 class Swift311ActionContainerTests extends SwiftActionContainerTests {
 
   override lazy val swiftContainerImageName = "action-swift-v3.1.1"
   override lazy val swiftBinaryName = System.getProperty("user.dir") + "/dat/build/swift311/HelloSwift3.zip"
-
 
   lazy val watsonCode = """
         | import AlchemyDataNewsV1
