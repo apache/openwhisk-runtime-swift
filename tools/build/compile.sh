@@ -58,6 +58,7 @@ cp /owexec/actions/$1/Package.swift $DEST_PACKAGE_SWIFT
 swift build ${BUILD_FLAGS} -c release
 
 echo 'Creating archive $1.zip...'
+#.build/release/Action
 mkdir -p /owexec/$OUTPUT_DIR
 zip \"/owexec/$OUTPUT_DIR/$1.zip\" .build/release/Action
 

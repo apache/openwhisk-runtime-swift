@@ -55,19 +55,17 @@ let package = Package(
       )
     ],
     dependencies: [
-      .package(url: "https://github.com/IBM-Swift/SwiftyJSON.git", majorVersion: 17)
+      .package(url: "https://github.com/IBM-Swift/SwiftyRequest.git", .upToNextMajor(from: "1.0.0"))
     ],
     targets: [
       .target(
         name: "Action",
-        dependencies: [
-          "SwiftyJSON"
-          ]
+        dependencies: ["SwiftyRequest"],
+        path: "."
       )
-    ]
-)
+ 
 ```
-  As you can see this example adds `SwiftyJSON` dependencies.
+  As you can see this example adds `SwiftyRequest` dependencies.
   
   Notice that now with swift:4 is no longer required to include `CCurl`, `Kitura-net` and `SwiftyJSON` in your own `Package.swift`.
   You are free now to use no dependencies, or add the combination that you want with the versions you want.
@@ -135,6 +133,7 @@ This will produce a zip `build/swift4/Hello.zip`
 
 ### SwiftyJSON using single source action file
 If you have a swift:3.1.1 action not compile, just as source using the `SwiftyJSON` package, you need to precompile your action and specify the version of SwiftyJSON you wan to use for swift:4 kind action.
+Take into account that tarting with Swift 4 there is better support to manage JSON data natively.
 
 Note: This is only applicable to the base image provided for the Swift 4 runtime, other downstream such as IBM Cloud Functions extending this image might provide additional SDK and packages including `SwiftyJSON` and IBM Watson SDK, check the vendor documentation for more specific information about packages and versions.
 

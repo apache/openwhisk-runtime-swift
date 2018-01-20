@@ -17,8 +17,11 @@
 
 package runtime.actionContainers
 
+import java.io.File
+
 import org.junit.runner.RunWith
 import org.scalatest.junit.JUnitRunner
+import spray.json.{JsObject, JsString}
 
 
 @RunWith(classOf[JUnitRunner])
@@ -26,6 +29,7 @@ class Swift4ActionContainerTests extends SwiftActionContainerTests {
 
   override lazy val swiftContainerImageName = "action-swift-v4"
   override lazy val swiftBinaryName = System.getProperty("user.dir") + "/dat/build/swift4/HelloSwift4.zip"
+  val partyCompile =  System.getProperty("user.dir") + "/dat/build/swift4/SwiftyRequest.zip"
 
   val httpCode = """
        | import Dispatch
@@ -65,5 +69,28 @@ class Swift4ActionContainerTests extends SwiftActionContainerTests {
        |     return resp
        | }
      """.stripMargin
+
+  it should "support ability to use 3rd party packages like SwiftyRequest" in {
+    val zip = new File(partyCompile).toPath
+    val code = ResourceHelpers.readAsBase64(zip)
+
+    val (out, err) = withActionContainer() { c =>
+      val (initCode, initRes) = c.init(initPayload(code))
+      initCode should be(200)
+
+      val args = JsObject("message" -> (JsString("serverless")))
+      val (runCode, runRes) = c.run(runPayload(args))
+
+      runCode should be(200)
+      val json = runRes.get.fields.get("json")
+      json shouldBe Some(args)
+    }
+
+    checkStreams(out, err, {
+      case (o, e) =>
+        if (enforceEmptyOutputStream) o shouldBe empty
+        e shouldBe empty
+    })
+  }
 
 }
