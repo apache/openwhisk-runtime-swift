@@ -18,22 +18,19 @@ func main(args: [String:Any]) -> [String:Any] {
     request.responseData(queryItems: [URLQueryItem(name: "hour", value: "9")]) { response in
         switch response.result {
         case .success(let retval):
-            guard let decoded = try? JSONSerialization.jsonObject(with: retval, options: []),
-                let json = decoded as? [String: Any] else {
-                    resp = ["error":"Response from server is not a dictionary"]
-                    semaphore.signal()
-                    return
+            if let json = try? JSONSerialization.jsonObject(with: retval, options: []) as! [String:Any]  {
+                resp = json
+            } else {
+                resp = ["error":"Response from server is not a dictionary like"]
             }
-            resp = json
         case .failure(let error):
             resp = ["error":"Failed to get data response: \(error)"]
-            print("Failed to get data response: \(error)")
         }
         semaphore.signal()
     }
     _ = semaphore.wait(timeout: .distantFuture)
     return resp
 }
-let r = main(args:["message":"serveless"])
-print(r)
+//let r = main(args:["message":"serverless"])
+//print(r)
 
