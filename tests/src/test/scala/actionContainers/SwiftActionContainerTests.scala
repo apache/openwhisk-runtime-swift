@@ -35,7 +35,6 @@ abstract class SwiftActionContainerTests extends BasicActionRunnerTests with Wsk
   lazy val swiftBinaryName = System.getProperty("user.dir") + "/dat/actions/swift4zip/build/Hello.zip"
   val httpCode: String
 
-
   behavior of swiftContainerImageName
 
   testEcho(Seq {
