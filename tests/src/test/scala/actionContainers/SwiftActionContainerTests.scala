@@ -22,8 +22,9 @@ import java.io.File
 import common.WskActorSystem
 import org.junit.runner.RunWith
 import org.scalatest.junit.JUnitRunner
-import spray.json.{JsObject, JsString}
 import ActionContainer.withContainer
+import spray.json.DefaultJsonProtocol._
+import spray.json._
 @RunWith(classOf[JUnitRunner])
 abstract class SwiftActionContainerTests extends BasicActionRunnerTests with WskActorSystem {
 
@@ -34,47 +35,6 @@ abstract class SwiftActionContainerTests extends BasicActionRunnerTests with Wsk
   lazy val swiftBinaryName = System.getProperty("user.dir") + "/dat/actions/swift4zip/build/Hello.zip"
   val httpCode: String
 
-  lazy val envCode =
-    """
-          | func main(args: [String: Any]) -> [String: Any] {
-          |     let env = ProcessInfo.processInfo.environment
-          |     var a = "???"
-          |     var b = "???"
-          |     var c = "???"
-          |     var d = "???"
-          |     var e = "???"
-          |     var f = "???"
-          |     if let v : String = env["__OW_API_HOST"] {
-          |         a = "\(v)"
-          |     }
-          |     if let v : String = env["__OW_API_KEY"] {
-          |         b = "\(v)"
-          |     }
-          |     if let v : String = env["__OW_NAMESPACE"] {
-          |         c = "\(v)"
-          |     }
-          |     if let v : String = env["__OW_ACTION_NAME"] {
-          |         d = "\(v)"
-          |     }
-          |     if let v : String = env["__OW_ACTIVATION_ID"] {
-          |         e = "\(v)"
-          |     }
-          |     if let v : String = env["__OW_DEADLINE"] {
-          |         f = "\(v)"
-          |     }
-          |     return ["api_host": a, "api_key": b, "namespace": c, "action_name": d, "activation_id": e, "deadline": f]
-          | }
-          """.stripMargin
-  lazy val errorCode = """
-           | // You need an indirection, or swiftc detects the div/0
-           | // at compile-time. Smart.
-           | func div(x: Int, y: Int) -> Int {
-           |     return x/y
-           | }
-           | func main(args: [String: Any]) -> [String: Any] {
-           |     return [ "divBy0": div(x:5, y:0) ]
-           | }
-         """.stripMargin
 
   behavior of swiftContainerImageName
 
@@ -102,7 +62,7 @@ abstract class SwiftActionContainerTests extends BasicActionRunnerTests with Wsk
 
   testUnicode(Seq {
     (
-      "swift",
+      "swift unicode",
       """
         | func main(args: [String: Any]) -> [String: Any] {
         |     if let str = args["delimiter"] as? String {
@@ -116,9 +76,42 @@ abstract class SwiftActionContainerTests extends BasicActionRunnerTests with Wsk
       """.stripMargin.trim)
   })
 
-  testEnv(Seq {
-    ("swift", envCode)
-  }, enforceEmptyOutputStream)
+  testEnv(
+    Seq {
+      (
+        "swift environment",
+        """
+        | func main(args: [String: Any]) -> [String: Any] {
+        |     let env = ProcessInfo.processInfo.environment
+        |     var a = "???"
+        |     var b = "???"
+        |     var c = "???"
+        |     var d = "???"
+        |     var e = "???"
+        |     var f = "???"
+        |     if let v : String = env["__OW_API_HOST"] {
+        |         a = "\(v)"
+        |     }
+        |     if let v : String = env["__OW_API_KEY"] {
+        |         b = "\(v)"
+        |     }
+        |     if let v : String = env["__OW_NAMESPACE"] {
+        |         c = "\(v)"
+        |     }
+        |     if let v : String = env["__OW_ACTION_NAME"] {
+        |         d = "\(v)"
+        |     }
+        |     if let v : String = env["__OW_ACTIVATION_ID"] {
+        |         e = "\(v)"
+        |     }
+        |     if let v : String = env["__OW_DEADLINE"] {
+        |         f = "\(v)"
+        |     }
+        |     return ["api_host": a, "api_key": b, "namespace": c, "action_name": d, "activation_id": e, "deadline": f]
+        | }
+      """.stripMargin)
+    },
+    enforceEmptyOutputStream)
 
   it should "support actions using non-default entry points" in {
     withActionContainer() { c =>
@@ -138,7 +131,16 @@ abstract class SwiftActionContainerTests extends BasicActionRunnerTests with Wsk
 
   it should "return some error on action error" in {
     val (out, err) = withActionContainer() { c =>
-      val code = errorCode
+      val code = """
+                   | // You need an indirection, or swiftc detects the div/0
+                   | // at compile-time. Smart.
+                   | func div(x: Int, y: Int) -> Int {
+                   |     return x/y
+                   | }
+                   | func main(args: [String: Any]) -> [String: Any] {
+                   |     return [ "divBy0": div(x:5, y:0) ]
+                   | }
+                 """.stripMargin
 
       val (initCode, _) = c.init(initPayload(code))
       initCode should be(200)
@@ -252,4 +254,129 @@ abstract class SwiftActionContainerTests extends BasicActionRunnerTests with Wsk
     withContainer(swiftContainerImageName, env)(code)
   }
 
+}
+
+trait BasicActionRunnerTests extends ActionProxyContainerTestUtils {
+  def withActionContainer(env: Map[String, String] = Map.empty)(code: ActionContainer => Unit): (String, String)
+
+  /**
+   * Runs tests for actions which do not return a dictionary and confirms expected error messages.
+   * @param codeNotReturningJson code to execute, should not return a JSON object
+   * @param checkResultInLogs should be true iff the result of the action is expected to appear in stdout or stderr
+   */
+  def testNotReturningJson(codeNotReturningJson: String, checkResultInLogs: Boolean = true) = {
+    it should "run and report an error for script not returning a json object" in {
+      val (out, err) = withActionContainer() { c =>
+        val (initCode, _) = c.init(initPayload(codeNotReturningJson))
+        initCode should be(200)
+        val (runCode, out) = c.run(JsObject())
+        runCode should be(502)
+        out should be(Some(JsObject("error" -> JsString("The action did not return a dictionary."))))
+      }
+
+      checkStreams(out, err, {
+        case (o, e) =>
+          if (checkResultInLogs) {
+            (o + e) should include("not a json object")
+          } else {
+            o shouldBe empty
+            e shouldBe empty
+          }
+      })
+    }
+  }
+
+  /**
+   * Runs tests for code samples which are expected to echo the input arguments
+   * and print hello [stdout, stderr].
+   */
+  def testEcho(stdCodeSamples: Seq[(String, String)]) = {
+    stdCodeSamples.foreach { s =>
+      it should s"run a ${s._1} script" in {
+        val argss = List(
+          JsObject("string" -> JsString("hello")),
+          JsObject("string" -> JsString("❄ ☃ ❄")),
+          JsObject("numbers" -> JsArray(JsNumber(42), JsNumber(1))),
+          // JsObject("boolean" -> JsBoolean(true)), // fails with swift3 returning boolean: 1
+          JsObject("object" -> JsObject("a" -> JsString("A"))))
+
+        val (out, err) = withActionContainer() { c =>
+          val (initCode, _) = c.init(initPayload(s._2))
+          initCode should be(200)
+
+          for (args <- argss) {
+            val (runCode, out) = c.run(runPayload(args))
+            runCode should be(200)
+            out should be(Some(args))
+          }
+        }
+
+        checkStreams(out, err, {
+          case (o, e) =>
+            o should include("hello stdout")
+            e should include("hello stderr")
+        }, argss.length)
+      }
+    }
+  }
+
+  def testUnicode(stdUnicodeSamples: Seq[(String, String)]) = {
+    stdUnicodeSamples.foreach { s =>
+      it should s"run a ${s._1} action and handle unicode in source, input params, logs, and result" in {
+        val (out, err) = withActionContainer() { c =>
+          val (initCode, _) = c.init(initPayload(s._2))
+          initCode should be(200)
+
+          val (runCode, runRes) = c.run(runPayload(JsObject("delimiter" -> JsString("❄"))))
+          runRes.get.fields.get("winter") shouldBe Some(JsString("❄ ☃ ❄"))
+        }
+
+        checkStreams(out, err, {
+          case (o, _) =>
+            o.toLowerCase should include("❄ ☃ ❄")
+        })
+      }
+    }
+  }
+
+  /** Runs tests for code samples which are expected to return the expected standard environment {auth, edge}. */
+  def testEnv(stdEnvSamples: Seq[(String, String)],
+              enforceEmptyOutputStream: Boolean = true,
+              enforceEmptyErrorStream: Boolean = true) = {
+    stdEnvSamples.foreach { s =>
+      it should s"run a ${s._1} script and confirm expected environment variables" in {
+        val props = Seq(
+          "api_host" -> "xyz",
+          "api_key" -> "abc",
+          "namespace" -> "zzz",
+          "action_name" -> "xxx",
+          "activation_id" -> "iii",
+          "deadline" -> "123")
+        val env = props.map { case (k, v) => s"__OW_${k.toUpperCase()}" -> v }
+
+        val (out, err) = withActionContainer(env.take(1).toMap) { c =>
+          val (initCode, _) = c.init(initPayload(s._2))
+          initCode should be(200)
+
+          val (runCode, out) = c.run(runPayload(JsObject(), Some(props.toMap.toJson.asJsObject)))
+          runCode should be(200)
+          out shouldBe defined
+          props.map {
+            case (k, v) =>
+              withClue(k) {
+                out.get.fields(k) shouldBe JsString(v)
+              }
+
+          }
+        }
+
+        checkStreams(out, err, {
+          case (o, e) =>
+            if (enforceEmptyOutputStream) o shouldBe empty
+            if (enforceEmptyErrorStream) e shouldBe empty
+        })
+      }
+    }
+
+  }
 }
