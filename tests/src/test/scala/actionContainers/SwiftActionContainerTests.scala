@@ -1,3 +1,20 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package runtime.actionContainers
 
 import java.io.File
@@ -14,12 +31,13 @@ abstract class SwiftActionContainerTests extends BasicActionRunnerTests with Wsk
   // prints status messages and there doesn't seem to be a way to quiet them
   val enforceEmptyOutputStream = false
   lazy val swiftContainerImageName = "action-swift-v4"
-  lazy val envCode = makeEnvCode("ProcessInfo.processInfo")
   lazy val swiftBinaryName = System.getProperty("user.dir") + "/dat/actions/swift4zip/build/Hello.zip"
+  val httpCode: String
 
-  def makeEnvCode(processInfo: String) = ("""
-          |func main(args: [String: Any]) -> [String: Any] {
-          |     let env = """ + processInfo + """.environment
+  lazy val envCode =
+    """
+          | func main(args: [String: Any]) -> [String: Any] {
+          |     let env = ProcessInfo.processInfo.environment
           |     var a = "???"
           |     var b = "???"
           |     var c = "???"
@@ -45,8 +63,8 @@ abstract class SwiftActionContainerTests extends BasicActionRunnerTests with Wsk
           |         f = "\(v)"
           |     }
           |     return ["api_host": a, "api_key": b, "namespace": c, "action_name": d, "activation_id": e, "deadline": f]
-          |}
-          """).stripMargin
+          | }
+          """.stripMargin
   lazy val errorCode = """
            | // You need an indirection, or swiftc detects the div/0
            | // at compile-time. Smart.
@@ -57,8 +75,6 @@ abstract class SwiftActionContainerTests extends BasicActionRunnerTests with Wsk
            |     return [ "divBy0": div(x:5, y:0) ]
            | }
          """.stripMargin
-
-  val httpCode: String
 
   behavior of swiftContainerImageName
 
