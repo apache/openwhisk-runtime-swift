@@ -44,6 +44,8 @@ abstract class SwiftSDKTests extends TestHelpers with WskTestHelpers with Matche
   val controllerHost = WhiskProperties.getBaseControllerHost()
   val controllerPort = WhiskProperties.getControllerBasePort()
   val baseUrl = s"http://$controllerHost:$controllerPort"
+  //when running tests on environment with valid ssl certs in whisk host then pass -DswiftUseSSLWhiskHost=true
+  val overridebaseURL = "true" != System.getProperty("swiftUseSSLWhiskHost")
 
   behavior of s"Swift Whisk SDK tests using $actionKind"
 
@@ -55,8 +57,11 @@ abstract class SwiftSDKTests extends TestHelpers with WskTestHelpers with Matche
       action.create(name = actionName, artifact = file, kind = Some(actionKind))
     }
     // invoke the action
+    var params = Map("dummy" -> JsString("dummy"))
+    if (overridebaseURL)
+      params = params + ("baseUrl" -> JsString(baseUrl))
 
-    val run = wsk.action.invoke(actionName, Map("baseUrl" -> JsString(baseUrl)))
+    val run = wsk.action.invoke(actionName, params)
     withActivation(wsk.activation, run, initialWait = 5 seconds, totalWait = 60 seconds) { activation =>
       // should be successful
       activation.response.success shouldBe true
@@ -80,7 +85,11 @@ abstract class SwiftSDKTests extends TestHelpers with WskTestHelpers with Matche
       }
 
       // invoke the action
-      val run = wsk.action.invoke(actionName, Map("baseUrl" -> JsString(baseUrl)))
+      var params = Map("dummy" -> JsString("dummy"))
+      if (overridebaseURL)
+        params = params + ("baseUrl" -> JsString(baseUrl))
+
+      val run = wsk.action.invoke(actionName, params)
       withActivation(wsk.activation, run, initialWait = 5 seconds, totalWait = 60 seconds) { activation =>
         // should not have a "response"
         whisk.utils.JsHelpers.fieldPathExists(activation.response.result.get, "response") shouldBe false
@@ -105,7 +114,11 @@ abstract class SwiftSDKTests extends TestHelpers with WskTestHelpers with Matche
     }
 
     // invoke the action
-    val run = wsk.action.invoke(actionName, Map("triggerName" -> JsString(triggerName), "baseUrl" -> JsString(baseUrl)))
+    var params = Map("triggerName" -> JsString(triggerName))
+    if (overridebaseURL)
+      params = params + ("baseUrl" -> JsString(baseUrl))
+
+    val run = wsk.action.invoke(actionName, params)
     withActivation(wsk.activation, run, initialWait = 5 seconds, totalWait = 60 seconds) { activation =>
       // should be successful
       activation.response.success shouldBe true
@@ -137,7 +150,11 @@ abstract class SwiftSDKTests extends TestHelpers with WskTestHelpers with Matche
     }
 
     // invoke the action
-    val run = wsk.action.invoke(actionName, Map("triggerName" -> JsString(triggerName), "baseUrl" -> JsString(baseUrl)))
+    var params = Map("triggerName" -> JsString(triggerName))
+    if (overridebaseURL)
+      params = params + ("baseUrl" -> JsString(baseUrl))
+
+    val run = wsk.action.invoke(actionName, params)
     withActivation(wsk.activation, run, initialWait = 5 seconds, totalWait = 60 seconds) { activation =>
       // should be successful
       activation.response.success shouldBe true
@@ -172,15 +189,16 @@ abstract class SwiftSDKTests extends TestHelpers with WskTestHelpers with Matche
     }
 
     // invoke the create rule action
-    val runCreateRule = wsk.action.invoke(
-      "ActionThatCreatesRule",
-      Map(
-        "triggerName" -> s"/_/$ruleTriggerName".toJson,
-        "actionName" -> s"/_/$ruleActionName".toJson,
-        "ruleName" -> ruleName.toJson,
-        "baseUrl" -> baseUrl.toJson))
+    var params = Map(
+      "triggerName" -> s"/_/$ruleTriggerName".toJson,
+      "actionName" -> s"/_/$ruleActionName".toJson,
+      "ruleName" -> ruleName.toJson)
 
-    withActivation(wsk.activation, runCreateRule, initialWait = 5 seconds, totalWait = 60 seconds) { activation =>
+    if (overridebaseURL)
+      params = params + ("baseUrl" -> JsString(baseUrl))
+
+    val run = wsk.action.invoke("ActionThatCreatesRule", params)
+    withActivation(wsk.activation, run, initialWait = 5 seconds, totalWait = 60 seconds) { activation =>
       // should be successful
       activation.response.success shouldBe true
 
