@@ -27,22 +27,23 @@ import org.scalatest.junit.JUnitRunner
 import common.{TestHelpers, WhiskProperties, WskProps, WskTestHelpers}
 import common.rest.WskRest
 import spray.json._
+import spray.json.DefaultJsonProtocol.StringJsonFormat
 
 @RunWith(classOf[JUnitRunner])
-class SwiftSDKTests extends TestHelpers with WskTestHelpers with Matchers {
+abstract class SwiftSDKTests extends TestHelpers with WskTestHelpers with Matchers {
 
   implicit val wskprops = WskProps()
   val wsk = new WskRest
   val expectedDuration = 45 seconds
   val activationPollDuration = 60 seconds
-  val actionKind = "swift:4"
-  val actionDir = s"${actionKind.replace(":", "")}"
-  val actionTypeDir: String = System.getProperty("user.dir") + "/dat/actions/sdk/" + actionDir
+  lazy val actionKind = "swift:3.1.1"
+  lazy val actionDir = s"${actionKind.replace(":", "")}"
+  lazy val actionTypeDir: String = System.getProperty("user.dir") + "/dat/actions/sdk/" + actionDir
   val controllerHost = WhiskProperties.getBaseControllerHost()
   val controllerPort = WhiskProperties.getControllerBasePort()
   val baseUrl = s"http://$controllerHost:$controllerPort"
 
-  behavior of "Swift Whisk SDK tests"
+  behavior of s"Swift Whisk SDK tests using $actionKind"
 
   it should "allow Swift actions to invoke other actions" in withAssetCleaner(wskprops) { (wp, assetHelper) =>
     val file = Some(new File(actionTypeDir, "invoke.swift").toString())
@@ -66,18 +67,18 @@ class SwiftSDKTests extends TestHelpers with WskTestHelpers with Matchers {
         true)
     }
   }
-  /*
+
   it should "allow Swift actions to invoke other actions and not block" in withAssetCleaner(wskprops) {
     (wp, assetHelper) =>
       // use CLI to create action from dat/actions/invokeNonBlocking.swift
-      val file = TestUtils.getTestActionFilename("invokeNonBlocking.swift")
+      val file = Some(new File(actionTypeDir, "invokeNonBlocking.swift").toString())
       val actionName = "invokeNonBlockingAction"
       assetHelper.withCleaner(wsk.action, actionName) { (action, _) =>
-        action.create(name = actionName, artifact = Some(file), kind = Some(runtimeContainer))
+        action.create(name = actionName, file, kind = Some(actionKind))
       }
 
       // invoke the action
-      val run = wsk.action.invoke(actionName)
+      val run = wsk.action.invoke(actionName, Map("baseUrl" -> JsString(baseUrl)))
       withActivation(wsk.activation, run, initialWait = 5 seconds, totalWait = 60 seconds) { activation =>
         // should not have a "response"
         whisk.utils.JsHelpers.fieldPathExists(activation.response.result.get, "response") shouldBe false
@@ -95,14 +96,14 @@ class SwiftSDKTests extends TestHelpers with WskTestHelpers with Matchers {
     }
 
     // create an action that fires the trigger
-    val file = TestUtils.getTestActionFilename("trigger.swift")
+    val file = Some(new File(actionTypeDir, "trigger.swift").toString())
     val actionName = "ActionThatTriggers"
     assetHelper.withCleaner(wsk.action, actionName) { (action, _) =>
-      action.create(name = actionName, artifact = Some(file), kind = Some(runtimeContainer))
+      action.create(name = actionName, file, kind = Some(actionKind))
     }
 
     // invoke the action
-    val run = wsk.action.invoke(actionName, Map("triggerName" -> triggerName.toJson))
+    val run = wsk.action.invoke(actionName, Map("triggerName" -> JsString(triggerName), "baseUrl" -> JsString(baseUrl)))
     withActivation(wsk.activation, run, initialWait = 5 seconds, totalWait = 60 seconds) { activation =>
       // should be successful
       activation.response.success shouldBe true
@@ -120,7 +121,7 @@ class SwiftSDKTests extends TestHelpers with WskTestHelpers with Matchers {
 
   it should "allow Swift actions to create a trigger" in withAssetCleaner(wskprops) { (wp, assetHelper) =>
     // create an action that creates the trigger
-    val file = TestUtils.getTestActionFilename("createTrigger.swift")
+    val file = Some(new File(actionTypeDir, "createTrigger.swift").toString())
     val actionName = "ActionThatTriggers"
 
     // the name of the trigger to create
@@ -129,18 +130,18 @@ class SwiftSDKTests extends TestHelpers with WskTestHelpers with Matchers {
     assetHelper.withCleaner(wsk.action, actionName) { (action, _) =>
       assetHelper.withCleaner(wsk.trigger, triggerName) { (_, _) =>
         // using an asset cleaner on the created trigger name will clean it up at the conclusion of the test
-        action.create(name = actionName, artifact = Some(file), kind = Some(runtimeContainer))
+        action.create(name = actionName, file, kind = Some(actionKind))
       }
     }
 
     // invoke the action
-    val run = wsk.action.invoke(actionName, Map("triggerName" -> triggerName.toJson))
+    val run = wsk.action.invoke(actionName, Map("triggerName" -> JsString(triggerName), "baseUrl" -> JsString(baseUrl)))
     withActivation(wsk.activation, run, initialWait = 5 seconds, totalWait = 60 seconds) { activation =>
       // should be successful
       activation.response.success shouldBe true
 
       // should have a field named "name" which is the name of the trigger created
-      activation.response.result.get.fields("name") shouldBe triggerName.toJson
+      activation.response.result.get.fields("name") shouldBe JsString(triggerName)
     }
   }
 
@@ -151,8 +152,8 @@ class SwiftSDKTests extends TestHelpers with WskTestHelpers with Matchers {
 
     // create a dummy action and trigger for the rule
     assetHelper.withCleaner(wsk.action, ruleActionName) { (action, name) =>
-      val dummyFile = TestUtils.getTestActionFilename("hello.swift")
-      action.create(name, artifact = Some(dummyFile), kind = Some(runtimeContainer))
+      val dummyFile = Some(new File(actionTypeDir, "hello.swift").toString())
+      action.create(name, dummyFile, kind = Some(actionKind))
     }
 
     assetHelper.withCleaner(wsk.trigger, ruleTriggerName) { (trigger, name) =>
@@ -163,9 +164,9 @@ class SwiftSDKTests extends TestHelpers with WskTestHelpers with Matchers {
     }
 
     // create an action that creates the rule
-    val createRuleFile = TestUtils.getTestActionFilename("createRule.swift")
+    val createRuleFile = Some(new File(actionTypeDir, "createRule.swift").toString())
     assetHelper.withCleaner(wsk.action, "ActionThatCreatesRule") { (action, name) =>
-      action.create(name, artifact = Some(createRuleFile), kind = Some(runtimeContainer))
+      action.create(name, createRuleFile, kind = Some(actionKind))
     }
 
     // invoke the create rule action
@@ -174,7 +175,8 @@ class SwiftSDKTests extends TestHelpers with WskTestHelpers with Matchers {
       Map(
         "triggerName" -> s"/_/$ruleTriggerName".toJson,
         "actionName" -> s"/_/$ruleActionName".toJson,
-        "ruleName" -> ruleName.toJson))
+        "ruleName" -> ruleName.toJson,
+        "baseUrl" -> baseUrl.toJson))
 
     withActivation(wsk.activation, runCreateRule, initialWait = 5 seconds, totalWait = 60 seconds) { activation =>
       // should be successful
@@ -187,5 +189,5 @@ class SwiftSDKTests extends TestHelpers with WskTestHelpers with Matchers {
       activation.response.result.get.fields("action").asJsObject.fields("name") shouldBe ruleActionName.toJson
     }
   }
- */
+
 }
