@@ -24,11 +24,9 @@ import scala.language.postfixOps
 import org.junit.runner.RunWith
 import org.scalatest.Matchers
 import org.scalatest.junit.JUnitRunner
-import common.TestHelpers
+import common.{TestHelpers, WhiskProperties, WskProps, WskTestHelpers}
 import common.rest.WskRest
-import common.WskProps
-import common.WskTestHelpers
-
+import spray.json._
 
 @RunWith(classOf[JUnitRunner])
 class SwiftSDKTests extends TestHelpers with WskTestHelpers with Matchers {
@@ -37,23 +35,25 @@ class SwiftSDKTests extends TestHelpers with WskTestHelpers with Matchers {
   val wsk = new WskRest
   val expectedDuration = 45 seconds
   val activationPollDuration = 60 seconds
-  val datdir = System.getProperty("user.dir") + "/dat/actions/sdk/"
-
-  lazy val runtimeContainer = "swift:4"
-
+  val actionKind = "swift:4"
+  val actionDir = s"${actionKind.replace(":", "")}"
+  val actionTypeDir: String = System.getProperty("user.dir") + "/dat/actions/sdk/" + actionDir
+  val controllerHost = WhiskProperties.getBaseControllerHost()
+  val controllerPort = WhiskProperties.getControllerBasePort()
+  val baseUrl = s"http://$controllerHost:$controllerPort"
 
   behavior of "Swift Whisk SDK tests"
 
   it should "allow Swift actions to invoke other actions" in withAssetCleaner(wskprops) { (wp, assetHelper) =>
-
-    val file = Some(new File(datdir + "swift4", "invoke.swift").toString())
+    val file = Some(new File(actionTypeDir, "invoke.swift").toString())
 
     val actionName = "invokeAction"
     assetHelper.withCleaner(wsk.action, actionName) { (action, _) =>
-      action.create(name = actionName, artifact = file, kind = Some(runtimeContainer))
+      action.create(name = actionName, artifact = file, kind = Some(actionKind))
     }
     // invoke the action
-    val run = wsk.action.invoke(actionName)
+
+    val run = wsk.action.invoke(actionName, Map("baseUrl" -> JsString(baseUrl)))
     withActivation(wsk.activation, run, initialWait = 5 seconds, totalWait = 60 seconds) { activation =>
       // should be successful
       activation.response.success shouldBe true
@@ -62,10 +62,11 @@ class SwiftSDKTests extends TestHelpers with WskTestHelpers with Matchers {
       activation.response.result.get.fields("activationId").toString.length should be >= 32
 
       // check for "date" field that comes from invoking the date action
-      whisk.utils.JsHelpers.fieldPathExists(activation.response.result.get, "response", "result", "date") should be(true)
+      whisk.utils.JsHelpers.fieldPathExists(activation.response.result.get, "response", "result", "date") should be(
+        true)
     }
   }
-/*
+  /*
   it should "allow Swift actions to invoke other actions and not block" in withAssetCleaner(wskprops) {
     (wp, assetHelper) =>
       // use CLI to create action from dat/actions/invokeNonBlocking.swift
@@ -186,5 +187,5 @@ class SwiftSDKTests extends TestHelpers with WskTestHelpers with Matchers {
       activation.response.result.get.fields("action").asJsObject.fields("name") shouldBe ruleActionName.toJson
     }
   }
-  */
+ */
 }
