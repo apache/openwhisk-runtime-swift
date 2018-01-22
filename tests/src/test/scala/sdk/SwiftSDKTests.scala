@@ -18,12 +18,9 @@
 package runtime.sdk
 
 import java.io.File
-
 import scala.concurrent.duration.DurationInt
 import scala.language.postfixOps
-import org.junit.runner.RunWith
 import org.scalatest.Matchers
-import org.scalatest.junit.JUnitRunner
 import common.{TestHelpers, WhiskProperties, WskProps, WskTestHelpers}
 import common.rest.WskRest
 import spray.json._
