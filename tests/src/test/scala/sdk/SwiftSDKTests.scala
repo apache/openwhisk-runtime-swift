@@ -29,7 +29,6 @@ import common.rest.WskRest
 import spray.json._
 import spray.json.DefaultJsonProtocol.StringJsonFormat
 
-@RunWith(classOf[JUnitRunner])
 abstract class SwiftSDKTests extends TestHelpers with WskTestHelpers with Matchers {
 
   implicit val wskprops = WskProps()

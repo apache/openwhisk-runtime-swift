@@ -18,14 +18,11 @@
 package runtime.actionContainers
 
 import java.io.File
-
 import common.WskActorSystem
-import org.junit.runner.RunWith
-import org.scalatest.junit.JUnitRunner
 import ActionContainer.withContainer
 import spray.json.DefaultJsonProtocol._
 import spray.json._
-@RunWith(classOf[JUnitRunner])
+
 abstract class SwiftActionContainerTests extends BasicActionRunnerTests with WskActorSystem {
 
   // note: "out" will likely not be empty in some swift build as the compiler
