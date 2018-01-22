@@ -37,7 +37,9 @@ abstract class SwiftSDKTests extends TestHelpers with WskTestHelpers with Matche
   val expectedDuration = 45 seconds
   val activationPollDuration = 60 seconds
   lazy val actionKind = "swift:3.1.1"
-  lazy val actionDir = s"${actionKind.replace(":", "")}"
+  lazy val lang = actionKind.split(":")(0)
+  lazy val majorVersion = actionKind.split(":")(1).split('.')(0)
+  lazy val actionDir = s"$lang$majorVersion"
   lazy val actionTypeDir: String = System.getProperty("user.dir") + "/dat/actions/sdk/" + actionDir
   val controllerHost = WhiskProperties.getBaseControllerHost()
   val controllerPort = WhiskProperties.getControllerBasePort()
