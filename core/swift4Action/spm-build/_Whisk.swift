@@ -91,7 +91,6 @@ class Whisk {
         }
         
         let urlStr = "\(baseUrl!)\(encodedPath)"
-        print("DEBUG urlStr \(urlStr)")
         if let url = URL(string: urlStr) {
             var request = URLRequest(url: url)
             request.httpMethod = method
