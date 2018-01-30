@@ -60,7 +60,7 @@ class Swift4Runner(ActionRunner):
         with codecs.open(DEST_SCRIPT_FILE, 'a', 'utf-8') as fp:
             os.chdir(DEST_SCRIPT_DIR)
             for file in glob.glob("*.swift"):
-                if file not in ["Package.swift", "main.swift", "_WhiskJSONUtils.swift", "_Whisk.swift"]:
+                if file not in ["Package.swift", "_Whisk.swift"]:
                     with codecs.open(file, 'r', 'utf-8') as f:
                         fp.write(f.read())
             with codecs.open(SRC_EPILOGUE_FILE, 'r', 'utf-8') as ep:
