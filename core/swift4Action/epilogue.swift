@@ -2,9 +2,8 @@
 import Foundation
 
 let env = ProcessInfo.processInfo.environment
-let inputStr: String = env["WHISK_INPUT"] ?? "{}"
+let inputStr: String = readLine() ?? "{}"
 let json = inputStr.data(using: .utf8, allowLossyConversion: true)!
-
 
 // snippet of code "injected" (wrapper code for invoking traditional main)
 func _run_main(mainFunction: ([String: Any]) -> [String: Any]) -> Void {
