@@ -129,7 +129,8 @@ class ActionRunner:
         try:
             input = json.dumps(args)
             p = subprocess.Popen(
-                [self.binary, input],
+                [self.binary],
+                stdin=subprocess.PIPE,
                 stdout=subprocess.PIPE,
                 stderr=subprocess.PIPE,
                 env=env)
@@ -138,7 +139,7 @@ class ActionRunner:
 
         # run the process and wait until it completes.
         # stdout/stderr will always be set because we passed PIPEs to Popen
-        (o, e) = p.communicate()
+        (o, e) = p.communicate(input=input.encode())
 
         # stdout/stderr may be either text or bytes, depending on Python
         # version, so if bytes, decode to text. Note that in Python 2
