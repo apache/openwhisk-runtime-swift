@@ -1,6 +1,6 @@
 # Dockerfile for swift actions, overrides and extends ActionRunner from actionProxy
 # This Dockerfile is partially based on: https://github.com/IBM-Swift/swift-ubuntu-docker/blob/master/swift-development/Dockerfile
-FROM ibmcom/swift-ubuntu:4.0
+FROM ibmcom/swift-ubuntu:4.0.3
 
 # Set WORKDIR
 WORKDIR /

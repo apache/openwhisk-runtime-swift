@@ -104,8 +104,6 @@ class Swift4Runner(ActionRunner):
 
     def env(self, message):
         env = ActionRunner.env(self, message)
-        args = message.get('value', {}) if message else {}
-        env['WHISK_INPUT'] = json.dumps(args)
         return env
 
 

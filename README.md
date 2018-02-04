@@ -1,4 +1,5 @@
 # Apache OpenWhisk runtimes for swift
+
 [![Build Status](https://travis-ci.org/apache/incubator-openwhisk-runtime-swift.svg?branch=master)](https://travis-ci.org/apache/incubator-openwhisk-runtime-swift)
 
 
@@ -110,7 +111,7 @@ let package = Package(
 ### Migrating from Swift 3 to Swift 4
 
 ### Helper compile.sh helper script
-When compiling and packaging your swift 4 now there are a couple of differences
+When compiling and packaging your swift 4 action, there are a couple of differences.
 All your source code needs to be copy to `/swift4Action/spm-build/Sources/Action/` instead of `/swift3Action/spm-build/`
 You Package.swift needs to have the first line with a comment indicating swift4 tooling and format
 ```
@@ -199,7 +200,7 @@ wskdev fresh -t local-swift
 
 To use as docker action push to your own dockerhub account
 ```
-docker tag whisk/swift8action $user_prefix/action-swift-v3.1.1
+docker tag whisk/action-swift-v3.1.1 $user_prefix/action-swift-v3.1.1
 docker push $user_prefix/action-swift-v3.1.1
 ```
 Then create the action using your the image from dockerhub

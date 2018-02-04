@@ -128,17 +128,28 @@ class ActionRunner:
 
         try:
             input = json.dumps(args)
-            p = subprocess.Popen(
-                [self.binary, input],
-                stdout=subprocess.PIPE,
-                stderr=subprocess.PIPE,
-                env=env)
+            if len(input) > 131071:             # MAX_ARG_STRLEN (131071) linux/binfmts.h
+                # pass argument via stdin
+                p = subprocess.Popen(
+                    [self.binary],
+                    stdin=subprocess.PIPE,
+                    stdout=subprocess.PIPE,
+                    stderr=subprocess.PIPE,
+                    env=env)
+            else:
+                # pass argument via stdin and command parameter
+                p = subprocess.Popen(
+                    [self.binary, input],
+                    stdin=subprocess.PIPE,
+                    stdout=subprocess.PIPE,
+                    stderr=subprocess.PIPE,
+                    env=env)
+            # run the process and wait until it completes.
+            # stdout/stderr will always be set because we passed PIPEs to Popen
+            (o, e) = p.communicate(input=input.encode())
+
         except Exception as e:
             return error(e)
-
-        # run the process and wait until it completes.
-        # stdout/stderr will always be set because we passed PIPEs to Popen
-        (o, e) = p.communicate()
 
         # stdout/stderr may be either text or bytes, depending on Python
         # version, so if bytes, decode to text. Note that in Python 2
