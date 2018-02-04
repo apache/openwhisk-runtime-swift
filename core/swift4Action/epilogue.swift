@@ -1,8 +1,7 @@
 // Imports
 import Foundation
 
-let env = ProcessInfo.processInfo.environment
-let inputStr: String = env["WHISK_INPUT"] ?? "{}"
+let inputStr: String = readLine() ?? "{}"
 let json = inputStr.data(using: .utf8, allowLossyConversion: true)!
 
 
