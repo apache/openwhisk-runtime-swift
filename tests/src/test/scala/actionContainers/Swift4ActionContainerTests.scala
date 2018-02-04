@@ -102,7 +102,7 @@ class Swift4ActionContainerTests extends SwiftActionContainerTests {
       val (initCode, initRes) = c.init(initPayload(code))
       initCode should be(200)
 
-      val arg = JsObject("arg" -> JsString(("a" * 198144)))
+      val arg = JsObject("arg" -> JsString(("a" * 1048561)))
       val (_, runRes) = c.run(runPayload(arg))
       runRes.get shouldBe arg
     }
