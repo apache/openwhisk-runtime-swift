@@ -1,13 +1,2 @@
 ext.dockerImageName = 'action-swift-v4'
 apply from: '../../gradle/docker.gradle'
-distDocker.dependsOn 'copyProxy'
-distDocker.finalizedBy('cleanup')
-
-task copyProxy(type: Copy) {
-    from '../actionProxy/actionproxy.py'
-    into '.'
-}
-
-task cleanup(type: Delete) {
-    delete 'actionproxy.py'
-}
