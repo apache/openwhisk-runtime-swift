@@ -98,8 +98,20 @@ abstract class SwiftSDKTests extends TestHelpers with WskTestHelpers with Matche
   it should "allow Swift actions to trigger events" in withAssetCleaner(wskprops) { (wp, assetHelper) =>
     // create a trigger
     val triggerName = s"TestTrigger ${System.currentTimeMillis()}"
+    val ruleName = s"TestTriggerRule ${System.currentTimeMillis()}"
+    val ruleActionName = s"TestTriggerAction ${System.currentTimeMillis()}"
     assetHelper.withCleaner(wsk.trigger, triggerName) { (trigger, _) =>
       trigger.create(triggerName)
+    }
+
+    // create a dummy action
+    assetHelper.withCleaner(wsk.action, ruleActionName) { (action, name) =>
+      val dummyFile = Some(new File(actionTypeDir, "hello.swift").toString())
+      action.create(name, dummyFile, kind = Some(actionKind))
+    }
+    // create a dummy rule
+    assetHelper.withCleaner(wsk.rule, ruleName) { (rule, name) =>
+      rule.create(name, trigger = triggerName, action = ruleActionName)
     }
 
     // create an action that fires the trigger
