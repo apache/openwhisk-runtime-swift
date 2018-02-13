@@ -16,7 +16,7 @@ IMAGE_TAG=$3
 if [ ${RUNTIME_VERSION} == "3.1.1" ]; then
   RUNTIME="swift3.1.1Action"
 elif [ ${RUNTIME_VERSION} == "4" ]; then
-  RUNTIME="swift4Action"
+  RUNTIME="swift40Action"
 fi
 
 if [[ ! -z ${DOCKER_USER} ]] && [[ ! -z ${DOCKER_PASSWORD} ]]; then
