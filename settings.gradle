@@ -10,7 +10,7 @@ include 'tests'
 
 include 'core:swift3.1.1Action'
 
-include 'core:swift4Action'
+include 'core:swift40Action'
 
 rootProject.name = 'runtime-swift'
 

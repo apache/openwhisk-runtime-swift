@@ -28,7 +28,7 @@ abstract class SwiftActionContainerTests extends BasicActionRunnerTests with Wsk
   // note: "out" will likely not be empty in some swift build as the compiler
   // prints status messages and there doesn't seem to be a way to quiet them
   val enforceEmptyOutputStream = false
-  lazy val swiftContainerImageName = "action-swift-v4"
+  lazy val swiftContainerImageName = "action-swift-v4.0"
   lazy val swiftBinaryName = System.getProperty("user.dir") + "/dat/actions/swift4zip/build/Hello.zip"
   val httpCode: String
 

@@ -23,11 +23,11 @@ import org.junit.runner.RunWith
 import org.scalatest.junit.JUnitRunner
 import spray.json.{JsObject, JsString}
 @RunWith(classOf[JUnitRunner])
-class Swift4ActionContainerTests extends SwiftActionContainerTests {
+class Swift40ActionContainerTests extends SwiftActionContainerTests {
 
-  override lazy val swiftContainerImageName = "action-swift-v4"
-  override lazy val swiftBinaryName = System.getProperty("user.dir") + "/dat/build/swift4/HelloSwift4.zip"
-  val partyCompile = System.getProperty("user.dir") + "/dat/build/swift4/SwiftyRequest.zip"
+  override lazy val swiftContainerImageName = "action-swift-v4.0"
+  override lazy val swiftBinaryName = System.getProperty("user.dir") + "/dat/build/swift4.0/HelloSwift4.zip"
+  val partyCompile = System.getProperty("user.dir") + "/dat/build/swift4.0/SwiftyRequest.zip"
 
   val httpCode = """
        | import Dispatch
