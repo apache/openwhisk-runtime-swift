@@ -68,6 +68,8 @@ ansible/roles/nginx/files/*cert.pem
 
 # .zip files must be explicited whitelisted
 !tests/dat/build/swift311/HelloSwift3.zip
-!tests/dat/build/swift4/HelloSwift4.zip
-!tests/dat/build/swift4/SwiftyRequest.zip
+!tests/dat/build/swift4.0/HelloSwift4.zip
+!tests/dat/build/swift4.0/SwiftyRequest.zip
+!tests/dat/build/swift4.1/HelloSwift4.zip
+!tests/dat/build/swift4.1/SwiftyRequest.zip
 

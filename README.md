@@ -150,6 +150,10 @@ docker login
 ./gradlew core:swift40Action:distDocker -PdockerImagePrefix=$prefix-user -PdockerRegistry=docker.io 
 ```
 
+### Swift 4.1 Experimental
+We have a runtime for swift 4.1, is experimental as we are trying beta builds released by Swift org.
+Follow same insructions for Swift 4.0 above and replace the kind wih `swift:4.1` and image with `openwhisk/action-swift-v4.0`
+
 
 ### Using Swift 3.1.1
 To use as a docker action
