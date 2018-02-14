@@ -22,6 +22,9 @@ class Whisk {
     
     static var baseUrl = ProcessInfo.processInfo.environment["__OW_API_HOST"]
     static var apiKey = ProcessInfo.processInfo.environment["__OW_API_KEY"]
+    // This will allow user to modify the default JSONDecoder and JSONEncoder used by epilogue
+    static var jsonDecoder = JSONDecoder()
+    static var jsonEncoder = JSONEncoder()
     
     class func invoke(actionNamed action : String, withParameters params : [String:Any], blocking: Bool = true) -> [String:Any] {
         let parsedAction = parseQualifiedName(name: action)

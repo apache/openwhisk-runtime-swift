@@ -25,7 +25,7 @@ import spray.json.JsString
 class Swift311ActionContainerTests extends SwiftActionContainerTests {
 
   override lazy val swiftContainerImageName = "action-swift-v3.1.1"
-  override lazy val swiftBinaryName = System.getProperty("user.dir") + "/dat/build/swift311/HelloSwift3.zip"
+  override lazy val swiftBinaryName = "tests/dat/build/swift311/HelloSwift3.zip"
 
   lazy val watsonCode = """
         | import AlchemyDataNewsV1
