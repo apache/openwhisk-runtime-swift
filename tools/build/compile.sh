@@ -20,6 +20,11 @@ elif [ ${2} == "swift:4.0" ]; then
   BASE_PATH="/swift4Action"
   DEST_SOURCE="/$BASE_PATH/spm-build/Sources/Action"
   OUTPUT_DIR="build/swift4.0"
+elif [ ${2} == "swift:4.1" ]; then
+  RUNTIME="action-swift-v4.1"
+  BASE_PATH="/swift4Action"
+  DEST_SOURCE="/$BASE_PATH/spm-build/Sources/Action"
+  OUTPUT_DIR="build/swift4.1"
 else
   echo "Error: Kind $2 not recognize"
   exit 3
