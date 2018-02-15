@@ -2,7 +2,12 @@
 
 [![Build Status](https://travis-ci.org/apache/incubator-openwhisk-runtime-swift.svg?branch=master)](https://travis-ci.org/apache/incubator-openwhisk-runtime-swift)
 
+## Changelogs
+- [Swift 3.1.1 CHANGELOG.md](core/swift3.1.1Action/CHANGELOG.md)
+- [Swift 4.0   CHANGELOG.md](core/swift40Action/CHANGELOG.md)
+- [Swift 4.1   CHANGELOG.md](core/swift41Action/CHANGELOG.md)
 
+## Quick Swift Action
 ### Simple swift action hello.swift
 The traditional support for dictionary still works:
 ```swift
@@ -15,6 +20,7 @@ func main(args: [String:Any]) -> [String:Any] {
 }
 ```
 
+## Swift 4.x support
 ### Packaging an action as a Swift executable using Swift 4
 
 When you create an OpenWhisk Swift action with a Swift source file, it has to be compiled into a binary before the action is run. Once done, subsequent calls to the action are much faster until the container holding your action is purged. This delay is known as the cold-start delay.
