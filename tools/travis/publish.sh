@@ -17,7 +17,6 @@ if [ ${RUNTIME_VERSION} == "3.1.1" ]; then
   RUNTIME="swift3.1.1Action"
 elif [ ${RUNTIME_VERSION} == "4.0" ]; then
   RUNTIME="swift40Action"
-fi
 elif [ ${RUNTIME_VERSION} == "4.1" ]; then
   RUNTIME="swift41Action"
 fi
