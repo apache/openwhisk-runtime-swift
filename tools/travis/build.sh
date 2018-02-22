@@ -11,15 +11,6 @@ export OPENWHISK_HOME=$WHISKDIR
 
 IMAGE_PREFIX="testing"
 
-# Build runtime
-cd $ROOTDIR
-TERM=dumb ./gradlew \
-:core:swift3.1.1Action:distDocker \
-:core:swift40Action:distDocker \
-:core:swift41Action:distDocker \
--PdockerImagePrefix=${IMAGE_PREFIX}
-
-
 # Build OpenWhisk
 cd $WHISKDIR
 
@@ -31,6 +22,16 @@ docker tag openwhisk/invoker ${IMAGE_PREFIX}/invoker
 docker pull openwhisk/nodejs6action
 docker tag openwhisk/nodejs6action ${IMAGE_PREFIX}/nodejs6action
 
+TERM=dumb ./gradlew \
+:common:scala:install \
+:core:controller:install \
+:core:invoker:install \
+:tests:install
 
-
-
+# Build runtime
+cd $ROOTDIR
+TERM=dumb ./gradlew \
+:core:swift3.1.1Action:distDocker \
+:core:swift40Action:distDocker \
+:core:swift41Action:distDocker \
+-PdockerImagePrefix=${IMAGE_PREFIX}
