@@ -72,6 +72,6 @@ ansible/roles/nginx/files/*cert.pem
 !tests/dat/build/swift4.0/SwiftyRequest.zip
 !tests/dat/build/swift4.1/HelloSwift4.zip
 !tests/dat/build/swift4.1/SwiftyRequest.zip
-tests/dat/build/swift4.0/HelloSwift4Codable.zip
-tests/dat/build/swift4.1/HelloSwift4Codable.zip
+!tests/dat/build/swift4.0/HelloSwift4Codable.zip
+!tests/dat/build/swift4.1/HelloSwift4Codable.zip
 
