@@ -43,7 +43,7 @@ func _run_main(mainFunction: ([String: Any]) -> [String: Any]) -> Void {
                     _whisk_print_error(message: "Error serializing data to JSON, data conversion returns nil string", error: nil)
                 }
             } catch {
-                _whisk_print_error(message: "JFailed to encode Dictionary type to JSON string:", error: error)
+                _whisk_print_error(message: "Failed to encode Dictionary type to JSON string:", error: error)
             }
         } else {
             _whisk_print_error(message: "Error serializing JSON, data does not appear to be valid JSON", error: nil)
