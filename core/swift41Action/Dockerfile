@@ -5,7 +5,7 @@ LABEL Description="Linux Ubuntu 14.04 image with the Swift binaries and tools."
 USER root
 
 # Set environment variables for image
-ENV SWIFT_SNAPSHOT swift-4.1-DEVELOPMENT-SNAPSHOT-2018-03-01-a
+ENV SWIFT_SNAPSHOT swift-4.1-DEVELOPMENT-SNAPSHOT-2018-03-05-a
 ENV SWIFT_SNAPSHOT_LOWERCASE swift-4.1-branch
 ENV UBUNTU_VERSION ubuntu14.04
 ENV UBUNTU_VERSION_NO_DOTS ubuntu1404
