@@ -206,7 +206,7 @@ let package = Package(
 
 ### Helper compile.sh helper script
 When compiling and packaging your swift 4 action, there are a couple of differences.
-All your source code needs to be copy to `/swift4Action/spm-build/Sources/Action/` instead of `/swift3Action/spm-build/`
+All your source code needs to be copied to `/swift4Action/spm-build/Sources/Action/` instead of `/swift3Action/spm-build/`
 You Package.swift needs to have the first line with a comment indicating swift4 tooling and format
 ```
 // swift-tools-version:4.0
@@ -228,7 +228,7 @@ This will produce a zip `build/swift4/Hello.zip`
 
 ### SwiftyJSON using single source action file
 If you have a swift:3.1.1 action not compile, just as source using the `SwiftyJSON` package, you need to precompile your action and specify the version of SwiftyJSON you wan to use for swift:4.0 kind action.
-Take into account that tarting with Swift 4 there is better support to manage JSON data natively.
+Take into account that starting with Swift 4 there is better support to manage JSON data natively.
 
 Note: This is only applicable to the base image provided for the Swift 4 runtime, other downstream such as IBM Cloud Functions extending this image might provide additional SDK and packages including `SwiftyJSON` and IBM Watson SDK, check the vendor documentation for more specific information about packages and versions.
 
