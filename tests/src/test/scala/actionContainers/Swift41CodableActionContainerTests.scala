@@ -17,12 +17,7 @@
 
 package runtime.actionContainers
 
-import org.junit.runner.RunWith
-import org.scalatest.junit.JUnitRunner
-
-@RunWith(classOf[JUnitRunner])
-class Swift41ActionContainerTests extends Swift40ActionContainerTests {
+class Swift41CodableActionContainerTests extends SwiftCodableActionContainerTests {
   override lazy val swiftContainerImageName = "action-swift-v4.1"
-  override lazy val swiftBinaryName = "tests/dat/build/swift4.1/HelloSwift4.zip"
-  override lazy val partyCompile = "tests/dat/build/swift4.1/SwiftyRequest.zip"
+  override lazy val swiftBinaryName = "tests/dat/build/swift4.1/HelloSwift4Codable.zip"
 }

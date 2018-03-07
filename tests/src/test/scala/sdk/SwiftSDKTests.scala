@@ -30,13 +30,12 @@ abstract class SwiftSDKTests extends TestHelpers with WskTestHelpers with Matche
 
   implicit val wskprops = WskProps()
   val wsk = new WskRest
-  val expectedDuration = 45 seconds
-  val activationPollDuration = 60 seconds
+  val activationPollDuration = 2.minutes
   lazy val actionKind = "swift:3.1.1"
   lazy val lang = actionKind.split(":")(0)
   lazy val majorVersion = actionKind.split(":")(1).split('.')(0)
   lazy val actionDir = s"$lang$majorVersion"
-  lazy val actionTypeDir: String = System.getProperty("user.dir") + "/dat/actions/sdk/" + actionDir
+  lazy val actionTypeDir: String = "tests/dat/actions/sdk/" + actionDir
   val controllerHost = WhiskProperties.getBaseControllerHost()
   val controllerPort = WhiskProperties.getControllerBasePort()
   val baseUrl = s"http://$controllerHost:$controllerPort"
@@ -58,7 +57,7 @@ abstract class SwiftSDKTests extends TestHelpers with WskTestHelpers with Matche
       params = params + ("baseUrl" -> JsString(baseUrl))
 
     val run = wsk.action.invoke(actionName, params)
-    withActivation(wsk.activation, run, initialWait = 5 seconds, totalWait = 60 seconds) { activation =>
+    withActivation(wsk.activation, run, initialWait = 5 seconds, totalWait = activationPollDuration) { activation =>
       // should be successful
       activation.response.success shouldBe true
 
@@ -86,7 +85,7 @@ abstract class SwiftSDKTests extends TestHelpers with WskTestHelpers with Matche
         params = params + ("baseUrl" -> JsString(baseUrl))
 
       val run = wsk.action.invoke(actionName, params)
-      withActivation(wsk.activation, run, initialWait = 5 seconds, totalWait = 60 seconds) { activation =>
+      withActivation(wsk.activation, run, initialWait = 5 seconds, totalWait = activationPollDuration) { activation =>
         // should not have a "response"
         whisk.utils.JsHelpers.fieldPathExists(activation.response.result.get, "response") shouldBe false
 
@@ -127,7 +126,7 @@ abstract class SwiftSDKTests extends TestHelpers with WskTestHelpers with Matche
       params = params + ("baseUrl" -> JsString(baseUrl))
 
     val run = wsk.action.invoke(actionName, params)
-    withActivation(wsk.activation, run, initialWait = 5 seconds, totalWait = 60 seconds) { activation =>
+    withActivation(wsk.activation, run, initialWait = 5 seconds, totalWait = activationPollDuration) { activation =>
       // should be successful
       activation.response.success shouldBe true
 
@@ -163,7 +162,7 @@ abstract class SwiftSDKTests extends TestHelpers with WskTestHelpers with Matche
       params = params + ("baseUrl" -> JsString(baseUrl))
 
     val run = wsk.action.invoke(actionName, params)
-    withActivation(wsk.activation, run, initialWait = 5 seconds, totalWait = 60 seconds) { activation =>
+    withActivation(wsk.activation, run, initialWait = 5 seconds, totalWait = activationPollDuration) { activation =>
       // should be successful
       activation.response.success shouldBe true
 
@@ -206,7 +205,7 @@ abstract class SwiftSDKTests extends TestHelpers with WskTestHelpers with Matche
       params = params + ("baseUrl" -> JsString(baseUrl))
 
     val run = wsk.action.invoke("ActionThatCreatesRule", params)
-    withActivation(wsk.activation, run, initialWait = 5 seconds, totalWait = 60 seconds) { activation =>
+    withActivation(wsk.activation, run, initialWait = 5 seconds, totalWait = activationPollDuration) { activation =>
       // should be successful
       activation.response.success shouldBe true
 
