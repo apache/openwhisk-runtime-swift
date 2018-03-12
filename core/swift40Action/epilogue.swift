@@ -55,7 +55,7 @@ func _run_main(mainFunction: ([String: Any]) -> [String: Any]) -> Void {
 }
 
 // Codable main signature input Codable
-func _run_main<In: Codable, Out: Codable>(mainFunction: @escaping (In, (Out?, Error?) -> Void) -> Void) {
+func _run_main<In: Decodable, Out: Encodable>(mainFunction: @escaping (In, (Out?, Error?) -> Void) -> Void) {
     do {
         let input = try Whisk.jsonDecoder.decode(In.self, from: json)
         let resultHandler = { (out: Out?, error: Error?) in
@@ -90,7 +90,7 @@ func _run_main<In: Codable, Out: Codable>(mainFunction: @escaping (In, (Out?, Er
 }
 
 // Codable main signature no input
-func _run_main<Out: Codable>(mainFunction: @escaping ((Out?, Error?) -> Void) -> Void) {
+func _run_main<Out: Encodable>(mainFunction: @escaping ((Out?, Error?) -> Void) -> Void) {
     let resultHandler = { (out: Out?, error: Error?) in
         if let error = error {
             _whisk_print_error(message: "Action handler callback returned an error:", error: error)
