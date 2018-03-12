@@ -60,3 +60,5 @@ runtimes_manifest:
 
   blackboxes:
     - name: "dockerskeleton"
+
+controller_protocol: "http"
