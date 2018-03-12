@@ -120,8 +120,8 @@ class Whisk {
                         
                         if let data = data {
                             do {
-                                //let outputStr  = String(data: data, encoding: String.Encoding.utf8) as String!
-                                //print(outputStr)
+                                let outputStr  = String(data: data, encoding: String.Encoding.utf8) as String!
+                                print(outputStr)
                                 let respJson = try JSONSerialization.jsonObject(with: data)
                                 if respJson is [String:Any] {
                                     callback(respJson as! [String:Any])
