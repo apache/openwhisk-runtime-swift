@@ -49,6 +49,5 @@ TERM=dumb ./gradlew \
 cd $ROOTDIR
 TERM=dumb ./gradlew \
 :core:swift3.1.1Action:distDocker \
-:core:swift40Action:distDocker \
 :core:swift41Action:distDocker \
 -PdockerImagePrefix=${IMAGE_PREFIX}

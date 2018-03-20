@@ -1,2 +1,0 @@
-ext.dockerImageName = 'action-swift-v4.0'
-apply from: '../../gradle/docker.gradle'
