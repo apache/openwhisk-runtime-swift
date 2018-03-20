@@ -47,11 +47,6 @@ runtimes_manifest:
       image:
         name: "action-swift-v3.1.1"
       deprecated: false
-    - kind: "swift:4.0"
-      default: true
-      image:
-        name: "action-swift-v4.0"
-      deprecated: false
     - kind: "swift:4.1"
       default: false
       image:

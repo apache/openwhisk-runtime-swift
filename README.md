@@ -22,7 +22,6 @@
 
 ## Changelogs
 - [Swift 3.1.1 CHANGELOG.md](core/swift3.1.1Action/CHANGELOG.md)
-- [Swift 4.0   CHANGELOG.md](core/swift40Action/CHANGELOG.md)
 - [Swift 4.1   CHANGELOG.md](core/swift41Action/CHANGELOG.md)
 
 ## Quick Swift Action
@@ -117,7 +116,7 @@ To avoid the cold-start delay, you can compile your Swift file into a binary and
 
 - Run an interactive Swift action container.
   ```
-  docker run --rm -it -v "$(pwd):/owexec" openwhisk/action-swift-v4.0 bash
+  docker run --rm -it -v "$(pwd):/owexec" openwhisk/action-swift-v4.1 bash
   ```
   This puts you in a bash shell within the Docker container.
 
@@ -162,7 +161,7 @@ let package = Package(
 ```
   As you can see this example adds `SwiftyRequest` dependencies.
   
-  Notice that now with swift:4.0 is no longer required to include `CCurl`, `Kitura-net` and `SwiftyJSON` in your own `Package.swift`.
+  Notice that now with swift:4.1 is no longer required to include `CCurl`, `Kitura-net` and `SwiftyJSON` in your own `Package.swift`.
   You are free now to use no dependencies, or add the combination that you want with the versions you want.
 
 - Copy Package.swift to spm-build directory
@@ -194,7 +193,7 @@ let package = Package(
 
 - Upload it to OpenWhisk with the action name helloSwifty:
   ```
-  wsk action update helloSwiftly hello.zip openwhisk/action-swift-v4.0
+  wsk action update helloSwiftly hello.zip openwhisk/action-swift-v4.1
   ```
 
 - To check how much faster it is, run
@@ -219,15 +218,15 @@ Having a project directory `Hello` under a directory `actions` like the followin
 actions/Hello/Package.swift
 actions/Hello/Sources/main.swift
 ```
-Change to the parent directory then run the compile script specify the project directory, the kind `swift:3.1.1` or `swift:4.0` and any swiftc build flags like the following:
+Change to the parent directory then run the compile script specify the project directory, the kind `swift:3.1.1` or `swift:4.1` and any swiftc build flags like the following:
 ```
 cd actions/
-incubator-runtime-swift/tools/build/compile.sh Hello swift:4.0 -v
+incubator-runtime-swift/tools/build/compile.sh Hello swift:4.1 -v
 ```
 This will produce a zip `build/swift4/Hello.zip`
 
 ### SwiftyJSON using single source action file
-If you have a swift:3.1.1 action not compile, just as source using the `SwiftyJSON` package, you need to precompile your action and specify the version of SwiftyJSON you wan to use for swift:4.0 kind action.
+If you have a swift:3.1.1 action not compile, just as source using the `SwiftyJSON` package, you need to precompile your action and specify the version of SwiftyJSON you wan to use for swift:4.1 kind action.
 Take into account that starting with Swift 4 there is better support to manage JSON data natively.
 
 Note: This is only applicable to the base image provided for the Swift 4 runtime, other downstream such as IBM Cloud Functions extending this image might provide additional SDK and packages including `SwiftyJSON` and IBM Watson SDK, check the vendor documentation for more specific information about packages and versions.
@@ -236,7 +235,7 @@ Note: This is only applicable to the base image provided for the Swift 4 runtime
 ```
 ./gradlew core:swift40Action:distDocker
 ```
-This will produce the image `whisk/action-swift-v4.0`
+This will produce the image `whisk/action-swift-v4.1`
 
 Build and Push image
 ```
@@ -246,7 +245,7 @@ docker login
 
 ### Swift 4.1 Experimental
 We have a runtime for swift 4.1, is experimental as we are trying beta builds released by Swift org.
-Follow same insructions for Swift 4.0 above and replace the kind wih `swift:4.1` and image with `openwhisk/action-swift-v4.0`
+Follow same insructions for Swift 4.1 above and replace the kind wih `swift:4.1` and image with `openwhisk/action-swift-v4.1`
 
 
 ## Codable Suppor with Swift 4.x
@@ -336,7 +335,7 @@ wsk action update myAction myAction.swift --kind swift:3.1.1
 
 ## Local development
 ```
-./gradlew core:swiftAction:distDocker
+./gradlew core:swift41Action:distDocker
 ```
 This will produce the image `whisk/action-swift-v3.1.1`
 
