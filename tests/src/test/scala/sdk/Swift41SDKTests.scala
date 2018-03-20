@@ -21,6 +21,6 @@ import org.junit.runner.RunWith
 import org.scalatest.junit.JUnitRunner
 
 @RunWith(classOf[JUnitRunner])
-class Swift41SDKTests extends Swift40SDKTests {
+class Swift41SDKTests extends SwiftSDKTests {
   override lazy val actionKind = "swift:4.1"
 }
