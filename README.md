@@ -1,16 +1,16 @@
 <!--
 #
-# Licensed to the Apache Software Foundation (ASF) under one or more contributor 
-# license agreements.  See the NOTICE file distributed with this work for additional 
+# Licensed to the Apache Software Foundation (ASF) under one or more contributor
+# license agreements.  See the NOTICE file distributed with this work for additional
 # information regarding copyright ownership.  The ASF licenses this file to you
-# under the Apache License, Version 2.0 (the # "License"); you may not use this 
-# file except in compliance with the License.  You may obtain a copy of the License 
+# under the Apache License, Version 2.0 (the # "License"); you may not use this
+# file except in compliance with the License.  You may obtain a copy of the License
 # at:
 #
 # http://www.apache.org/licenses/LICENSE-2.0
 #
-# Unless required by applicable law or agreed to in writing, software distributed 
-# under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR 
+# Unless required by applicable law or agreed to in writing, software distributed
+# under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
 # CONDITIONS OF ANY KIND, either express or implied.  See the License for the
 # specific language governing permissions and limitations under the License.
 #
@@ -86,7 +86,7 @@ func main(input: Employee, respondWith: (Employee?, Error?) -> Void) -> Void {
         throw VendingMachineError.insufficientFunds(coinsNeeded: 5)
     } catch {
         respondWith(nil, error)
-    } 
+    }
 }
 ```
 ```
@@ -157,10 +157,10 @@ let package = Package(
         dependencies: ["SwiftyRequest"],
         path: "."
       )
- 
+
 ```
   As you can see this example adds `SwiftyRequest` dependencies.
-  
+
   Notice that now with swift:4.1 is no longer required to include `CCurl`, `Kitura-net` and `SwiftyJSON` in your own `Package.swift`.
   You are free now to use no dependencies, or add the combination that you want with the versions you want.
 
@@ -240,7 +240,7 @@ This will produce the image `whisk/action-swift-v4.1`
 Build and Push image
 ```
 docker login
-./gradlew core:swift40Action:distDocker -PdockerImagePrefix=$prefix-user -PdockerRegistry=docker.io 
+./gradlew core:swift40Action:distDocker -PdockerImagePrefix=$prefix-user -PdockerRegistry=docker.io
 ```
 
 ### Swift 4.1 Experimental
@@ -298,7 +298,7 @@ func main(input: Employee, respondWith: (Employee?, Error?) -> Void) -> Void {
         throw VendingMachineError.insufficientFunds(coinsNeeded: 5)
     } catch {
         respondWith(nil, error)
-    } 
+    }
 }
 ```
 ```
@@ -330,22 +330,22 @@ This works on any deployment of Apache OpenWhisk
 ### To use on deployment that contains the rutime as a kind
 To use as a kind action
 ```
-wsk action update myAction myAction.swift --kind swift:3.1.1
+wsk action update myAction myAction.swift --kind swift:4.1
 ```
 
 ## Local development
 ```
 ./gradlew core:swift41Action:distDocker
 ```
-This will produce the image `whisk/action-swift-v3.1.1`
+This will produce the image `whisk/action-swift-v4.1`
 
 Build and Push image
 ```
 docker login
-./gradlew core:swiftAction:distDocker -PdockerImagePrefix=$prefix-user -PdockerRegistry=docker.io 
+./gradlew core:swift41Action:distDocker -PdockerImagePrefix=$prefix-user -PdockerRegistry=docker.io
 ```
 
-Deploy OpenWhisk using ansible environment that contains the kind `swift:3.1.1`
+Deploy OpenWhisk using ansible environment that contains the kind `swift:4.1`
 Assuming you have OpenWhisk already deploy localy and `OPENWHISK_HOME` pointing to root directory of OpenWhisk core repository.
 
 Set `ROOTDIR` to the root directory of this repository.
