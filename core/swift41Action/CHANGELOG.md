@@ -1,5 +1,11 @@
 # Apache OpenWhisk Swift 4.1 Runtime Container
 
+## 1.0.3
+Changes:
+  - update swift41 snapshot build to `2018-03-26-a`
+
+Swift runtime version: [swift-4.1-DEVELOPMENT-SNAPSHOT-2018-03-26-a](https://swift.org/builds/swift-4.1-branch/ubuntu1404/swift-4.1-DEVELOPMENT-SNAPSHOT-2018-03-26-a/swift-4.1-DEVELOPMENT-SNAPSHOT-2018-03-26-a-ubuntu14.04.tar.gz)
+
 ## 1.0.2
 Changes:
   - update epilogue with additional @escaping for Codable
