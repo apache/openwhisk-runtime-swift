@@ -53,7 +53,7 @@ abstract class SwiftCodableActionContainerTests extends BasicActionRunnerTests w
         |  let numbers: [Int]?
         |  let object: AnObject?
         | }
-        | func main(input: AnInput, respondWith: (AnInput?, Error?) -> Void) -> Void {
+        | func main(input: AnInput, respondWith: @escaping (AnInput?, Error?) -> Void) -> Void {
         |    print("hello stdout")
         |    var standardError = FileHandle.standardError
         |    print("hello stderr", to: &standardError)

@@ -30,6 +30,7 @@ class Swift41ActionContainerTests extends SwiftActionContainerTests {
   override lazy val swiftContainerImageName = "action-swift-v4.1"
   override lazy val swiftBinaryName = "tests/dat/build/swift4.1/HelloSwift4.zip"
   lazy val partyCompile = "tests/dat/build/swift4.1/SwiftyRequest.zip"
+  lazy val partyCompileCodable = "tests/dat/build/swift4.1/SwiftyRequestCodable.zip"
 
   val httpCode = """
        | import Dispatch
@@ -84,6 +85,28 @@ class Swift41ActionContainerTests extends SwiftActionContainerTests {
       runCode should be(200)
       val json = runRes.get.fields.get("json")
       json shouldBe Some(args)
+    }
+
+    checkStreams(out, err, {
+      case (o, e) =>
+        if (enforceEmptyOutputStream) o shouldBe empty
+        e shouldBe empty
+    })
+  }
+
+  it should "support ability to use escaping completion in Codable" in {
+    val zip = new File(partyCompileCodable).toPath
+    val code = ResourceHelpers.readAsBase64(zip)
+
+    val (out, err) = withActionContainer() { c =>
+      val (initCode, initRes) = c.init(initPayload(code, main = "mainCodable"))
+      initCode should be(200)
+
+      val (runCode, runRes) = c.run(runPayload(JsObject()))
+
+      runCode should be(200)
+      runRes.get.fields.get("greeting") shouldBe Some(JsString("success"))
+
     }
 
     checkStreams(out, err, {

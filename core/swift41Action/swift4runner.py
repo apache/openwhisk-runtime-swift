@@ -66,7 +66,7 @@ class Swift4Runner(ActionRunner):
             with codecs.open(SRC_EPILOGUE_FILE, 'r', 'utf-8') as ep:
                 fp.write(ep.read())
 
-            fp.write('_run_main(mainFunction: %s)\n' % main_function)
+            fp.write('_run_main(mainFunction: %s)\n_ = _whisk_semaphore.wait(timeout: .distantFuture)\n' % main_function)
 
     def build(self, init_message):
         # short circuit the build, if there already exists a binary
