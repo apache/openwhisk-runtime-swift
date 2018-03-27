@@ -33,7 +33,7 @@ RUNTIME="openwhisk/action-swift-v3.1.1"
 if [ ${2} == "swift:3.1.1" ]; then
   OUTPUT_DIR="build/swift311"
 elif [ ${2} == "swift:4.1" ]; then
-  RUNTIME="action-swift-v4.1"
+  RUNTIME="openwhisk/action-swift-v4.1"
   BASE_PATH="/swift4Action"
   DEST_SOURCE="/$BASE_PATH/spm-build/Sources/Action"
   OUTPUT_DIR="build/swift4.1"
@@ -67,6 +67,12 @@ fi
 # Add in the OW specific bits
 cat $BASE_PATH/epilogue.swift >> $DEST_SOURCE/main.swift
 echo '_run_main(mainFunction:main)' >> $DEST_SOURCE/main.swift
+
+# Only for Swift4
+if [ ${2} != "swift:3.1.1" ]; then
+  echo 'Adding wait to deal with escaping'
+  echo '_ = _whisk_semaphore.wait(timeout: .distantFuture)' >> $DEST_SOURCE/main.swift
+fi
 
 echo \"Compiling $1...\"
 cd /$BASE_PATH/spm-build
