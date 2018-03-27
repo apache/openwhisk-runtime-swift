@@ -320,10 +320,10 @@ wsk action invoke helloCodableError -b -p id 42 -p name Carlos
 }
 ```
 
-### Using Swift 3.1.1
+### Using Swift 4.1
 To use as a docker action
 ```
-wsk action update myAction myAction.swift --docker openwhisk/action-swift-v3.1.1:1.0.0
+wsk action update myAction myAction.swift --docker openwhisk/action-swift-v4.1:1.0.0
 ```
 This works on any deployment of Apache OpenWhisk
 
@@ -389,12 +389,12 @@ Using IntelliJ:
 #### Using container image to test
 To use as docker action push to your own dockerhub account
 ```
-docker tag whisk/action-swift-v3.1.1 $user_prefix/action-swift-v3.1.1
-docker push $user_prefix/action-swift-v3.1.1
+docker tag whisk/action-swift-v4.1 $user_prefix/action-swift-v4.1
+docker push $user_prefix/action-swift-v4.1
 ```
 Then create the action using your the image from dockerhub
 ```
-wsk action update myAction myAction.swift --docker $user_prefix/action-swift-v3.1.1
+wsk action update myAction myAction.swift --docker $user_prefix/action-swift-v4.1
 ```
 The `$user_prefix` is usually your dockerhub user id.
 
