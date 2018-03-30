@@ -1,5 +1,11 @@
 # Apache OpenWhisk Swift 4.1 Runtime Container
 
+## 1.0.4
+Changes:
+  - update swift41 runtime to `swift-4.1-RELEASE`
+
+Swift runtime version: [swift-4.1-RELEASE](https://swift.org/builds/swift-4.1-release/ubuntu1404/swift-4.1-RELEASE/swift-4.1-RELEASE-ubuntu14.04.tar.gz)
+
 ## 1.0.3
 Changes:
   - update swift41 snapshot build to `2018-03-26-a`
