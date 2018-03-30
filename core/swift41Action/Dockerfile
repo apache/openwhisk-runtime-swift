@@ -6,7 +6,6 @@ USER root
 
 # Set environment variables for image
 # Using git hash https://github.com/apple/swift/commit/f01501c324876fc07820dc28923d7088fb7af847
-https://swift.org/builds/swift-4.1-release/ubuntu1404/swift-4.1-RELEASE/swift-4.1-RELEASE-ubuntu14.04.tar.gz
 ENV SWIFT_SNAPSHOT swift-4.1-RELEASE
 ENV SWIFT_SNAPSHOT_LOWERCASE swift-4.1-release
 ENV UBUNTU_VERSION ubuntu14.04
