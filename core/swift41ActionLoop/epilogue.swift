@@ -20,7 +20,6 @@ import Foundation
 // Linux only
 import Glibc
 
-
 func _whisk_print_error(message: String, error: Error?){
     var errStr =  "{\"error\":\"\(message)\"}\n"
     if let error = error {
@@ -43,6 +42,8 @@ func _run_main(mainFunction: ([String: Any]) -> [String: Any]) -> Void {
                     var json = [UInt8](jsonData)
                     json.append(10)
                     write(3, json, json.count)
+                    fflush(stdout)
+                    fflush(stderr)
                 } catch {
                     _whisk_print_error(message: "Failed to encode Dictionary type to JSON string:", error: error)
                 }
