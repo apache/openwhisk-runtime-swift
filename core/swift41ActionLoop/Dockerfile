@@ -67,3 +67,5 @@ RUN touch /swift4Action/spm-build/Sources/Action/main.swift \
     && chmod 0755 /bin/compile \
     && python /swift4Action/buildandrecord.py \
     && rm /swift4Action/spm-build/.build/release/Action
+
+CMD /proxy
