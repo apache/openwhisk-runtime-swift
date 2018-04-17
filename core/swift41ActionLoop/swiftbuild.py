@@ -92,7 +92,7 @@ def collect(source):
     if os.path.isdir(source):
         with codecs.open(DEST_SCRIPT_FILE, 'a', 'utf-8') as fp:
             for file in glob.glob(source+"/*.swift"):
-                print "contact "+file
+                print "concat "+file
                 with codecs.open(file, 'r', 'utf-8') as f:
                     fp.write(f.read())
         return source
@@ -101,31 +101,32 @@ def collect(source):
     sys.exit(1)
 
 def main(argv):
-    if len(argv) == 1:
-        print("usage: <source< [<main>] [<target>]\n<main> defaults to 'main'\n<target> must be a dir\n")
-        sys.exit(1)
 
     # collect args
-    source = argv[1]
     main = "main"
-    target = ""
+    source = "/src"
+    target = "/out"
+    if len(argv) > 1:
+        main = argv[1]
     if len(argv) > 2:
-        main = argv[2]  
+        source = argv[2]  
     if len(argv) > 3:
         target = argv[3]  
 
-  
+    source = os.path.abspath(source)
+    target = os.path.abspath(target)
+
     # build
-    sourcedir = collect(source)
+    collect(source)
     os.chdir(DEST_SCRIPT_DIR)
     epilogue(main)
     build()
     
     # copy to target
-    if target != "" and os.path.isdir(target):
+    if os.path.isdir(target):
         dest = target+ "/" + main
     else:
-        dest = sourcedir + "/" + main
+        dest = target
     
     shutil.copyfile(DEST_BIN_FILE, dest)
     os.chmod(dest, 0o755)
