@@ -19,15 +19,17 @@
  */
 """
 import os
+import os.path
 import glob
 import sys
 import subprocess
 import codecs
 import json
-from shutil import copyfile
+import shutil 
 
 SRC_EPILOGUE_FILE = '/swift4Action/epilogue.swift'
 DEST_SCRIPT_FILE = '/swift4Action/spm-build/Sources/Action/main.swift'
+DEST_SCRIPT_SRC = '/swift4Action/spm-build/Sources/Action'
 DEST_SCRIPT_DIR = '/swift4Action/spm-build'
 DEST_BIN_FILE = '/swift4Action/spm-build/.build/release/Action'
 
@@ -41,9 +43,11 @@ def epilogue(main_function):
         os.chdir(DEST_SCRIPT_DIR)
         for file in glob.glob("*.swift"):
             if file not in ["Package.swift", "main.swift", "_WhiskJSONUtils.swift", "_Whisk.swift"]:
+                print("concat "+file)
                 with codecs.open(file, 'r', 'utf-8') as f:
                     fp.write(f.read())
         with codecs.open(SRC_EPILOGUE_FILE, 'r', 'utf-8') as ep:
+            print("concat "+SRC_EPILOGUE_FILE)
             fp.write(ep.read())
 
         fp.write('_run_main(mainFunction: %s)\n' % main_function)
@@ -76,25 +80,55 @@ def build():
         sys.stderr.write(e)
         sys.stderr.flush()
 
-if __name__ == '__main__':
-    if len(sys.argv) == 1:
-        print("usage: source [main] [target]\nmain defaults to 'main'\ntarget defaults to source\n")
+
+def collect(source):
+    # copy file
+    if os.path.isfile(source):
+      print "copying "+source
+      shutil.copyfile(source, DEST_SCRIPT_FILE)
+      return os.path.dirname(source)
+
+    # collect sources in a single main
+    if os.path.isdir(source):
+        with codecs.open(DEST_SCRIPT_FILE, 'a', 'utf-8') as fp:
+            for file in glob.glob(source+"/*.swift"):
+                print "contact "+file
+                with codecs.open(file, 'r', 'utf-8') as f:
+                    fp.write(f.read())
+        return source
+    
+    print "cannot read "+source
+    sys.exit(1)
+
+def main(argv):
+    if len(argv) == 1:
+        print("usage: <source< [<main>] [<target>]\n<main> defaults to 'main'\n<target> must be a dir\n")
         sys.exit(1)
 
-    source = sys.argv[1]
-    mainscript = "main"
-    target = source
-    if len(sys.argv) > 2:
-        mainscript = sys.argv[2]
-    if len(sys.argv) >3:
-        target = sys.argv[3]
+    # collect args
+    source = argv[1]
+    main = "main"
+    target = ""
+    if len(argv) > 2:
+        main = argv[2]  
+    if len(argv) > 3:
+        target = argv[3]  
 
-
-    here = os.getcwd()
-    copyfile(source, DEST_SCRIPT_FILE)
-    epilogue(mainscript)
+  
+    # build
+    sourcedir = collect(source)
+    os.chdir(DEST_SCRIPT_DIR)
+    epilogue(main)
     build()
-    os.chdir(here)
-    copyfile(DEST_BIN_FILE, target)
-    os.chmod(target, 0o755)
+    
+    # copy to target
+    if target != "" and os.path.isdir(target):
+        dest = target+ "/" + main
+    else:
+        dest = sourcedir + "/" + main
+    
+    shutil.copyfile(DEST_BIN_FILE, dest)
+    os.chmod(dest, 0o755)
 
+if __name__ == '__main__':
+    main(sys.argv)

@@ -1,5 +1,5 @@
-FROM goproxy
-LABEL Description="Swift Action Compiler based on GoProxy"
+FROM actionloop
+LABEL Description="Swift Action Compiler based on Go ActionLoop"
 EXPOSE 8080
 USER root
 
@@ -59,11 +59,11 @@ ADD spm-build/Package.swift /swift4Action/spm-build
 ADD spm-build/_Whisk.swift /swift4Action/spm-build/Sources/Action
 
 # swift compiler 
-ADD swiftbuild.py /swiftbuild
-ENV COMPILER /swiftbuild
+ADD swiftbuild.py /bin/compile
+ENV COMPILER /bin/compile
 
 # Build
 RUN touch /swift4Action/spm-build/Sources/Action/main.swift \
-    && chmod 0755 /swiftbuild \
+    && chmod 0755 /bin/compile \
     && python /swift4Action/buildandrecord.py \
     && rm /swift4Action/spm-build/.build/release/Action
