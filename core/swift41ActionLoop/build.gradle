@@ -6,12 +6,12 @@ distDocker.dependsOn 'copyPackageSwift'
 distDocker.finalizedBy('cleanup')
 
 task copyWhisk(type: Copy) {
-    from '../swift40Action/spm-build/_Whisk.swift'
+    from '../swift41Action/spm-build/_Whisk.swift'
     into './spm-build'
 }
 
 task copyPackageSwift(type: Copy) {
-    from '../swift40Action/spm-build/Package.swift'
+    from '../swift41Action/spm-build/Package.swift'
     into './spm-build'
 }
 
