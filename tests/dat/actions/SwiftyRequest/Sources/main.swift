@@ -1,3 +1,6 @@
+// Licensed to the Apache Software Foundation (ASF) under one or more contributor
+// license agreements; and to You under the Apache License, Version 2.0.
+
 import SwiftyRequest
 import Dispatch
 import Foundation
@@ -5,7 +8,7 @@ import Foundation
 func main(args: [String:Any]) -> [String:Any] {
     var resp :[String:Any] = ["error":"Action failed"]
     let echoURL = "http://httpbin.org/post"
-    
+
     // setting body data to {"Data":"string"}
     let origJson: [String: Any] = args
     guard let data = try? JSONSerialization.data(withJSONObject: origJson, options: []) else {
@@ -33,4 +36,3 @@ func main(args: [String:Any]) -> [String:Any] {
 }
 //let r = main(args:["message":"serverless"])
 //print(r)
-
