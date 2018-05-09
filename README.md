@@ -17,8 +17,9 @@
 -->
 
 # Apache OpenWhisk runtimes for swift
-
+[![License](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](http://www.apache.org/licenses/LICENSE-2.0)
 [![Build Status](https://travis-ci.org/apache/incubator-openwhisk-runtime-swift.svg?branch=master)](https://travis-ci.org/apache/incubator-openwhisk-runtime-swift)
+
 
 ## Changelogs
 - [Swift 3.1.1 CHANGELOG.md](core/swift3.1.1Action/CHANGELOG.md)
@@ -397,10 +398,3 @@ Then create the action using your the image from dockerhub
 wsk action update myAction myAction.swift --docker $user_prefix/action-swift-v4.1
 ```
 The `$user_prefix` is usually your dockerhub user id.
-
-
-
-# License
-[Apache 2.0](LICENSE.txt)
-
-
