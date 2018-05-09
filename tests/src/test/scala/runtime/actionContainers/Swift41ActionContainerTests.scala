@@ -31,6 +31,8 @@ class Swift41ActionContainerTests extends SwiftActionContainerTests {
   override lazy val swiftBinaryName = "tests/dat/build/swift4.1/HelloSwift4.zip"
   lazy val partyCompile = "tests/dat/build/swift4.1/SwiftyRequest.zip"
   lazy val partyCompileCodable = "tests/dat/build/swift4.1/SwiftyRequestCodable.zip"
+  val echoURLPost = "https://eu.httpbin.org/post"
+  val echoURLGet = "https://eu.httpbin.org/get"
 
   val httpCode = """
        | import Dispatch
@@ -79,12 +81,12 @@ class Swift41ActionContainerTests extends SwiftActionContainerTests {
       val (initCode, initRes) = c.init(initPayload(code))
       initCode should be(200)
 
-      val args = JsObject("message" -> (JsString("serverless")))
-      val (runCode, runRes) = c.run(runPayload(args))
+      val args = Map("message" -> JsString("serverless"), "url" -> JsString(echoURLPost))
+      val (runCode, runRes) = c.run(runPayload(JsObject(args)))
 
       runCode should be(200)
       val json = runRes.get.fields.get("json")
-      json shouldBe Some(args)
+      json shouldBe Some(JsObject(args))
     }
 
     checkStreams(out, err, {
@@ -99,10 +101,10 @@ class Swift41ActionContainerTests extends SwiftActionContainerTests {
     val code = ResourceHelpers.readAsBase64(zip)
 
     val (out, err) = withActionContainer() { c =>
-      val (initCode, initRes) = c.init(initPayload(code, main = "mainCodable"))
+      val (initCode, initRes) = c.init(initPayload(code))
       initCode should be(200)
 
-      val (runCode, runRes) = c.run(runPayload(JsObject()))
+      val (runCode, runRes) = c.run(runPayload(JsObject("url" -> JsString(echoURLGet))))
 
       runCode should be(200)
       runRes.get.fields.get("greeting") shouldBe Some(JsString("success"))

@@ -7,7 +7,12 @@ import Foundation
 
 func main(args: [String:Any]) -> [String:Any] {
     var resp :[String:Any] = ["error":"Action failed"]
-    let echoURL = "http://httpbin.org/post"
+    var echoURL:String
+    if let echoUrlValue = args["url"]  {
+        echoURL = echoUrlValue as! String
+    } else {
+        echoURL = "https://httpbin.org/post"
+    }
 
     // setting body data to {"Data":"string"}
     let origJson: [String: Any] = args
