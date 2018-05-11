@@ -187,7 +187,7 @@
       same "printed page" as the copyright notice for easier
       identification within third-party archives.
 
-   Copyright 2015-present The Apache Software Foundation
+   Copyright 2016-2018 The Apache Software Foundation
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -200,47 +200,3 @@
    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    See the License for the specific language governing permissions and
    limitations under the License.
-
-
-========================================================================
-Apache License 2.0
-========================================================================
-
-This distribution has binary dependencies on the following components, which are available under an Apache License 2.0 (https://opensource.org/licenses/Apache-2.0).
-Swift 3.1.1 and 4.1 (swift - https://swift.org/)
-  License included at licenses/LICENSE-swift.txt, or https://swift.org/community/#license
-  Copyright (c) 2018 Apple Inc. All rights reserved.
-
-
-This distribution depends on the following components, which are available under an Apache License 2.0 (https://opensource.org/licenses/Apache-2.0).
-Openwhisk Runtime Docker 1.0.0 (openwhisk-runtime-docker - https://github.com/apache/incubator-openwhisk-runtime-docker/)
-  License included at licenses/LICENSE-openwhiskruntimedocker.txt, or https://github.com/apache/incubator-openwhisk-runtime-docker/blob/master/LICENSE.txt
-  Copyright (c) 2016-present The Apache Software Foundation
-
-========================================================================
-Python Software Foundation License
-========================================================================
-
-This distribution has binary dependencies on the following components, which are available under an Python Software Foundation License (https://opensource.org/licenses/Python-2.0).
-Python 2.7 (python - https://www.python.org)
-  License included at licenses/LICENSE-python.txt, or https://www.python.org/download/releases/2.7/license/
-
-
-========================================================================
-MIT License
-========================================================================
-
-This distribution depends on the following components, which are available under an MIT License (https://opensource.org/licenses/MIT).
-Gevent latest (gevent - https://github.com/gevent/gevent/)
-  License included at licenses/LICENSE-gevent.txt, or https://github.com/gevent/gevent/blob/master/LICENSE
-  Copyright (c) Denis Bilenko and the contributors, http://www.gevent.org
-
-
-========================================================================
-BSD 3-Clause License
-========================================================================
-
-This distribution depends on the following components, which are available under a BSD 3-clause License (https://opensource.org/licenses/BSD-3-Clause).
-Flask latest (flask - https://github.com/pallets/flask/)
-  License included at licenses/LICENSE-flask.txt, or https://github.com/pallets/flask/blob/master/LICENSE
-  Copyright (c) 2010 by the Pallets team.
