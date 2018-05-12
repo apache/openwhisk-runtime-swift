@@ -43,7 +43,9 @@ else
 fi
 DEST_PACKAGE_SWIFT="$BASE_PATH/spm-build/Package.swift"
 
-BUILD_FLAGS=""
+# Due to a current bug in the Swift Docker image compile optimization is disabled by default.
+# If you need compiler optimization you can override the BUILD_FLAGS to enable it
+BUILD_FLAGS="-Xswiftc -Onone"
 if [ -n "$3" ] ; then
     BUILD_FLAGS=${3}
 fi
