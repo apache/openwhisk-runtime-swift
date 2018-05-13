@@ -30,6 +30,7 @@ fi
 BASE_PATH="/swift3Action"
 DEST_SOURCE="$BASE_PATH/spm-build"
 RUNTIME="openwhisk/action-swift-v3.1.1"
+BUILD_FLAGS=""
 if [ ${2} == "swift:3.1.1" ]; then
   OUTPUT_DIR="build/swift311"
 elif [ ${2} == "swift:4.1" ]; then
@@ -37,15 +38,15 @@ elif [ ${2} == "swift:4.1" ]; then
   BASE_PATH="/swift4Action"
   DEST_SOURCE="/$BASE_PATH/spm-build/Sources/Action"
   OUTPUT_DIR="build/swift4.1"
+  # Due to a current bug in the Swift Docker image compile optimization is disabled by default.
+  # If you need compiler optimization you can override the BUILD_FLAGS to enable it
+  BUILD_FLAGS="-Xswiftc -Onone"
 else
   echo "Error: Kind $2 not recognize"
   exit 3
 fi
 DEST_PACKAGE_SWIFT="$BASE_PATH/spm-build/Package.swift"
 
-# Due to a current bug in the Swift Docker image compile optimization is disabled by default.
-# If you need compiler optimization you can override the BUILD_FLAGS to enable it
-BUILD_FLAGS="-Xswiftc -Onone"
 if [ -n "$3" ] ; then
     BUILD_FLAGS=${3}
 fi
