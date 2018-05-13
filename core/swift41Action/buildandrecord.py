@@ -27,7 +27,7 @@ COMPILE_PREFIX = "/usr/bin/swiftc -module-name Action "
 LINKER_PREFIX =  "/usr/bin/swiftc -target x86_64-unknown-linux -sdk / -L /swift4Action/spm-build/.build/x86_64-unknown-linux/release -o /swift4Action/spm-build/.build/x86_64-unknown-linux/release/Action -module-name Action -emit-executable -Xlinker '-rpath=$ORIGIN'"
 GENERATED_BUILD_SCRIPT = "/swift4Action/spm-build/swiftbuildandlink.sh"
 SPM_DIRECTORY = "/swift4Action/spm-build"
-BUILD_COMMAND = ["swift", "build", "-v", "-c", "release"]
+BUILD_COMMAND = ["swift", "build", "-v", "-Xswiftc", "-Onone", "-c", "release"]
 
 # Build Swift package and capture step trace
 print("Building action")

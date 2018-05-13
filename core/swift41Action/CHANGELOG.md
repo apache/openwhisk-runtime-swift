@@ -19,6 +19,12 @@
 
 # Apache OpenWhisk Swift 4.1 Runtime Container
 
+## 1.0.5
+Changes:
+  - update to pass swiftc flags -Xswiftc -Onone to workaround swift optimization problem
+
+Swift runtime version: [swift-4.1-RELEASE](https://swift.org/builds/swift-4.1-release/ubuntu1404/swift-4.1-RELEASE/swift-4.1-RELEASE-ubuntu14.04.tar.gz)
+
 ## 1.0.4
 Changes:
   - update swift41 runtime to `swift-4.1-RELEASE`
