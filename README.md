@@ -399,3 +399,7 @@ Then create the action using your the image from dockerhub
 wsk action update myAction myAction.swift --docker $user_prefix/action-swift-v4.1
 ```
 The `$user_prefix` is usually your dockerhub user id.
+
+# Disclaimer
+
+Apache OpenWhisk Runtime Swift is an effort undergoing incubation at The Apache Software Foundation (ASF), sponsored by the Apache Incubator. Incubation is required of all newly accepted projects until a further review indicates that the infrastructure, communications, and decision making process have stabilized in a manner consistent with other successful ASF projects. While incubation status is not necessarily a reflection of the completeness or stability of the code, it does indicate that the project has yet to be fully endorsed by the ASF.
