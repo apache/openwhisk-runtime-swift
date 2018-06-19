@@ -42,7 +42,7 @@ docker tag openwhisk/controller ${IMAGE_PREFIX}/controller
 docker pull openwhisk/invoker
 docker tag openwhisk/invoker ${IMAGE_PREFIX}/invoker
 docker pull openwhisk/nodejs6action
-docker tag openwhisk/nodejs6action ${IMAGE_PREFIX}/nodejs6action
+docker tag openwhisk/nodejs6action nodejs6action
 
 TERM=dumb ./gradlew \
 :common:scala:install \
