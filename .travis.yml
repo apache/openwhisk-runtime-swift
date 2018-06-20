@@ -27,10 +27,12 @@ deploy:
     on:
       tags: true
       all_branches: true
+      repo: apache/incubator-openwhisk-runtime-swift
   - provider: script
     script: "./tools/travis/publish.sh openwhisk 4.1 master"
     on:
       branch: master
+      repo: apache/incubator-openwhisk-runtime-swift
 env:
   global:
   - secure: YqQG7kchpqrqYNCBHmoXs5QJFJQmtuy30WYQnQtudVuqZ1/PqsTJXy6+kNxQ88z5NoU4XZKClB61V8ZVHqGsbQd3lAsTy11QKxf+s4kfsGBuoRlow4eQmnUnnaF3E6KVV2nJ4oXro7RQhP3WwLjpsThrMk322B1ZtlSRALR9hK5wCit8Q1ifSJqmKLwuoNSNQzd7onlDF19Q9pyKkgVu9wLKU5epo76wuFkRfkbr1mB3fF2le2WRNXer2N8rL8McHousFPYA03IIdo6zdX27yGmqSW3teCiVYieGrqtaGhH0WCE7dcmoQ/gs7IBqn1K80wJSR1lbkKDiWzmb73FWScKuXmRn5c4HCq/wPya2I5JNUGyPg5YI0HyMDxGTJ/OdXv2Aizyh3hyNMFjtbjK4N6gz6kFAn8Uo6wFs441Bq+S3+ipLAQ41KIQ7E4/Di6ERSG8KKWKy+LlnA5Qy60CQHRIyJCg3+aqfTe7LUrI/mCclRelnLzUPApFOBI1zPB44+lJVRFfcAKhKIen1bdljTwhjP0xkmOS7rJKtEUl3BvIOAeHC9Dgts9LoqhcMjeXexasbgIpm/CEb8yBTSs+1/FG+8r/v0qGEI6+X/HRJaapQ3vsAKI3M+kbHIjrXhJaUlLWc4dk70B7Ee2eh057cPgInZYLXPi0ksNWy8wAtAJE=
