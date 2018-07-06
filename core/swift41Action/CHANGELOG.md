@@ -19,6 +19,10 @@
 
 # Apache OpenWhisk Swift 4.1 Runtime Container
 
+## 1.0.6
+Changes:
+  - Update base image to openwhisk/dockerskeleton:1.3.1
+
 ## 1.0.5
 Changes:
   - update to pass swiftc flags -Xswiftc -Onone to workaround swift optimization problem

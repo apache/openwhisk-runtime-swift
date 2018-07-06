@@ -19,6 +19,10 @@
 
 # Apache OpenWhisk Swift 3.1 Runtime Container
 
+## 1.0.1
+Changes:
+  - Update base image to openwhisk/dockerskeleton:1.3.1
+
 ## 1.0.0
 Initial Swift 3.1 image
   - Image name: `openwhisk/action-swift-v3.1.1`
