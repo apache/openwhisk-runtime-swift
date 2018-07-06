@@ -19,8 +19,9 @@ package runtime.actionContainers
 
 import java.io.File
 import common.WskActorSystem
-import actionContainers.{ActionContainer, ResourceHelpers}
+import actionContainers.{ActionContainer, BasicActionRunnerTests}
 import actionContainers.ActionContainer.withContainer
+import actionContainers.ResourceHelpers.readAsBase64
 import spray.json._
 
 abstract class SwiftCodableActionContainerTests extends BasicActionRunnerTests with WskActorSystem {
@@ -213,7 +214,7 @@ abstract class SwiftCodableActionContainerTests extends BasicActionRunnerTests w
 
   it should "support pre-compiled binary in a zip file" in {
     val zip = new File(swiftBinaryName).toPath
-    val code = ResourceHelpers.readAsBase64(zip)
+    val code = readAsBase64(zip)
 
     val (out, err) = withActionContainer() { c =>
       val (initCode, initRes) = c.init(initPayload(code))
