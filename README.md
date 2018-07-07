@@ -325,7 +325,7 @@ wsk action invoke helloCodableError -b -p id 42 -p name Carlos
 ### Using Swift 4.1
 To use as a docker action
 ```
-wsk action update myAction myAction.swift --docker openwhisk/action-swift-v4.1:1.0.6
+wsk action update myAction myAction.swift --docker openwhisk/action-swift-v4.1:1.0.7
 ```
 This works on any deployment of Apache OpenWhisk
 
