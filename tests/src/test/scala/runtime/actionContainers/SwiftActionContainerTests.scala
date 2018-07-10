@@ -18,29 +18,57 @@
 package runtime.actionContainers
 
 import java.io.File
+
 import common.WskActorSystem
 import actionContainers.{ActionContainer, BasicActionRunnerTests}
 import actionContainers.ActionContainer.withContainer
 import actionContainers.ResourceHelpers.readAsBase64
+import org.junit.runner.RunWith
+import org.scalatest.junit.JUnitRunner
 import spray.json._
 
+@RunWith(classOf[JUnitRunner])
 abstract class SwiftActionContainerTests extends BasicActionRunnerTests with WskActorSystem {
 
   // note: "out" will likely not be empty in some swift build as the compiler
   // prints status messages and there doesn't seem to be a way to quiet them
   val enforceEmptyOutputStream = false
-  lazy val swiftContainerImageName = "action-swift-v4.0"
-  lazy val swiftBinaryName = "tests/dat/actions/swift4zip/build/Hello.zip"
+  lazy val swiftContainerImageName: String = ???
+  lazy val swiftBinaryName: String = ???
   val httpCode: String
 
   behavior of swiftContainerImageName
 
-  //testNoSourceOrExec(checkResultInLogs = false)
+  override val testNoSourceOrExec = {
+    TestConfig("")
+  }
 
-  testEcho(Seq {
-    (
-      "swift echo",
+  override val testNotReturningJson = {
+    // cannot compile function that doesn't return a json object
+    TestConfig("", skipTest = true)
+  }
+
+  override val testInitCannotBeCalledMoreThanOnce = {
+    TestConfig("""
+        | func main(args: [String: Any]) -> [String: Any] {
+        |     return args
+        | }
+      """.stripMargin)
+  }
+
+  override val testEntryPointOtherThanMain = {
+    TestConfig(
       """
+        | func niam(args: [String: Any]) -> [String: Any] {
+        |     return args
+        | }
+      """.stripMargin,
+      main = "niam",
+      enforceEmptyOutputStream = enforceEmptyOutputStream)
+  }
+
+  override val testEcho = {
+    TestConfig("""
         | import Foundation
         |
         | extension FileHandle : TextOutputStream {
@@ -57,12 +85,10 @@ abstract class SwiftActionContainerTests extends BasicActionRunnerTests with Wsk
         |     return args
         | }
       """.stripMargin)
-  })
+  }
 
-  testUnicode(Seq {
-    (
-      "swift unicode",
-      """
+  override val testUnicode = {
+    TestConfig("""
         | func main(args: [String: Any]) -> [String: Any] {
         |     if let str = args["delimiter"] as? String {
         |         let msg = "\(str) ☃ \(str)"
@@ -73,13 +99,11 @@ abstract class SwiftActionContainerTests extends BasicActionRunnerTests with Wsk
         |     }
         | }
       """.stripMargin.trim)
-  })
+  }
 
-  testEnv(
-    Seq {
-      (
-        "swift environment",
-        """
+  override val testEnv = {
+    TestConfig(
+      """
         | func main(args: [String: Any]) -> [String: Any] {
         |     let env = ProcessInfo.processInfo.environment
         |     var a = "???"
@@ -108,30 +132,16 @@ abstract class SwiftActionContainerTests extends BasicActionRunnerTests with Wsk
         |     }
         |     return ["api_host": a, "api_key": b, "namespace": c, "action_name": d, "activation_id": e, "deadline": f]
         | }
-      """.stripMargin)
-    },
-    enforceEmptyOutputStream)
+      """.stripMargin,
+      enforceEmptyOutputStream = enforceEmptyOutputStream)
+  }
 
-  testInitCannotBeCalledMoreThanOnce("""
+  override val testLargeInput = {
+    TestConfig("""
         | func main(args: [String: Any]) -> [String: Any] {
         |     return args
         | }
       """.stripMargin)
-
-  it should "support actions using non-default entry points" in {
-    withActionContainer() { c =>
-      val code = """
-                   | func niam(args: [String: Any]) -> [String: Any] {
-                   |     return [ "result": "it works" ]
-                   | }
-                   |""".stripMargin
-
-      val (initCode, initRes) = c.init(initPayload(code, main = "niam"))
-      initCode should be(200)
-
-      val (_, runRes) = c.run(runPayload(JsObject()))
-      runRes.get.fields.get("result") shouldBe Some(JsString("it works"))
-    }
   }
 
   it should "return some error on action error" in {
