@@ -229,7 +229,7 @@ abstract class SwiftCodableActionContainerTests extends BasicActionRunnerTests w
     checkStreams(out, err, {
       case (o, e) =>
         if (enforceEmptyOutputStream) o shouldBe empty
-        e shouldBe empty
+        e should not be empty
     })
   }
 
