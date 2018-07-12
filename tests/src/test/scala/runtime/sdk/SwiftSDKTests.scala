@@ -22,9 +22,12 @@ import java.io.File
 import scala.concurrent.duration.DurationInt
 import scala.language.postfixOps
 import common._
+import org.junit.runner.RunWith
+import org.scalatest.junit.JUnitRunner
 import spray.json._
 import spray.json.DefaultJsonProtocol.StringJsonFormat
 
+@RunWith(classOf[JUnitRunner])
 abstract class SwiftSDKTests extends TestHelpers with WskTestHelpers with WskActorSystem {
 
   implicit val wskprops = WskProps()

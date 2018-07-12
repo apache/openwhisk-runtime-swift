@@ -115,21 +115,4 @@ class Swift41ActionContainerTests extends SwiftActionContainerTests {
         e shouldBe empty
     })
   }
-
-  it should "receive a large (1MB) argument" in {
-    withActionContainer() { c =>
-      val code = """
-                   | func main(args: [String: Any]) -> [String: Any] {
-                   |     return args
-                   | }
-                   |""".stripMargin
-
-      val (initCode, initRes) = c.init(initPayload(code))
-      initCode should be(200)
-
-      val arg = JsObject("arg" -> JsString(("a" * 1048561)))
-      val (_, runRes) = c.run(runPayload(arg))
-      runRes.get shouldBe arg
-    }
-  }
 }

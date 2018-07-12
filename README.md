@@ -59,7 +59,9 @@ func main(input: Employee, respondWith: (Employee?, Error?) -> Void) -> Void {
 ```
 wsk action update helloCodableAsync helloCodableAsync.swift swift:4.1
 ```
+```
 ok: updated action helloCodableAsync
+```
 ```
 wsk action invoke helloCodableAsync -r -p id 42 -p name Carlos
 ```
@@ -94,7 +96,9 @@ func main(input: Employee, respondWith: (Employee?, Error?) -> Void) -> Void {
 ```
 wsk action update helloCodableError helloCodableError.swift swift:4.1
 ```
+```
 ok: updated action helloCodableError
+```
 ```
 wsk action invoke helloCodableError -b -p id 42 -p name Carlos
 ```
@@ -159,7 +163,7 @@ let package = Package(
         dependencies: ["SwiftyRequest"],
         path: "."
       )
-
+    ]
 ```
   As you can see this example adds `SwiftyRequest` dependencies.
 
@@ -271,7 +275,9 @@ func main(input: Employee, respondWith: (Employee?, Error?) -> Void) -> Void {
 ```
 wsk action update helloCodableAsync helloCodableAsync.swift swift:4.1
 ```
+```
 ok: updated action helloCodableAsync
+```
 ```
 wsk action invoke helloCodableAsync -r -p id 42 -p name Carlos
 ```
@@ -306,26 +312,29 @@ func main(input: Employee, respondWith: (Employee?, Error?) -> Void) -> Void {
 ```
 wsk action update helloCodableError helloCodableError.swift swift:4.1
 ```
+```
 ok: updated action helloCodableError
+```
 ```
 wsk action invoke helloCodableError -b -p id 42 -p name Carlos
 ```
 ```json
 {
-"name": "helloCodableError",
-"response": {
-  "result": {
-    "error": "insufficientFunds(5)"
-  },
-"status": "application error",
-"success": false
+  "name": "helloCodableError",
+  "response": {
+    "result": {
+      "error": "insufficientFunds(5)"
+    },
+    "status": "application error",
+    "success": false
+  }
 }
 ```
 
 ### Using Swift 4.1
 To use as a docker action
 ```
-wsk action update myAction myAction.swift --docker openwhisk/action-swift-v4.1:1.0.6
+wsk action update myAction myAction.swift --docker openwhisk/action-swift-v4.1:1.0.7
 ```
 This works on any deployment of Apache OpenWhisk
 
