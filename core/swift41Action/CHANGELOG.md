@@ -19,6 +19,10 @@
 
 # Apache OpenWhisk Swift 4.1 Runtime Container
 
+## 1.0.8
+Changes:
+  - Update base image to openwhisk/dockerskeleton:1.3.3
+
 ## 1.0.7
 Changes:
   - Update base image to openwhisk/dockerskeleton:1.3.2
