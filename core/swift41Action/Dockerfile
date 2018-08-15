@@ -72,7 +72,7 @@ RUN apt-get -y update \
  && apt-get -y install --fix-missing python2.7 python-gevent python-flask zip
 
 # Add the action proxy
-ADD https://raw.githubusercontent.com/apache/incubator-openwhisk-runtime-docker/dockerskeleton%401.3.2/core/actionProxy/actionproxy.py /actionProxy/actionproxy.py
+ADD https://raw.githubusercontent.com/apache/incubator-openwhisk-runtime-docker/dockerskeleton%401.3.3/core/actionProxy/actionproxy.py /actionProxy/actionproxy.py
 
 # Add files needed to build and run action
 RUN mkdir -p /swift4Action/spm-build/Sources/Action
