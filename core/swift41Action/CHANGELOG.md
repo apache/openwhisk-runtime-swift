@@ -21,7 +21,8 @@
 
 ## 1.0.8
 Changes:
-  - Update base image to openwhisk/dockerskeleton:1.3.3
+  - Update base image to use python proxy from openwhisk/dockerskeleton:1.3.3
+  - Update base image to extend ibmcom/swift-ubuntu:4.1
 
 ## 1.0.7
 Changes:
