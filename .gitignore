@@ -73,3 +73,7 @@ ansible/roles/nginx/files/*cert.pem
 !tests/dat/build/swift4.1/SwiftyRequestCodable.zip
 !tests/dat/build/swift4.1/HelloSwift4Codable.zip
 
+# Makefile artifacts
+test.json
+*.done
+examples/swift-main-single/main.zip
