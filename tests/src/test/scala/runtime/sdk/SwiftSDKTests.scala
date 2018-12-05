@@ -67,8 +67,8 @@ abstract class SwiftSDKTests extends TestHelpers with WskTestHelpers with WskAct
       activation.response.result.get.fields("activationId").toString.length should be >= 32
 
       // check for "date" field that comes from invoking the date action
-      whisk.utils.JsHelpers.fieldPathExists(activation.response.result.get, "response", "result", "date") should be(
-        true)
+      org.apache.openwhisk.utils.JsHelpers
+        .fieldPathExists(activation.response.result.get, "response", "result", "date") should be(true)
     }
   }
 
@@ -89,7 +89,7 @@ abstract class SwiftSDKTests extends TestHelpers with WskTestHelpers with WskAct
       val run = wsk.action.invoke(actionName, params)
       withActivation(wsk.activation, run, initialWait = 5 seconds, totalWait = activationPollDuration) { activation =>
         // should not have a "response"
-        whisk.utils.JsHelpers.fieldPathExists(activation.response.result.get, "response") shouldBe false
+        org.apache.openwhisk.utils.JsHelpers.fieldPathExists(activation.response.result.get, "response") shouldBe false
 
         // should have a field named "activationId" which is the date action's activationId
         activation.response.result.get.fields("activationId").toString.length should be >= 32
