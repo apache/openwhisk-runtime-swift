@@ -200,39 +200,6 @@ abstract class SwiftCodableActionContainerTests extends BasicActionRunnerTests w
     })
   }
 
-  it should "return some error on action error" in {
-    val (out, err) = withActionContainer() { c =>
-      val code = """
-                   | // You need an indirection, or swiftc detects the div/0
-                   | // at compile-time. Smart.
-                   | func div(x: Int, y: Int) -> Int {
-                   |    return x/y
-                   | }
-                   | struct Result: Codable{
-                   |    let divBy0: Int?
-                   | }
-                   | func main(respondWith: (Result?, Error?) -> Void) -> Void {
-                   |    respondWith(Result(divBy0: div(x:5, y:0)), nil)
-                   | }
-                 """.stripMargin
-
-      val (initCode, _) = c.init(initPayload(code))
-      initCode should be(200)
-
-      val (runCode, runRes) = c.run(runPayload(JsObject()))
-      runCode should be(502)
-
-      runRes shouldBe defined
-      runRes.get.fields.get("error") shouldBe defined
-    }
-
-    checkStreams(out, err, {
-      case (o, e) =>
-        if (enforceEmptyOutputStream) o shouldBe empty
-        e should not be empty
-    })
-  }
-
   it should "support application errors" in {
     val (out, err) = withActionContainer() { c =>
       val code = """

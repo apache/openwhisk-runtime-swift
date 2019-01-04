@@ -144,54 +144,6 @@ abstract class SwiftActionContainerTests extends BasicActionRunnerTests with Wsk
       """.stripMargin)
   }
 
-  it should "return some error on action error" in {
-    val (out, err) = withActionContainer() { c =>
-      val code = """
-                   | // You need an indirection, or swiftc detects the div/0
-                   | // at compile-time. Smart.
-                   | func div(x: Int, y: Int) -> Int {
-                   |     return x/y
-                   | }
-                   | func main(args: [String: Any]) -> [String: Any] {
-                   |     return [ "divBy0": div(x:5, y:0) ]
-                   | }
-                 """.stripMargin
-
-      val (initCode, _) = c.init(initPayload(code))
-      initCode should be(200)
-
-      val (runCode, runRes) = c.run(runPayload(JsObject()))
-      runCode should be(502)
-
-      runRes shouldBe defined
-      runRes.get.fields.get("error") shouldBe defined
-    }
-
-    checkStreams(out, err, {
-      case (o, e) =>
-        if (enforceEmptyOutputStream) o shouldBe empty
-        if (enforceEmptyOutputStream) e shouldBe empty
-    })
-  }
-
-  it should "log compilation errors" in {
-    val (out, err) = withActionContainer() { c =>
-      val code = """
-                   | 10 PRINT "Hello!"
-                   | 20 GOTO 10
-                 """.stripMargin
-
-      val (initCode, _) = c.init(initPayload(code))
-      initCode should not be (200)
-    }
-
-    checkStreams(out, err, {
-      case (o, e) =>
-        if (enforceEmptyOutputStream) o shouldBe empty
-        e.toLowerCase should include("error")
-    })
-  }
-
   it should "support application errors" in {
     val (out, err) = withActionContainer() { c =>
       val code = """

@@ -15,5 +15,12 @@
  * limitations under the License.
  */
 
-ext.dockerImageName = 'actionloop-swift-v4.2.1'
-apply from: '../../gradle/docker.gradle'
+package runtime.sdk
+
+import org.junit.runner.RunWith
+import org.scalatest.junit.JUnitRunner
+
+@RunWith(classOf[JUnitRunner])
+class Swift42SDKTests extends SwiftSDKTests {
+  override lazy val actionKind = "swift:4.2"
+}

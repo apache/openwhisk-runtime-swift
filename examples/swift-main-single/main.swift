@@ -19,6 +19,35 @@ func main(args: [String:Any]) -> [String:Any] {
     if let name = args["name"] as? String {
         return [ "greeting" : "Hello \(name)!" ]
     } else {
-        return [ "greeting" : "Hello swif4!" ]
+        return [ "greeting" : "Hello swif4.2!" ]
     }
+}
+
+func mainenv(args: [String: Any]) -> [String: Any] {
+     let env = ProcessInfo.processInfo.environment
+     var a = "???"
+     var b = "???"
+     var c = "???"
+     var d = "???"
+     var e = "???"
+     var f = "???"
+     if let v : String = env["__OW_API_HOST"] {
+         a = "\(v)"
+     }
+     if let v : String = env["__OW_API_KEY"] {
+         b = "\(v)"
+     }
+     if let v : String = env["__OW_NAMESPACE"] {
+         c = "\(v)"
+     }
+     if let v : String = env["__OW_ACTION_NAME"] {
+         d = "\(v)"
+     }
+     if let v : String = env["__OW_ACTIVATION_ID"] {
+         e = "\(v)"
+     }
+     if let v : String = env["__OW_DEADLINE"] {
+         f = "\(v)"
+     }
+     return ["api_host": a, "api_key": b, "namespace": c, "action_name": d, "activation_id": e, "deadline": f]
 }
