@@ -1,7 +1,7 @@
-OW_USER?=openwhisk
-OW_RUNTIME?=$(OW_USER)/actionloop-swift-v4.2.1
-OW_COMPILER?=$(OW_USER)/actionloop-swift-v4.2.1
-WSK?=wsk
+OW_USER?=whisk
+OW_RUNTIME?=$(OW_USER)/action-swift-v4.2
+OW_COMPILER?=$(OW_USER)/action-swift-v4.2
+WSK?=wsk -i
 MAIN=main
 PACKAGE=test
 SRC=$(MAIN).swift

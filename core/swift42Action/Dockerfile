@@ -16,16 +16,16 @@
 #
 FROM openwhisk/actionloop as builder
 
-FROM swift:4.2.1
+FROM swift:4.2
 
 RUN rm -rf /var/lib/apt/lists/* && apt-get clean && apt-get update \
-	&& apt-get install -y --no-install-recommends locales python3 \
+	&& apt-get install -y --no-install-recommends locales python3 vim \
 	&& rm -rf /var/lib/apt/lists/* \
 	&& locale-gen en_US.UTF-8
 
 ENV LANG="en_US.UTF-8" \
 	LANGUAGE="en_US:en" \
-	LC_ALL="en_US.UTF-8" 
+	LC_ALL="en_US.UTF-8"
 
 RUN mkdir -p /swiftAction
 WORKDIR /swiftAction
@@ -34,6 +34,15 @@ WORKDIR /swiftAction
 COPY --from=builder /bin/proxy /bin/proxy
 ADD swiftbuild.py /bin/compile
 ADD swiftbuild.py.launcher.swift /bin/compile.launcher.swift
+COPY _Whisk.swift /swiftAction/Sources/
+COPY Package.swift /swiftAction/
+COPY buildandrecord.py /swiftAction/
+COPY main.swift /swiftAction/Sources/
+RUN swift build -c release; \
+touch /swiftAction/Sources/main.swift; \
+rm /swiftAction/.build/release/Action; \
+/swiftAction/buildandrecord.py
+
 
 ENV OW_COMPILER=/bin/compile
 ENTRYPOINT [ "/bin/proxy" ]
