@@ -16,7 +16,7 @@
 #
 
 # TODO Replace this dockerfile and extend from official image when 4.1 is released
-FROM ibmcom/swift-ubuntu:4.1
+FROM ibmcom/swift-ubuntu:4.1.3
 
 # Upgrade and install basic Python dependencies
 RUN apt-get -y update \
