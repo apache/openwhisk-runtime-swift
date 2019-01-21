@@ -37,9 +37,9 @@ func _whisk_print_result(jsonData: Data){
 func _whisk_print_buffer(jsonString: String){
     var buf : [UInt8] = Array(jsonString.utf8)
     buf.append(10)
-    write(3, buf, buf.count)
     fflush(stdout)
     fflush(stderr)
+    write(3, buf, buf.count)
 }
 
 // snippet of code "injected" (wrapper code for invoking traditional main)
