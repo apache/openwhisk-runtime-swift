@@ -25,6 +25,7 @@ import common._
 import org.junit.runner.RunWith
 import org.scalatest.junit.JUnitRunner
 import spray.json._
+import org.apache.openwhisk.core.entity.WhiskAction.provideApiKeyAnnotationName
 import spray.json.DefaultJsonProtocol.StringJsonFormat
 
 @RunWith(classOf[JUnitRunner])
@@ -51,7 +52,11 @@ abstract class SwiftSDKTests extends TestHelpers with WskTestHelpers with WskAct
 
     val actionName = "invokeAction"
     assetHelper.withCleaner(wsk.action, actionName) { (action, _) =>
-      action.create(name = actionName, artifact = file, kind = Some(actionKind))
+      action.create(
+        name = actionName,
+        artifact = file,
+        kind = Some(actionKind),
+        annotations = Map(provideApiKeyAnnotationName -> JsTrue))
     }
     // invoke the action
     var params = Map("dummy" -> JsString("dummy"))
@@ -78,7 +83,11 @@ abstract class SwiftSDKTests extends TestHelpers with WskTestHelpers with WskAct
       val file = Some(new File(actionTypeDir, "invokeNonBlocking.swift").toString())
       val actionName = "invokeNonBlockingAction"
       assetHelper.withCleaner(wsk.action, actionName) { (action, _) =>
-        action.create(name = actionName, file, kind = Some(actionKind))
+        action.create(
+          name = actionName,
+          file,
+          kind = Some(actionKind),
+          annotations = Map(provideApiKeyAnnotationName -> JsTrue))
       }
 
       // invoke the action
@@ -119,7 +128,11 @@ abstract class SwiftSDKTests extends TestHelpers with WskTestHelpers with WskAct
     val file = Some(new File(actionTypeDir, "trigger.swift").toString())
     val actionName = "ActionThatTriggers"
     assetHelper.withCleaner(wsk.action, actionName) { (action, _) =>
-      action.create(name = actionName, file, kind = Some(actionKind))
+      action.create(
+        name = actionName,
+        file,
+        kind = Some(actionKind),
+        annotations = Map(provideApiKeyAnnotationName -> JsTrue))
     }
 
     // invoke the action
@@ -154,7 +167,11 @@ abstract class SwiftSDKTests extends TestHelpers with WskTestHelpers with WskAct
     assetHelper.withCleaner(wsk.action, actionName) { (action, _) =>
       assetHelper.withCleaner(wsk.trigger, triggerName) { (_, _) =>
         // using an asset cleaner on the created trigger name will clean it up at the conclusion of the test
-        action.create(name = actionName, file, kind = Some(actionKind))
+        action.create(
+          name = actionName,
+          file,
+          kind = Some(actionKind),
+          annotations = Map(provideApiKeyAnnotationName -> JsTrue))
       }
     }
 
@@ -181,7 +198,7 @@ abstract class SwiftSDKTests extends TestHelpers with WskTestHelpers with WskAct
     // create a dummy action and trigger for the rule
     assetHelper.withCleaner(wsk.action, ruleActionName) { (action, name) =>
       val dummyFile = Some(new File(actionTypeDir, "hello.swift").toString())
-      action.create(name, dummyFile, kind = Some(actionKind))
+      action.create(name, dummyFile, kind = Some(actionKind), annotations = Map(provideApiKeyAnnotationName -> JsTrue))
     }
 
     assetHelper.withCleaner(wsk.trigger, ruleTriggerName) { (trigger, name) =>
@@ -194,7 +211,11 @@ abstract class SwiftSDKTests extends TestHelpers with WskTestHelpers with WskAct
     // create an action that creates the rule
     val createRuleFile = Some(new File(actionTypeDir, "createRule.swift").toString())
     assetHelper.withCleaner(wsk.action, "ActionThatCreatesRule") { (action, name) =>
-      action.create(name, createRuleFile, kind = Some(actionKind))
+      action.create(
+        name,
+        createRuleFile,
+        kind = Some(actionKind),
+        annotations = Map(provideApiKeyAnnotationName -> JsTrue))
     }
 
     // invoke the create rule action
