@@ -198,7 +198,7 @@ abstract class SwiftSDKTests extends TestHelpers with WskTestHelpers with WskAct
     // create a dummy action and trigger for the rule
     assetHelper.withCleaner(wsk.action, ruleActionName) { (action, name) =>
       val dummyFile = Some(new File(actionTypeDir, "hello.swift").toString())
-      action.create(name, dummyFile, kind = Some(actionKind), annotations = Map(Annotations -> JsTrue)
+      action.create(name, dummyFile, kind = Some(actionKind), annotations = Map(Annotations -> JsTrue))
     }
 
     assetHelper.withCleaner(wsk.trigger, ruleTriggerName) { (trigger, name) =>
