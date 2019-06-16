@@ -56,7 +56,7 @@ abstract class SwiftSDKTests extends TestHelpers with WskTestHelpers with WskAct
         name = actionName,
         artifact = file,
         kind = Some(actionKind),
-        annotations = Map(Annotations -> JsTrue)
+        annotations = Map(Annotations -> JsTrue))
     }
     // invoke the action
     var params = Map("dummy" -> JsString("dummy"))
@@ -87,7 +87,7 @@ abstract class SwiftSDKTests extends TestHelpers with WskTestHelpers with WskAct
           name = actionName,
           file,
           kind = Some(actionKind),
-          annotations = Map(Annotations -> JsTrue)
+          annotations = Map(Annotations -> JsTrue))
       }
 
       // invoke the action
@@ -132,7 +132,7 @@ abstract class SwiftSDKTests extends TestHelpers with WskTestHelpers with WskAct
         name = actionName,
         file,
         kind = Some(actionKind),
-        annotations = Map(Annotations -> JsTrue)
+        annotations = Map(Annotations -> JsTrue))
     }
 
     // invoke the action
@@ -171,7 +171,7 @@ abstract class SwiftSDKTests extends TestHelpers with WskTestHelpers with WskAct
           name = actionName,
           file,
           kind = Some(actionKind),
-          annotations = Map(Annotations -> JsTrue)
+          annotations = Map(Annotations -> JsTrue))
       }
     }
 
@@ -215,7 +215,7 @@ abstract class SwiftSDKTests extends TestHelpers with WskTestHelpers with WskAct
         name,
         createRuleFile,
         kind = Some(actionKind),
-        annotations = Map(Annotations -> JsTrue)
+        annotations = Map(Annotations -> JsTrue))
     }
 
     // invoke the create rule action
