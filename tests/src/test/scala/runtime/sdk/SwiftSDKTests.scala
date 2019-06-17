@@ -19,13 +19,13 @@ package runtime.sdk
 
 import java.io.File
 
-import scala.concurrent.duration.DurationInt
-import scala.language.postfixOps
 import common._
+import org.apache.openwhisk.core.entity.{Annotations}
 import org.junit.runner.RunWith
 import org.scalatest.junit.JUnitRunner
+import scala.concurrent.duration.DurationInt
+import scala.language.postfixOps
 import spray.json._
-import org.apache.openwhisk.core.entity.Annotations
 import spray.json.DefaultJsonProtocol.StringJsonFormat
 
 @RunWith(classOf[JUnitRunner])
