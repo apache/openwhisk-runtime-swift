@@ -25,7 +25,7 @@ import common._
 import org.junit.runner.RunWith
 import org.scalatest.junit.JUnitRunner
 import spray.json._
-import org.apache.openwhisk.core.entity.Annotations.Annotations
+import org.apache.openwhisk.core.entity.Annotations
 import spray.json.DefaultJsonProtocol.StringJsonFormat
 
 @RunWith(classOf[JUnitRunner])
