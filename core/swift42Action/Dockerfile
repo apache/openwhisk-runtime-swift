@@ -14,7 +14,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-FROM openwhisk/actionloop as builder
+FROM openwhisk/actionloop:nightly as builder
 
 FROM swift:4.2
 
@@ -39,9 +39,9 @@ COPY Package.swift /swiftAction/
 COPY buildandrecord.py /swiftAction/
 COPY main.swift /swiftAction/Sources/
 RUN swift build -c release; \
-touch /swiftAction/Sources/main.swift; \
-rm /swiftAction/.build/release/Action; \
-/swiftAction/buildandrecord.py
+	touch /swiftAction/Sources/main.swift; \
+	rm /swiftAction/.build/release/Action; \
+	/swiftAction/buildandrecord.py
 
 
 ENV OW_COMPILER=/bin/compile
