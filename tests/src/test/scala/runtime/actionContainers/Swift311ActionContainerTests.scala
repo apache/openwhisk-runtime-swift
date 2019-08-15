@@ -27,7 +27,7 @@ class Swift311ActionContainerTests extends SwiftActionContainerTests {
   override lazy val swiftContainerImageName = "action-swift-v3.1.1"
   override lazy val swiftBinaryName = "tests/dat/build/swift311/HelloSwift3.zip"
 
-  // issue https://github.com/apache/incubator-openwhisk-runtime-swift/issues/74
+  // issue https://github.com/apache/openwhisk-runtime-swift/issues/74
   override val testLargeInput = TestConfig("", skipTest = true)
 
   lazy val watsonCode = """
