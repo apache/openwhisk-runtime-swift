@@ -30,19 +30,16 @@ ENV LANG="en_US.UTF-8" \
 RUN mkdir -p /swiftAction
 WORKDIR /swiftAction
 
-
 COPY --from=builder /bin/proxy /bin/proxy
 ADD swiftbuild.py /bin/compile
 ADD swiftbuild.py.launcher.swift /bin/compile.launcher.swift
 COPY _Whisk.swift /swiftAction/Sources/
 COPY Package.swift /swiftAction/
-COPY buildandrecord.py /swiftAction/
+COPY swiftbuildandlink.sh /swiftAction/
 COPY main.swift /swiftAction/Sources/
 RUN swift build -c release; \
 	touch /swiftAction/Sources/main.swift; \
-	rm /swiftAction/.build/release/Action; \
-	/swiftAction/buildandrecord.py
-
+	rm /swiftAction/.build/release/Action
 
 ENV OW_COMPILER=/bin/compile
 ENTRYPOINT [ "/bin/proxy" ]
