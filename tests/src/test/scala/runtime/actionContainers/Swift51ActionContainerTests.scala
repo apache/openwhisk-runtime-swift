@@ -32,7 +32,11 @@ class Swift51ActionContainerTests extends SwiftActionContainerTests {
   lazy val partyCompileCodable = "tests/dat/build/swift4.2/SwiftyRequestCodable.zip"
 
   val httpCode = """
+                   | import Foundation
                    | import Dispatch
+                   | #if canImport(FoundationNetworking)
+                   |  import FoundationNetworking
+                   | #endif
                    | func main(args:[String: Any]) -> [String:Any] {
                    |     var resp :[String:Any] = ["error":"getUrl failed"]
                    |     guard let urlStr = args["getUrl"] as? String else {
