@@ -41,6 +41,14 @@ elif [ ${2} == "swift:4.1" ]; then
   # Due to a current bug in the Swift Docker image compile optimization is disabled by default.
   # If you need compiler optimization you can override the BUILD_FLAGS to enable it
   BUILD_FLAGS="-Xswiftc -Onone"
+elif [ ${2} == "swift:5.1" ]; then
+  RUNTIME="openwhisk/action-swift-v5.1"
+  BASE_PATH="/swift5Action"
+  DEST_SOURCE="/$BASE_PATH/spm-build/Sources/Action"
+  OUTPUT_DIR="build/swift5.1"
+  # Due to a current bug in the Swift Docker image compile optimization is disabled by default.
+  # If you need compiler optimization you can override the BUILD_FLAGS to enable it
+  BUILD_FLAGS="-Xswiftc -Onone"
 else
   echo "Error: Kind $2 not recognize"
   exit 3
@@ -71,7 +79,7 @@ fi
 cat $BASE_PATH/epilogue.swift >> $DEST_SOURCE/main.swift
 echo '_run_main(mainFunction:main)' >> $DEST_SOURCE/main.swift
 
-# Only for Swift4
+# Only for Swift4 and Swift5
 if [ ${2} != "swift:3.1.1" ]; then
   echo 'Adding wait to deal with escaping'
   echo '_ = _whisk_semaphore.wait(timeout: .distantFuture)' >> $DEST_SOURCE/main.swift

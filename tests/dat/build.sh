@@ -25,5 +25,8 @@ set -e
 ../../tools/build/compile.sh  SwiftyRequestCodable swift:4.1 "-v"
 ../../tools/build/compile.sh  HelloSwift4Codable swift:4.1 "-v"
 
+../../tools/build/compile.sh  HelloSwift5 swift:5.1 "-v"
+../../tools/build/compile.sh  HelloSwift5Codable swift:5.1 "-v"
+
 cd actions
 make all
