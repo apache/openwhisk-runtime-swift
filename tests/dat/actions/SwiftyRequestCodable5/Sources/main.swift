@@ -15,21 +15,30 @@
  * limitations under the License.
  */
 
+import SwiftyRequest
+import Dispatch
 import Foundation
-import Action
 
+enum RequestError: Error {
+    case requetError
+}
 struct AnInput: Codable {
-    let name: String?
+    let url: String?
 }
 struct AnOutput: Codable {
     let greeting: String?
 }
- func main(input: AnInput, respondWith: (AnOutput?, Error?) -> Void) -> Void {
-     if let name = input.name {
-         let answer = AnOutput(greeting: "Hello \(name)!")
-         respondWith(answer, nil)
-     } else {
-         let answer = AnOutput(greeting: "Hello stranger!")
-         respondWith(answer, nil)
-     }
-  }
+func main(param: AnInput, completion: @escaping (AnOutput?, Error?) -> Void) -> Void {
+    let echoURL = param.url ?? "https://httpbin.org/get"
+    let request = RestRequest(method: .get, url: echoURL)
+    request.responseString { result in
+        switch result {
+        case .success(let response):
+            print(response)
+            completion(AnOutput(greeting:"success"),nil)
+        case .failure(let error):
+            print(error)
+            completion(nil,RequestError.requetError)
+        }
+    }
+}

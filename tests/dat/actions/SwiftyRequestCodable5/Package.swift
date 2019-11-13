@@ -1,3 +1,6 @@
+// swift-tools-version:5.0
+// The swift-tools-version declares the minimum version of Swift required to build this package.
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements.  See the NOTICE file distributed with
@@ -15,21 +18,24 @@
  * limitations under the License.
  */
 
-import Foundation
+import PackageDescription
 
-struct AnInput: Codable {
-    let name: String?
-}
-struct AnOutput: Codable {
-    let greeting: String?
-}
-
-func main(input: AnInput, respondWith: (AnOutput?, Error?) -> Void) -> Void {
-    if let name = input.name {
-        let answer = AnOutput(greeting: "Hello \(name)!")
-        respondWith(answer, nil)
-    } else {
-        let answer = AnOutput(greeting: "Hello stranger!")
-        respondWith(answer, nil)
-    }
-}
+let package = Package(
+    name: "Action",
+    products: [
+      .executable(
+        name: "Action",
+        targets:  ["Action"]
+      )
+    ],
+    dependencies: [
+      .package(url: "https://github.com/IBM-Swift/SwiftyRequest.git", .upToNextMajor(from: "3.0.0"))
+    ],
+    targets: [
+      .target(
+        name: "Action",
+        dependencies: ["SwiftyRequest"],
+        path: "."
+      )
+    ]
+)

@@ -16,7 +16,6 @@
  */
 
 import Foundation
-import Action
 
 func main(args: [String:Any]) -> [String:Any] {
     if let name = args["name"] as? String {
