@@ -41,14 +41,6 @@ elif [ ${2} == "swift:4.1" ]; then
   # Due to a current bug in the Swift Docker image compile optimization is disabled by default.
   # If you need compiler optimization you can override the BUILD_FLAGS to enable it
   BUILD_FLAGS="-Xswiftc -Onone"
-elif [ ${2} == "swift:5.1" ]; then
-  RUNTIME="openwhisk/action-swift-v5.1"
-  BASE_PATH="/swift5Action"
-  DEST_SOURCE="/$BASE_PATH/spm-build/Sources/Action"
-  OUTPUT_DIR="build/swift5.1"
-  # Due to a current bug in the Swift Docker image compile optimization is disabled by default.
-  # If you need compiler optimization you can override the BUILD_FLAGS to enable it
-  BUILD_FLAGS="-Xswiftc -Onone"
 else
   echo "Error: Kind $2 not recognize"
   exit 3
@@ -61,13 +53,14 @@ fi
 
 
 echo "Using runtime $RUNTIME to compile swift"
-docker run --rm --name=compile-ow-swift -it -v "$(pwd):/owexec" $RUNTIME bash -ex -c "
+docker run --rm --entrypoint=bash --name=compile-ow-swift -it -v "$(pwd):/owexec" $RUNTIME -ex -c "
 
 if [ -f \"/owexec/$OUTPUT_DIR/$1.zip\" ] ; then
     rm \"/owexec/$OUTPUT_DIR/$1.zip\"
 fi
 
 echo 'Setting up build...'
+mkdir -p $DEST_SOURCE
 cp /owexec/actions/$1/Sources/*.swift $DEST_SOURCE/
 
 # action file can be either {action name}.swift or main.swift

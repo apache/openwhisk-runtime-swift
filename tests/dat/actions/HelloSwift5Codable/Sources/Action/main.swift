@@ -15,14 +15,21 @@
  * limitations under the License.
  */
 
-import PackageDescription
+import Foundation
+import Action
 
-let package = Package(
-    name: "Action",
-        dependencies: [
-            .Package(url: "https://github.com/IBM-Swift/CCurl.git", "0.2.3"),
-            .Package(url: "https://github.com/IBM-Swift/Kitura-net.git", "1.7.10"),
-            .Package(url: "https://github.com/IBM-Swift/SwiftyJSON.git", "15.0.1"),
-            .Package(url: "https://github.com/watson-developer-cloud/swift-sdk.git", "0.16.0")
-        ]
-)
+struct AnInput: Codable {
+    let name: String?
+}
+struct AnOutput: Codable {
+    let greeting: String?
+}
+ func main(input: AnInput, respondWith: (AnOutput?, Error?) -> Void) -> Void {
+     if let name = input.name {
+         let answer = AnOutput(greeting: "Hello \(name)!")
+         respondWith(answer, nil)
+     } else {
+         let answer = AnOutput(greeting: "Hello stranger!")
+         respondWith(answer, nil)
+     }
+  }
