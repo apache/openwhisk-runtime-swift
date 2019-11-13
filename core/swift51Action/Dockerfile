@@ -20,10 +20,10 @@ RUN curl -sL \
   | tar xzf -\
   && cd openwhisk-runtime-go-*/main\
   && GO111MODULE=on go build -o /bin/proxy
-FROM swift:5.1
+FROM swift:5.1.2
 
-RUN rm -rf /var/lib/apt/lists/* && apt-get clean && apt-get update \
-	&& apt-get install -y --no-install-recommends locales python3 vim \
+RUN rm -rf /var/lib/apt/lists/* && apt-get clean && apt-get -qq update \
+	&& apt-get install -y --no-install-recommends locales python3 vim libssl-dev libicu-dev \
 	&& rm -rf /var/lib/apt/lists/* \
 	&& locale-gen en_US.UTF-8
 
