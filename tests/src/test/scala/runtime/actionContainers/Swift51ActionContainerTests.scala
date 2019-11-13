@@ -17,12 +17,8 @@
 
 package runtime.actionContainers
 
-import java.io.File
-
-import actionContainers.ResourceHelpers
 import org.junit.runner.RunWith
 import org.scalatest.junit.JUnitRunner
-import spray.json.{JsObject, JsString}
 
 @RunWith(classOf[JUnitRunner])
 class Swift51ActionContainerTests extends SwiftActionContainerTests {
