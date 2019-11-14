@@ -415,7 +415,6 @@ Using IntelliJ:
 - Import project as gradle project.
 - Make sure working directory is root of the project/repo
 
-
 #### Using container image to test
 To use as docker action push to your own dockerhub account
 ```
