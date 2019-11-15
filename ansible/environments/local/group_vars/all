@@ -60,7 +60,7 @@ runtimes_manifest:
         name: "action-swift-v4.2"
       deprecated: false
     - kind: "swift:5.1"
-      default: true
+      default: false
       image:
         name: "action-swift-v5.1"
       deprecated: false
