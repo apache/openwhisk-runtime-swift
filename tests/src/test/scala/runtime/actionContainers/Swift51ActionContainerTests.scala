@@ -69,7 +69,7 @@ class Swift51ActionContainerTests extends SwiftActionContainerTests {
                    |     return resp
                    | }
                  """.stripMargin
-                 
+          
   it should "support ability to use 3rd party packages like SwiftyRequest" in {
     val zip = new File(partyCompile).toPath
     val code = ResourceHelpers.readAsBase64(zip)
