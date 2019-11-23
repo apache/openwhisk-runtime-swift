@@ -15,28 +15,21 @@
  * limitations under the License.
  */
 
-include 'tests'
+import Foundation
 
-include 'core:swift3.1.1Action'
+struct AnInput: Codable {
+    let name: String?
+}
+struct AnOutput: Codable {
+    let greeting: String?
+}
 
-include 'core:swift41Action'
-
-include 'core:swift42Action'
-
-include 'core:swift51Action'
-
-rootProject.name = 'runtime-swift'
-
-gradle.ext.openwhisk = [
-        version: '1.0.0-SNAPSHOT'
-]
-
-gradle.ext.scala = [
-    version: '2.12.7',
-    compileFlags: ['-feature', '-unchecked', '-deprecation', '-Xfatal-warnings', '-Ywarn-unused-import']
-]
-
-gradle.ext.scalafmt = [
-    version: '1.5.0',
-    config: new File(rootProject.projectDir, '.scalafmt.conf')
-]
+func main(input: AnInput, respondWith: (AnOutput?, Error?) -> Void) -> Void {
+    if let name = input.name {
+        let answer = AnOutput(greeting: "Hello \(name)!")
+        respondWith(answer, nil)
+    } else {
+        let answer = AnOutput(greeting: "Hello stranger!")
+        respondWith(answer, nil)
+    }
+}

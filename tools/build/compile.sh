@@ -53,13 +53,14 @@ fi
 
 
 echo "Using runtime $RUNTIME to compile swift"
-docker run --rm --name=compile-ow-swift -it -v "$(pwd):/owexec" $RUNTIME bash -ex -c "
+docker run --rm --name=compile-ow-swift -it -v "$(pwd):/owexec" $RUNTIME -ex -c "
 
 if [ -f \"/owexec/$OUTPUT_DIR/$1.zip\" ] ; then
     rm \"/owexec/$OUTPUT_DIR/$1.zip\"
 fi
 
 echo 'Setting up build...'
+mkdir -p $DEST_SOURCE
 cp /owexec/actions/$1/Sources/*.swift $DEST_SOURCE/
 
 # action file can be either {action name}.swift or main.swift
@@ -71,7 +72,7 @@ fi
 cat $BASE_PATH/epilogue.swift >> $DEST_SOURCE/main.swift
 echo '_run_main(mainFunction:main)' >> $DEST_SOURCE/main.swift
 
-# Only for Swift4
+# Only for Swift4 and Swift5
 if [ ${2} != "swift:3.1.1" ]; then
   echo 'Adding wait to deal with escaping'
   echo '_ = _whisk_semaphore.wait(timeout: .distantFuture)' >> $DEST_SOURCE/main.swift

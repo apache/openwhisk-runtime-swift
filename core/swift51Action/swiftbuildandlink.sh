@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 #
 # Licensed to the Apache Software Foundation (ASF) under one or more
 # contributor license agreements.  See the NOTICE file distributed with
@@ -15,21 +15,4 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-
-set -e
-
-../../tools/build/compile.sh  HelloSwift3 swift:3.1.1 "-v"
-
-../../tools/build/compile.sh  HelloSwift4 swift:4.1 "-v"
-../../tools/build/compile.sh  SwiftyRequest swift:4.1 "-v"
-../../tools/build/compile.sh  SwiftyRequestCodable swift:4.1 "-v"
-../../tools/build/compile.sh  HelloSwift4Codable swift:4.1 "-v"
-
-../../tools/build/compile5.sh  action-swift-v5.1 HelloSwift5 swift5.1 "-v"
-../../tools/build/compile5.sh  action-swift-v5.1 HelloSwift5Codable swift5.1 "-v"
-../../tools/build/compile5.sh  action-swift-v5.1 SwiftyRequest5 swift:5.1 "-v"
-../../tools/build/compile5.sh  action-swift-v5.1 SwiftyRequestCodable5 swift:5.1 "-v"
-
-
-cd actions
-make all
+swift build -c release

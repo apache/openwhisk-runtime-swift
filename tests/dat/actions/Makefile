@@ -25,6 +25,18 @@ Swifty:
 SwiftyCodable:
 	$(call BuildWithLib,SwiftyRequestCodable)
 
-all: Hello HelloCodable Swifty SwiftyCodable
+Hello5:
+	$(call Build,HelloSwift5)
 
-.PHONY: Hello HelloCodable Swifty SwiftyCodable
+HelloCodable5:
+	$(call Build,HelloSwift5Codable)
+
+Swifty5:
+	$(call BuildWithLib,SwiftyRequest5)
+
+SwiftyCodable5:
+	$(call BuildWithLib,SwiftyRequestCodable5)
+
+all: Hello HelloCodable Swifty SwiftyCodable Hello5 HelloCodable5 Swifty5 SwiftyCodable5
+
+.PHONY: Hello HelloCodable Swifty SwiftyCodable Hello5 HelloCodable5 Swifty5 SwiftyCodable5

@@ -15,28 +15,30 @@
  * limitations under the License.
  */
 
-include 'tests'
+import SwiftyRequest
+import Dispatch
+import Foundation
 
-include 'core:swift3.1.1Action'
-
-include 'core:swift41Action'
-
-include 'core:swift42Action'
-
-include 'core:swift51Action'
-
-rootProject.name = 'runtime-swift'
-
-gradle.ext.openwhisk = [
-        version: '1.0.0-SNAPSHOT'
-]
-
-gradle.ext.scala = [
-    version: '2.12.7',
-    compileFlags: ['-feature', '-unchecked', '-deprecation', '-Xfatal-warnings', '-Ywarn-unused-import']
-]
-
-gradle.ext.scalafmt = [
-    version: '1.5.0',
-    config: new File(rootProject.projectDir, '.scalafmt.conf')
-]
+enum RequestError: Error {
+    case requetError
+}
+struct AnInput: Codable {
+    let url: String?
+}
+struct AnOutput: Codable {
+    let greeting: String?
+}
+func main(param: AnInput, completion: @escaping (AnOutput?, Error?) -> Void) -> Void {
+    let echoURL = param.url ?? "https://httpbin.org/get"
+    let request = RestRequest(method: .get, url: echoURL)
+    request.responseString { result in
+        switch result {
+        case .success(let response):
+            print(response)
+            completion(AnOutput(greeting:"success"),nil)
+        case .failure(let error):
+            print(error)
+            completion(nil,RequestError.requetError)
+        }
+    }
+}

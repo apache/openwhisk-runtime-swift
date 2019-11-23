@@ -15,28 +15,17 @@
  * limitations under the License.
  */
 
-include 'tests'
+import Foundation
 
-include 'core:swift3.1.1Action'
-
-include 'core:swift41Action'
-
-include 'core:swift42Action'
-
-include 'core:swift51Action'
-
-rootProject.name = 'runtime-swift'
-
-gradle.ext.openwhisk = [
-        version: '1.0.0-SNAPSHOT'
-]
-
-gradle.ext.scala = [
-    version: '2.12.7',
-    compileFlags: ['-feature', '-unchecked', '-deprecation', '-Xfatal-warnings', '-Ywarn-unused-import']
-]
-
-gradle.ext.scalafmt = [
-    version: '1.5.0',
-    config: new File(rootProject.projectDir, '.scalafmt.conf')
-]
+func main(args: [String:Any]) -> [String:Any] {
+  if let baseUrl = args["baseUrl"] as? String {
+    //Overriding WHISK API HOST using baseUrl, only applicable in testing with self sign ssl certs"
+    Whisk.baseUrl = baseUrl
+  }
+  if let triggerName = args["triggerName"] as? String {
+    print("Trigger Name: \(triggerName)")
+    return Whisk.trigger(eventNamed: triggerName, withParameters: [:])
+  } else {
+    return ["error": "You must specify a triggerName parameter!"]
+  }
+}

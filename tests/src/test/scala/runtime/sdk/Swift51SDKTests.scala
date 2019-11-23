@@ -15,28 +15,12 @@
  * limitations under the License.
  */
 
-include 'tests'
+package runtime.sdk
 
-include 'core:swift3.1.1Action'
+import org.junit.runner.RunWith
+import org.scalatest.junit.JUnitRunner
 
-include 'core:swift41Action'
-
-include 'core:swift42Action'
-
-include 'core:swift51Action'
-
-rootProject.name = 'runtime-swift'
-
-gradle.ext.openwhisk = [
-        version: '1.0.0-SNAPSHOT'
-]
-
-gradle.ext.scala = [
-    version: '2.12.7',
-    compileFlags: ['-feature', '-unchecked', '-deprecation', '-Xfatal-warnings', '-Ywarn-unused-import']
-]
-
-gradle.ext.scalafmt = [
-    version: '1.5.0',
-    config: new File(rootProject.projectDir, '.scalafmt.conf')
-]
+@RunWith(classOf[JUnitRunner])
+class Swift51SDKTests extends SwiftSDKTests {
+  override lazy val actionKind = "swift:5.1"
+}

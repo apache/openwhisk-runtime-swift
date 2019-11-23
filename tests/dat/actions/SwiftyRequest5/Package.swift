@@ -1,3 +1,6 @@
+// swift-tools-version:5.0
+// The swift-tools-version declares the minimum version of Swift required to build this package.
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements.  See the NOTICE file distributed with
@@ -15,28 +18,24 @@
  * limitations under the License.
  */
 
-include 'tests'
+import PackageDescription
 
-include 'core:swift3.1.1Action'
-
-include 'core:swift41Action'
-
-include 'core:swift42Action'
-
-include 'core:swift51Action'
-
-rootProject.name = 'runtime-swift'
-
-gradle.ext.openwhisk = [
-        version: '1.0.0-SNAPSHOT'
-]
-
-gradle.ext.scala = [
-    version: '2.12.7',
-    compileFlags: ['-feature', '-unchecked', '-deprecation', '-Xfatal-warnings', '-Ywarn-unused-import']
-]
-
-gradle.ext.scalafmt = [
-    version: '1.5.0',
-    config: new File(rootProject.projectDir, '.scalafmt.conf')
-]
+let package = Package(
+    name: "Action",
+    products: [
+      .executable(
+        name: "Action",
+        targets:  ["Action"]
+      )
+    ],
+    dependencies: [
+      .package(url: "https://github.com/IBM-Swift/SwiftyRequest.git", .upToNextMajor(from: "3.0.0"))
+    ],
+    targets: [
+      .target(
+        name: "Action",
+        dependencies: ["SwiftyRequest"],
+        path: "."
+      ),
+    ]
+)
