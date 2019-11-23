@@ -15,28 +15,14 @@
  * limitations under the License.
  */
 
-include 'tests'
+import PackageDescription
 
-include 'core:swift3.1.1Action'
-
-include 'core:swift41Action'
-
-include 'core:swift42Action'
-
-include 'core:swift51Action'
-
-rootProject.name = 'runtime-swift'
-
-gradle.ext.openwhisk = [
-        version: '1.0.0-SNAPSHOT'
-]
-
-gradle.ext.scala = [
-    version: '2.12.7',
-    compileFlags: ['-feature', '-unchecked', '-deprecation', '-Xfatal-warnings', '-Ywarn-unused-import']
-]
-
-gradle.ext.scalafmt = [
-    version: '1.5.0',
-    config: new File(rootProject.projectDir, '.scalafmt.conf')
-]
+let package = Package(
+    name: "Action",
+        dependencies: [
+            .Package(url: "https://github.com/IBM-Swift/CCurl.git", "0.2.3"),
+            .Package(url: "https://github.com/IBM-Swift/Kitura-net.git", "1.7.10"),
+            .Package(url: "https://github.com/IBM-Swift/SwiftyJSON.git", "15.0.1"),
+            .Package(url: "https://github.com/watson-developer-cloud/swift-sdk.git", "0.16.0")
+        ]
+)

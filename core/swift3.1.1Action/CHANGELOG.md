@@ -1,4 +1,4 @@
-#!/bin/bash
+<!--
 #
 # Licensed to the Apache Software Foundation (ASF) under one or more
 # contributor license agreements.  See the NOTICE file distributed with
@@ -15,21 +15,28 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+-->
 
-set -e
+# Apache OpenWhisk Swift 3.1 Runtime Container
 
-../../tools/build/compile.sh  HelloSwift3 swift:3.1.1 "-v"
+## 1.0.3
+Changes:
+  - Update base image to openwhisk/dockerskeleton:1.3.3
 
-../../tools/build/compile.sh  HelloSwift4 swift:4.1 "-v"
-../../tools/build/compile.sh  SwiftyRequest swift:4.1 "-v"
-../../tools/build/compile.sh  SwiftyRequestCodable swift:4.1 "-v"
-../../tools/build/compile.sh  HelloSwift4Codable swift:4.1 "-v"
+## 1.0.2
+Changes:
+  - Update base image to openwhisk/dockerskeleton:1.3.2
 
-../../tools/build/compile5.sh  action-swift-v5.1 HelloSwift5 swift5.1 "-v"
-../../tools/build/compile5.sh  action-swift-v5.1 HelloSwift5Codable swift5.1 "-v"
-../../tools/build/compile5.sh  action-swift-v5.1 SwiftyRequest5 swift:5.1 "-v"
-../../tools/build/compile5.sh  action-swift-v5.1 SwiftyRequestCodable5 swift:5.1 "-v"
+## 1.0.1
+Changes:
+  - Update base image to openwhisk/dockerskeleton:1.3.1
 
+## 1.0.0
+Initial Swift 3.1 image
+  - Image name: `openwhisk/action-swift-v3.1.1`
+  - Kind is: `swift:3.1.1`
 
-cd actions
-make all
+Swift runtime version: [3.1.1](https://github.com/IBM-Swift/swift-ubuntu-docker/blob/58ee2502030deaa7273e3924b9b59495a929b66f/swift-development/Dockerfile)
+
+Packages included:
+  - No packages included, use Package.swift and pre-compile action.

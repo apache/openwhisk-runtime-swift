@@ -53,7 +53,7 @@ fi
 
 
 echo "Using runtime $RUNTIME to compile swift"
-docker run --rm --entrypoint=bash --name=compile-ow-swift -it -v "$(pwd):/owexec" $RUNTIME -ex -c "
+docker run --rm --name=compile-ow-swift -it -v "$(pwd):/owexec" $RUNTIME -ex -c "
 
 if [ -f \"/owexec/$OUTPUT_DIR/$1.zip\" ] ; then
     rm \"/owexec/$OUTPUT_DIR/$1.zip\"
