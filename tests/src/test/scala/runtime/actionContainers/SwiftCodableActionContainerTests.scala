@@ -139,6 +139,7 @@ abstract class SwiftCodableActionContainerTests extends BasicActionRunnerTests w
         |  let api_key: String
         |  let namespace: String
         |  let action_name: String
+        |  let action_version: String
         |  let activation_id: String
         |  let deadline: String
         | }
@@ -148,6 +149,7 @@ abstract class SwiftCodableActionContainerTests extends BasicActionRunnerTests w
         |     var b = "???"
         |     var c = "???"
         |     var d = "???"
+        |     var r = "???"
         |     var e = "???"
         |     var f = "???"
         |     if let v : String = env["__OW_API_HOST"] {
@@ -162,13 +164,16 @@ abstract class SwiftCodableActionContainerTests extends BasicActionRunnerTests w
         |     if let v : String = env["__OW_ACTION_NAME"] {
         |         d = "\(v)"
         |     }
+        |     if let v : String = env["__OW_ACTION_VERSION"] {
+        |         r = "\(v)"
+        |     }
         |     if let v : String = env["__OW_ACTIVATION_ID"] {
         |         e = "\(v)"
         |     }
         |     if let v : String = env["__OW_DEADLINE"] {
         |         f = "\(v)"
         |     }
-        |     let result = AnOutput(api_host:a, api_key:b, namespace:c, action_name:d, activation_id:e, deadline: f)
+        |     let result = AnOutput(api_host:a, api_key:b, namespace:c, action_name:d, action_version:r, activation_id:e, deadline: f)
         |     respondWith(result, nil)
         | }
       """.stripMargin,
