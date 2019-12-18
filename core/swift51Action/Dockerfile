@@ -15,15 +15,23 @@
 # limitations under the License.
 #
 
-FROM openwhisk/actionloop:nightly as builder
+# build go proxy from source
+FROM golang:1.12 AS builder_source
+RUN env CGO_ENABLED=0 go get github.com/apache/openwhisk-runtime-go/main && mv /go/bin/main /bin/proxy
 
-#FROM golang:1.12 as builder
-#RUN curl -sL \
-#  https://github.com/apache/openwhisk-runtime-go/archive/golang1.11@1.14.0.tar.gz\
-#  | tar xzf -\
-#  && cd openwhisk-runtime-go-*/main\
-#  && GO111MODULE=on go build -o /bin/proxy
+# or build it from a release
+FROM golang:1.12 AS builder_release
+ARG GO_PROXY_RELEASE_VERSION=golang1.12@1.14.0
+RUN curl -sL \
+  https://github.com/apache/openwhisk-runtime-go/archive/{$GO_PROXY_RELEASE_VERSION}.tar.gz\
+  | tar xzf -\
+  && cd openwhisk-runtime-go-*/main\
+  && GO111MODULE=on go build -o /bin/proxy
+
 FROM swift:5.1.2
+
+# select the builder to use
+ARG GO_PROXY_BUILD_FROM=source
 
 RUN rm -rf /var/lib/apt/lists/* && apt-get clean && apt-get -qq update \
 	&& apt-get install -y --no-install-recommends locales python3 vim libssl-dev libicu-dev \
@@ -37,7 +45,9 @@ ENV LANG="en_US.UTF-8" \
 RUN mkdir -p /swiftAction
 WORKDIR /swiftAction
 
-COPY --from=builder /bin/proxy /bin/proxy
+COPY --from=builder_source /bin/proxy /bin/proxy_source
+COPY --from=builder_release /bin/proxy /bin/proxy_release
+RUN ln -s /bin/proxy_${GO_PROXY_BUILD_FROM} /bin/proxy
 ADD swiftbuild.py /bin/compile
 ADD swiftbuild.py.launcher.swift /bin/compile.launcher.swift
 COPY _Whisk.swift /swiftAction/Sources/
