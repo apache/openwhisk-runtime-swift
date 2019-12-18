@@ -14,12 +14,15 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-FROM golang:1.12 as builder
-RUN curl -sL \
-  https://github.com/apache/openwhisk-runtime-go/archive/golang1.11@1.14.0.tar.gz\
-  | tar xzf -\
-  && cd openwhisk-runtime-go-*/main\
-  && GO111MODULE=on go build -o /bin/proxy
+
+FROM openwhisk/actionloop:nightly as builder
+
+#FROM golang:1.12 as builder
+#RUN curl -sL \
+#  https://github.com/apache/openwhisk-runtime-go/archive/golang1.11@1.14.0.tar.gz\
+#  | tar xzf -\
+#  && cd openwhisk-runtime-go-*/main\
+#  && GO111MODULE=on go build -o /bin/proxy
 FROM swift:5.1.2
 
 RUN rm -rf /var/lib/apt/lists/* && apt-get clean && apt-get -qq update \
