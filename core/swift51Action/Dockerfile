@@ -47,7 +47,7 @@ WORKDIR /swiftAction
 
 COPY --from=builder_source /bin/proxy /bin/proxy_source
 COPY --from=builder_release /bin/proxy /bin/proxy_release
-RUN ln -s /bin/proxy_${GO_PROXY_BUILD_FROM} /bin/proxy
+RUN mv /bin/proxy_${GO_PROXY_BUILD_FROM} /bin/proxy
 ADD swiftbuild.py /bin/compile
 ADD swiftbuild.py.launcher.swift /bin/compile.launcher.swift
 COPY _Whisk.swift /swiftAction/Sources/
