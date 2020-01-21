@@ -21,7 +21,7 @@ RUN env CGO_ENABLED=0 go get github.com/apache/openwhisk-runtime-go/main && mv /
 
 # or build it from a release
 FROM golang:1.12 AS builder_release
-ARG GO_PROXY_RELEASE_VERSION=golang1.12@1.14.0
+ARG GO_PROXY_RELEASE_VERSION=1.12@1.15.0
 RUN curl -sL \
   https://github.com/apache/openwhisk-runtime-go/archive/{$GO_PROXY_RELEASE_VERSION}.tar.gz\
   | tar xzf -\
@@ -31,7 +31,7 @@ RUN curl -sL \
 FROM swift:5.1.2
 
 # select the builder to use
-ARG GO_PROXY_BUILD_FROM=source
+ARG GO_PROXY_BUILD_FROM=release
 
 RUN rm -rf /var/lib/apt/lists/* && apt-get clean && apt-get -qq update \
 	&& apt-get install -y --no-install-recommends locales python3 vim libssl-dev libicu-dev \
