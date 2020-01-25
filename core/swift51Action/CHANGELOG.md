@@ -1,4 +1,4 @@
-#!/bin/bash
+<!--
 #
 # Licensed to the Apache Software Foundation (ASF) under one or more
 # contributor license agreements.  See the NOTICE file distributed with
@@ -15,16 +15,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+-->
 
-set -ex
+# Apache OpenWhisk Swift 5.1 Runtime Container
 
-# Build script for Travis-CI.
-
-SCRIPTDIR=$(cd $(dirname "$0") && pwd)
-ROOTDIR="$SCRIPTDIR/../.."
-WHISKDIR="$ROOTDIR/../openwhisk"
-
-export OPENWHISK_HOME=$WHISKDIR
-cd ${ROOTDIR}
-TERM=dumb ./gradlew :tests:checkScalafmtAll
-TERM=dumb ./gradlew :tests:test

@@ -40,15 +40,6 @@ runtimes_manifest:
         name: "nodejs6action"
       deprecated: false
     swift:
-    - kind: "swift:3"
-      image:
-        name: "swift3action"
-      deprecated: true
-    - kind: "swift:3.1.1"
-      default: false
-      image:
-        name: "action-swift-v3.1.1"
-      deprecated: false
     - kind: "swift:4.1"
       default: false
       image:

@@ -27,13 +27,7 @@ if [ -z "$2" ] ; then
     exit 2
 fi
 
-BASE_PATH="/swift3Action"
-DEST_SOURCE="$BASE_PATH/spm-build"
-RUNTIME="openwhisk/action-swift-v3.1.1"
-BUILD_FLAGS=""
-if [ ${2} == "swift:3.1.1" ]; then
-  OUTPUT_DIR="build/swift311"
-elif [ ${2} == "swift:4.1" ]; then
+if [ ${2} == "swift:4.1" ]; then
   RUNTIME="openwhisk/action-swift-v4.1"
   BASE_PATH="/swift4Action"
   DEST_SOURCE="/$BASE_PATH/spm-build/Sources/Action"

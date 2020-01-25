@@ -23,9 +23,9 @@
 
 
 ## Changelogs
-- [Swift 3.1.1 CHANGELOG.md](core/swift3.1.1Action/CHANGELOG.md)
 - [Swift 4.1   CHANGELOG.md](core/swift41Action/CHANGELOG.md)
 - [Swift 4.2   CHANGELOG.md](core/swift42Action/CHANGELOG.md)
+- [Swift 5.1   CHANGELOG.md](core/swift51Action/CHANGELOG.md)
 
 ## Quick Swift Action
 ### Simple swift action hello.swift
@@ -336,36 +336,6 @@ let package = Package(
   ```
   wsk action invoke helloSwiftly --blocking
   ```
-
-### Migrating from Swift 3 to Swift 4
-
-### Helper compile.sh helper script
-When compiling and packaging your swift 4 action, there are a couple of differences.
-All your source code needs to be copied to `/swift4Action/spm-build/Sources/Action/` instead of `/swift3Action/spm-build/`
-You Package.swift needs to have the first line with a comment indicating swift4 tooling and format
-```
-// swift-tools-version:4.0
-```
-For swift 4 you need specify additional information in Package.swift such as `products` with executable name `Action` and `targets`
-
-You can take a look at the helper script [tools/build/compile.sh](tools/build/compile.sh) to compile and zip your Actions.
-Having a project directory `Hello` under a directory `actions` like the following:
-```
-actions/Hello/Package.swift
-actions/Hello/Sources/main.swift
-```
-Change to the parent directory then run the compile script specify the project directory, the kind `swift:3.1.1` or `swift:4.2` and any swiftc build flags like the following:
-```
-cd actions/
-runtime-swift/tools/build/compile.sh Hello swift:4.2 -v
-```
-This will produce a zip `build/swift4/Hello.zip`
-
-### SwiftyJSON using single source action file
-If you have a swift:3.1.1 action not compile, just as source using the `SwiftyJSON` package, you need to precompile your action and specify the version of SwiftyJSON you wan to use for swift:4.2 kind action.
-Take into account that starting with Swift 4 there is better support to manage JSON data natively.
-
-Note: This is only applicable to the base image provided for the Swift 4 runtime, other downstream such as IBM Cloud Functions extending this image might provide additional SDK and packages including `SwiftyJSON` and IBM Watson SDK, check the vendor documentation for more specific information about packages and versions.
 
 ### Building the Swift4 Image
 ```

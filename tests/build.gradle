@@ -42,13 +42,3 @@ dependencies {
 tasks.withType(ScalaCompile) {
     scalaCompileOptions.additionalParameters = gradle.scala.compileFlags
 }
-
-task testSwift4(type: Test) {
-    exclude 'runtime/sdk/Swift311**'
-    exclude 'runtime/actionContainers/Swift311**'
-}
-
-task testSwift5(type: Test) {
-    exclude 'runtime/sdk/Swift311**'
-    exclude 'runtime/actionContainers/Swift311**'
-}
