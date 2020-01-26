@@ -17,26 +17,10 @@
 #
 -->
 
-# Apache OpenWhisk Swift 3.1 Runtime Container
+# Apache OpenWhisk Swift 4.2 Runtime Container
 
-## 1.0.3
-Changes:
-  - Update base image to openwhisk/dockerskeleton:1.3.3
-
-## 1.0.2
-Changes:
-  - Update base image to openwhisk/dockerskeleton:1.3.2
-
-## 1.0.1
-Changes:
-  - Update base image to openwhisk/dockerskeleton:1.3.1
-
-## 1.0.0
-Initial Swift 3.1 image
-  - Image name: `openwhisk/action-swift-v3.1.1`
-  - Kind is: `swift:3.1.1`
-
-Swift runtime version: [3.1.1](https://github.com/IBM-Swift/swift-ubuntu-docker/blob/58ee2502030deaa7273e3924b9b59495a929b66f/swift-development/Dockerfile)
+## 1.13.0-incubating
+ - Initial Release
 
 Packages included:
   - No packages included, use Package.swift and pre-compile action.

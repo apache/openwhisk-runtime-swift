@@ -30,9 +30,7 @@ IMAGE_PREFIX=$1
 RUNTIME_VERSION=$2
 IMAGE_TAG=$3
 
-if [ ${RUNTIME_VERSION} == "3.1.1" ]; then
-  RUNTIME="swift3.1.1Action"
-elif [ ${RUNTIME_VERSION} == "4.1" ]; then
+if [ ${RUNTIME_VERSION} == "4.1" ]; then
   RUNTIME="swift41Action"
 elif [ ${RUNTIME_VERSION} == "4.2" ]; then
   RUNTIME="swift42Action"
