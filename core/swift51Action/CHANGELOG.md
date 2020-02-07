@@ -19,3 +19,5 @@
 
 # Apache OpenWhisk Swift 5.1 Runtime Container
 
+## 1.14.0
+ - Initial Release
