@@ -19,6 +19,13 @@
 
 # Apache OpenWhisk Swift 4.1 Runtime Container
 
+## 1.14.0
+  - Support for __OW_ACTION_VERSION (openwhisk/4761)
+
+## 1.13.0-incubating
+
+## 1.12.0-incubating
+
 ## 1.0.8
 Changes:
   - Update base image to use python proxy from openwhisk/dockerskeleton:1.3.3
