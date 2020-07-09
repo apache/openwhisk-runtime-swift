@@ -28,7 +28,7 @@ RUN curl -sL \
   && cd openwhisk-runtime-go-*/main\
   && GO111MODULE=on go build -o /bin/proxy
 
-FROM swift:5.1.4
+FROM swift:5.1.5
 
 # select the builder to use
 ARG GO_PROXY_BUILD_FROM=release
