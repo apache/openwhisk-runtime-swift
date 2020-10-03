@@ -22,7 +22,7 @@
 ## 1.15.0
   - update Swift 5.1 image to Swift 5.1.5 (#120)
   - Move from golang:1.12 to golang:1.15 to build the runtime proxy (#121)
-  - build proxy from openwhisk-runtime-go 1.16.0 release (#122)
+  - Build proxy from openwhisk-runtime-go 1.16.0 release (#122)
 
 ## 1.14.0
  - Initial Release
