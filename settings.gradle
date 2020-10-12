@@ -23,6 +23,8 @@ include 'core:swift42Action'
 
 include 'core:swift51Action'
 
+include 'core:swift53Action'
+
 rootProject.name = 'runtime-swift'
 
 gradle.ext.openwhisk = [
