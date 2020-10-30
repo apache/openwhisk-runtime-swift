@@ -69,6 +69,11 @@ runtimes_manifest:
       image:
         name: "action-swift-v5.1"
       deprecated: false
+    - kind: "swift:5.3"
+      default: false
+      image:
+        name: "action-swift-v5.3"
+      deprecated: false
 
   blackboxes:
     - name: "dockerskeleton"
