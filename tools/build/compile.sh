@@ -32,6 +32,7 @@ if [ ${2} == "swift:4.1" ]; then
   BASE_PATH="/swift4Action"
   DEST_SOURCE="/$BASE_PATH/spm-build/Sources/Action"
   OUTPUT_DIR="build/swift4.1"
+  mkdir -p $OUTPUT_DIR || true # create dir when not exist
   # Due to a current bug in the Swift Docker image compile optimization is disabled by default.
   # If you need compiler optimization you can override the BUILD_FLAGS to enable it
   BUILD_FLAGS="-Xswiftc -Onone"
@@ -47,7 +48,7 @@ fi
 
 
 echo "Using runtime $RUNTIME to compile swift"
-docker run --rm --name=compile-ow-swift -it -v "$(pwd):/owexec" $RUNTIME -ex -c "
+docker run --rm --name=compile-ow-swift -it -v "$(pwd):/owexec" $RUNTIME sh -ex -c "
 
 if [ -f \"/owexec/$OUTPUT_DIR/$1.zip\" ] ; then
     rm \"/owexec/$OUTPUT_DIR/$1.zip\"

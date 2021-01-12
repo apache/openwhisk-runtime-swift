@@ -23,16 +23,17 @@ set -e
 ../../tools/build/compile.sh  SwiftyRequestCodable swift:4.1 "-v"
 ../../tools/build/compile.sh  HelloSwift4Codable swift:4.1 "-v"
 
+../../tools/build/compile5.sh  action-swift-v4.2 HelloSwift4 swift4.2 "-v"
+../../tools/build/compile5.sh  action-swift-v4.2 HelloSwift4Codable swift4.2 "-v"
+../../tools/build/compile5.sh  action-swift-v4.2 SwiftyRequest swift4.2 "-v"
+../../tools/build/compile5.sh  action-swift-v4.2 SwiftyRequestCodable swift4.2 "-v"
+
 ../../tools/build/compile5.sh  action-swift-v5.1 HelloSwift5 swift5.1 "-v"
 ../../tools/build/compile5.sh  action-swift-v5.1 HelloSwift5Codable swift5.1 "-v"
-../../tools/build/compile5.sh  action-swift-v5.1 SwiftyRequest5 swift:5.1 "-v"
-../../tools/build/compile5.sh  action-swift-v5.1 SwiftyRequestCodable5 swift:5.1 "-v"
+../../tools/build/compile5.sh  action-swift-v5.1 SwiftyRequest5 swift5.1 "-v"
+../../tools/build/compile5.sh  action-swift-v5.1 SwiftyRequestCodable5 swift5.1 "-v"
 
 ../../tools/build/compile5.sh  action-swift-v5.3 HelloSwift5 swift5.3 "-v"
 ../../tools/build/compile5.sh  action-swift-v5.3 HelloSwift5Codable swift5.3 "-v"
-../../tools/build/compile5.sh  action-swift-v5.3 SwiftyRequest5 swift:5.3 "-v"
-../../tools/build/compile5.sh  action-swift-v5.3 SwiftyRequestCodable5 swift:5.3 "-v"
-
-
-cd actions
-make all
+../../tools/build/compile5.sh  action-swift-v5.3 SwiftyRequest5 swift5.3 "-v"
+../../tools/build/compile5.sh  action-swift-v5.3 SwiftyRequestCodable5 swift5.3 "-v"
