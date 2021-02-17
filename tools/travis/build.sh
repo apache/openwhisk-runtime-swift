@@ -59,3 +59,7 @@ TERM=dumb ./gradlew \
 :core:swift51Action:distDocker \
 :core:swift53Action:distDocker \
 -PdockerImagePrefix=${IMAGE_PREFIX}
+
+# Compile test files
+cd $ROOTDIR/tests/dat
+sh build.sh
