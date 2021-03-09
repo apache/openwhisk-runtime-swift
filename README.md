@@ -350,7 +350,7 @@ docker login
 ```
 
 
-## Codable Suppor with Swift 4.x
+## Codable Support with Swift 4.x
 
 Some examples of using Codable In and Out
 
@@ -434,7 +434,7 @@ wsk action update myAction myAction.swift --docker openwhisk/action-swift-v4.2:1
 ```
 This works on any deployment of Apache OpenWhisk
 
-### To use on deployment that contains the rutime as a kind
+### To use on deployment that contains the runtime as a kind
 To use as a kind action
 ```
 wsk action update myAction myAction.swift --kind swift:4.2
@@ -453,7 +453,7 @@ docker login
 ```
 
 Deploy OpenWhisk using ansible environment that contains the kind `swift:4.2`
-Assuming you have OpenWhisk already deploy localy and `OPENWHISK_HOME` pointing to root directory of OpenWhisk core repository.
+Assuming you have OpenWhisk already deploy locally and `OPENWHISK_HOME` pointing to root directory of OpenWhisk core repository.
 
 Set `ROOTDIR` to the root directory of this repository.
 

@@ -121,6 +121,6 @@ func _run_main<Out: Encodable>(mainFunction: ( @escaping (Out?, Error?) -> Void)
     let _ = mainFunction(resultHandler)
 }
 
-// snippets of code "injected", dependending on the type of function the developer
+// snippets of code "injected", depending on the type of function the developer
 // wants to use traditional vs codable
 
