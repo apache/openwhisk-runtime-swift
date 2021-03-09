@@ -20,7 +20,7 @@ import Dispatch
 import Foundation
 
 enum RequestError: Error {
-    case requetError
+    case requestError
 }
 struct AnInput: Codable {
     let url: String?
@@ -38,7 +38,7 @@ func main(param: AnInput, completion: @escaping (AnOutput?, Error?) -> Void) -> 
             completion(AnOutput(greeting:"success"),nil)
         case .failure(let error):
             print(error)
-            completion(nil,RequestError.requetError)
+            completion(nil,RequestError.requestError)
         }
     }
 }
