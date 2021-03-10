@@ -29,7 +29,7 @@
 
 ## Quick Swift Action
 ### Simple swift action hello.swift
-The traditional support for dictionary still works:
+The traditional support for the dictionary still works:
 ```swift
 import Foundation
 
@@ -490,16 +490,16 @@ Using gradle to run some tests
 ```
 Using IntelliJ:
 - Import project as gradle project.
-- Make sure working directory is root of the project/repo
+- Make sure the working directory is root of the project/repo
 
 #### Using container image to test
-To use as docker action push to your own dockerhub account
+To use as docker action push to your own Docker Hub account
 ```
 docker tag whisk/action-swift-v4.2 $user_prefix/action-swift-v4.2
 docker push $user_prefix/action-swift-v4.2
 ```
-Then create the action using your the image from dockerhub
+Then create the action using your image from Docker Hub
 ```
 wsk action update myAction myAction.swift --docker $user_prefix/action-swift-v4.2
 ```
-The `$user_prefix` is usually your dockerhub user id.
+The `$user_prefix` is usually your Docker Hub user id.
