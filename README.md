@@ -113,13 +113,14 @@ wsk action invoke helloCodableError -b -p id 51 -p name Carlos
 ```
 ```json
 {
-"name": "helloCodableError",
-"response": {
-  "result": {
-    "error": "insufficientFunds(5)"
-  },
-"status": "application error",
-"success": false
+  "name": "helloCodableError",
+  "response": {
+    "result": {
+      "error": "insufficientFunds(5)"
+    },
+    "status": "application error",
+    "success": false
+  }
 }
 ```
 
@@ -212,13 +213,14 @@ wsk action invoke helloCodableError -b -p id 42 -p name Carlos
 ```
 ```json
 {
-"name": "helloCodableError",
-"response": {
-  "result": {
-    "error": "insufficientFunds(5)"
-  },
-"status": "application error",
-"success": false
+  "name": "helloCodableError",
+  "response": {
+    "result": {
+      "error": "insufficientFunds(5)"
+    },
+    "status": "application error",
+    "success": false
+  }
 }
 ```
 
