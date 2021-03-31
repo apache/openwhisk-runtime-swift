@@ -15,19 +15,6 @@
   "runtimes": {
     "swift": [
       {
-        "kind": "swift:4.1",
-        "default": false,
-        "image": {
-          "prefix": "openwhisk",
-          "name": "action-swift-v4.1"
-        },
-        "deprecated": false,
-        "attached": {
-          "attachmentName": "codefile",
-          "attachmentType": "text/plain"
-        }
-      },
-      {
         "kind": "swift:4.2",
         "default": false,
         "image": {
