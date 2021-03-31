@@ -18,6 +18,11 @@
 
 set -e
 
+if [ -f ".built" ]; then
+  echo "Test artifacts already built, skipping"
+  exit 0
+fi
+
 ../../tools/build/compile5.sh  action-swift-v4.2 HelloSwift4 swift4.2 "-v"
 ../../tools/build/compile5.sh  action-swift-v4.2 HelloSwift4Codable swift4.2 "-v"
 ../../tools/build/compile5.sh  action-swift-v4.2 SwiftyRequest swift4.2 "-v"
@@ -32,3 +37,5 @@ set -e
 ../../tools/build/compile5.sh  action-swift-v5.3 HelloSwift5Codable swift5.3 "-v"
 ../../tools/build/compile5.sh  action-swift-v5.3 SwiftyRequest5 swift5.3 "-v"
 ../../tools/build/compile5.sh  action-swift-v5.3 SwiftyRequestCodable5 swift5.3 "-v"
+
+touch .built
