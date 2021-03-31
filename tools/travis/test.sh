@@ -24,6 +24,9 @@ SCRIPTDIR=$(cd $(dirname "$0") && pwd)
 ROOTDIR="$SCRIPTDIR/../.."
 WHISKDIR="$ROOTDIR/../openwhisk"
 
+# needed by WskProps() in SwiftSDKTests
+export WHISK_AUTH=`cat ${WHISKDIR}/ansible/files/auth.guest`
+
 export OPENWHISK_HOME=$WHISKDIR
 cd ${ROOTDIR}
 TERM=dumb ./gradlew :tests:checkScalafmtAll
