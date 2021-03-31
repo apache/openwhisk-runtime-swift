@@ -23,9 +23,9 @@
 
 
 ## Changelogs
-- [Swift 4.1   CHANGELOG.md](core/swift41Action/CHANGELOG.md)
 - [Swift 4.2   CHANGELOG.md](core/swift42Action/CHANGELOG.md)
 - [Swift 5.1   CHANGELOG.md](core/swift51Action/CHANGELOG.md)
+- [Swift 5.3   CHANGELOG.md](core/swift53Action/CHANGELOG.md)
 
 ## Quick Swift Action
 ### Simple swift action hello.swift
@@ -246,107 +246,16 @@ zip - -r * | docker run -i openwhisk/action-swift-v4.2 -compile main >../action.
 
 For more build examples see [here](./examples/)
 
-
-### Compiling Swift 4.1
-These are the steps:
-
-- Run an interactive Swift action container.
-  ```
-  docker run --rm -it -v "$(pwd):/owexec" openwhisk/action-swift-v4.2 bash
-  ```
-  This puts you in a bash shell within the Docker container.
-
-- Copy the source code and prepare to build it.
-  ```
-  cp /owexec/hello.swift /swift4Action/spm-build/Sources/Action/main.swift
-  ```
-  ```
-  cat /swift4Action/epilogue.swift >> /swift4Action/spm-build/Sources/Action/main.swift
-  ```
-  ```
-  echo '_run_main(mainFunction:main)' >> /swift4Action/spm-build/Sources/Action/main.swift
-  ```
-  Copy any additional source files to `/swift4Action/spm-build/Sources/Action/`
-
-
-- Create the `Package.swift` file to add dependencies.
-```swift
-// swift-tools-version:4.0
-// The swift-tools-version declares the minimum version of Swift required to build this package.
-
-import PackageDescription
-
-let package = Package(
-    name: "Action",
-    products: [
-      .executable(
-        name: "Action",
-        targets:  ["Action"]
-      )
-    ],
-    dependencies: [
-      .package(url: "https://github.com/IBM-Swift/SwiftyRequest.git", .upToNextMajor(from: "1.0.0"))
-    ],
-    targets: [
-      .target(
-        name: "Action",
-        dependencies: ["SwiftyRequest"],
-        path: "."
-      )
-    ]
-```
-  As you can see this example adds `SwiftyRequest` dependencies.
-
-  Notice that now with swift:4.2 is no longer required to include `CCurl`, `Kitura-net` and `SwiftyJSON` in your own `Package.swift`.
-  You are free now to use no dependencies, or add the combination that you want with the versions you want.
-
-- Copy Package.swift to spm-build directory
-  ```
-  cp /owexec/Package.swift /swift4Action/spm-build/Package.swift
-  ```
-
-- Change to the spm-build directory.
-  ```
-  cd /swift4Action/spm-build
-  ```
-
-- Compile your Swift Action.
-  ```
-  swift build -c release
-  ```
-
-- Create the zip archive.
-  ```
-  zip /owexec/hello.zip .build/release/Action
-  ```
-
-- Exit the Docker container.
-  ```
-  exit
-  ```
-
-  This has created hello.zip in the same directory as hello.swift.
-
-- Upload it to OpenWhisk with the action name helloSwifty:
-  ```
-  wsk action update helloSwiftly hello.zip openwhisk/action-swift-v4.2
-  ```
-
-- To check how much faster it is, run
-  ```
-  wsk action invoke helloSwiftly --blocking
-  ```
-
 ### Building the Swift4 Image
 ```
-./gradlew core:swift40Action:distDocker
+./gradlew core:swift42Action:distDocker
 ```
 This will produce the image `whisk/action-swift-v4.2`
 
 Build and Push image
 ```
 docker login
-./gradlew core:swift40Action:distDocker -PdockerImagePrefix=$prefix-user -PdockerRegistry=docker.io
+./gradlew core:swift42Action:distDocker -PdockerImagePrefix=$prefix-user -PdockerRegistry=docker.io
 ```
 
 
@@ -442,14 +351,14 @@ wsk action update myAction myAction.swift --kind swift:4.2
 
 ## Local development
 ```
-./gradlew core:swift41Action:distDocker
+./gradlew core:swift42Action:distDocker
 ```
 This will produce the image `whisk/action-swift-v4.2`
 
 Build and Push image
 ```
 docker login
-./gradlew core:swift41Action:distDocker -PdockerImagePrefix=$prefix-user -PdockerRegistry=docker.io
+./gradlew core:swift42Action:distDocker -PdockerImagePrefix=$prefix-user -PdockerRegistry=docker.io
 ```
 
 Deploy OpenWhisk using ansible environment that contains the kind `swift:4.2`
