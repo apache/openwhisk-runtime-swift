@@ -17,15 +17,3 @@
 
 ext.dockerImageName = 'action-swift-v4.2'
 apply from: '../../gradle/docker.gradle'
-
-distDocker.dependsOn 'copyWhisk'
-distDocker.finalizedBy('cleanup')
-
-task copyWhisk(type: Copy) {
-    from '../swift41Action/spm-build/_Whisk.swift'
-    into '_Whisk.swift'
-}
-
-task cleanup(type: Delete) {
-    delete '_Whisk.swift'
-}

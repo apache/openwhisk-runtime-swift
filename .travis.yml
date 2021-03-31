@@ -42,7 +42,7 @@ deploy:
       all_branches: true
       repo: apache/openwhisk-runtime-swift
   - provider: script
-    script: "./tools/travis/publish.sh openwhisk 4.1 nightly && ./tools/travis/publish.sh openwhisk 4.2 nightly"
+    script: "./tools/travis/publish.sh openwhisk 4.2 nightly"
     on:
       branch: master
       repo: apache/openwhisk-runtime-swift
