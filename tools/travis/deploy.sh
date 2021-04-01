@@ -31,7 +31,7 @@ IMAGE_PREFIX="testing"
 
 # Deploy OpenWhisk
 cd $WHISKDIR/ansible
-ANSIBLE_CMD="ansible-playbook -i ${WHISKDIR}/ansible/environments/local -e manifest_file=$RUNTIMES_MANIFEST -e controller_protocol=http -e docker_image_prefix=${IMAGE_PREFIX}"
+ANSIBLE_CMD="ansible-playbook -i ${WHISKDIR}/ansible/environments/local -e runtimes_manifest=$RUNTIMES_MANIFEST -e controller_protocol=http -e docker_image_prefix=${IMAGE_PREFIX}"
 $ANSIBLE_CMD setup.yml
 $ANSIBLE_CMD prereq.yml
 $ANSIBLE_CMD couchdb.yml
