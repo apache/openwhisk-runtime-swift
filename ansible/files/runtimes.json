@@ -13,12 +13,28 @@
     "This file is meant to list all stable runtimes supported by the Apache Openwhisk community."
   ],
   "runtimes": {
+    "nodejs": [
+      {
+        "kind": "nodejs:10",
+        "default": true,
+        "image": {
+          "prefix": "openwhisk",
+          "name": "action-nodejs-v10",
+          "tag": "nightly"
+        },
+        "deprecated": false,
+        "attached": {
+          "attachmentName": "codefile",
+          "attachmentType": "text/plain"
+        }
+      }
+    ],
     "swift": [
       {
         "kind": "swift:4.2",
         "default": false,
         "image": {
-          "prefix": "openwhisk",
+          "prefix": "testing",
           "name": "action-swift-v4.2"
         },
         "deprecated": false,
@@ -31,7 +47,7 @@
         "kind": "swift:5.1",
         "default": false,
         "image": {
-          "prefix": "openwhisk",
+          "prefix": "testing",
           "name": "action-swift-v5.1"
         },
         "deprecated": false,
@@ -44,7 +60,7 @@
         "kind": "swift:5.3",
         "default": true,
         "image": {
-          "prefix": "openwhisk",
+          "prefix": "testing",
           "name": "action-swift-v5.3"
         },
         "deprecated": false,
