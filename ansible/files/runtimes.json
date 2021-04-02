@@ -18,9 +18,8 @@
         "kind": "nodejs:10",
         "default": true,
         "image": {
-          "prefix": "openwhisk",
+          "prefix": "testing",
           "name": "action-nodejs-v10",
-          "tag": "testing"
         },
         "deprecated": false,
         "attached": {
