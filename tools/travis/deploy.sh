@@ -37,7 +37,8 @@ $ANSIBLE_CMD prereq.yml
 $ANSIBLE_CMD couchdb.yml
 $ANSIBLE_CMD initdb.yml
 $ANSIBLE_CMD wipe.yml
-$ANSIBLE_CMD openwhisk.yml -e cli_installation_mode=remote
+$ANSIBLE_CMD elasticsearch.yml
+$ANSIBLE_CMD openwhisk.yml -e cli_installation_mode=remote -e db_activation_backend=ElasticSearch
 $ANSIBLE_CMD postdeploy.yml
 
 docker images
