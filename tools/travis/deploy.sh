@@ -41,7 +41,7 @@ $ANSIBLE_CMD wipe.yml
 $ANSIBLE_CMD openwhisk.yml -e cli_installation_mode=remote
 # HACK -- DO NOT MERGE
 docker ps
-docker logs controller-0
+docker logs controller0 --follow
 exit 1
 # END HACK
 $ANSIBLE_CMD properties.yml
