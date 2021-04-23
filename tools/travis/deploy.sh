@@ -16,10 +16,10 @@
 # limitations under the License.
 #
 
-# HACK -- DO NOT MERGE
+# HACK -- DO NOT MERGE!
 # set -ex
 set -x
-# END HACK -- DO NOT MERGE
+# END HACK -- DO NOT MERGE!
 
 # Build script for Travis-CI.
 
