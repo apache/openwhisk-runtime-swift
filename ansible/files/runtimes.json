@@ -18,8 +18,9 @@
         "kind": "nodejs:10",
         "default": true,
         "image": {
-          "prefix": "testing",
+          "prefix": "openwhisk",
           "name": "action-nodejs-v10",
+          "tag": "nightly"
         },
         "deprecated": false,
         "attached": {
@@ -34,7 +35,8 @@
         "default": false,
         "image": {
           "prefix": "testing",
-          "name": "action-swift-v4.2"
+          "name": "action-swift-v4.2",
+          "tag": "latest"
         },
         "deprecated": false,
         "attached": {
@@ -47,7 +49,8 @@
         "default": false,
         "image": {
           "prefix": "testing",
-          "name": "action-swift-v5.1"
+          "name": "action-swift-v5.1",
+          "tag": "latest"
         },
         "deprecated": false,
         "attached": {
@@ -60,7 +63,8 @@
         "default": true,
         "image": {
           "prefix": "testing",
-          "name": "action-swift-v5.3"
+          "name": "action-swift-v5.3",
+          "tag": "latest"
         },
         "deprecated": false,
         "attached": {
@@ -74,6 +78,7 @@
     {
       "prefix": "openwhisk",
       "name": "dockerskeleton"
+      "tag": "nightly"
     }
   ]
 }

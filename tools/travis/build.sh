@@ -38,18 +38,10 @@ cd $WHISKDIR
 
 #pull down images
 docker pull openwhisk/controller:nightly
-docker tag openwhisk/controller:nightly ${IMAGE_PREFIX}/controller
 docker pull openwhisk/invoker:nightly
-docker tag openwhisk/invoker:nightly ${IMAGE_PREFIX}/invoker
 docker pull openwhisk/action-nodejs-v10:nightly
-docker tag openwhisk/action-nodejs-v10:nightly ${IMAGE_PREFIX}/action-nodejs-v10
 
 TERM=dumb ./gradlew install
-
-# install new version docker
-curl -fsSL https://get.docker.com -o get-docker.sh
-sudo sh get-docker.sh
-docker version
 
 # Build runtime
 cd $ROOTDIR
