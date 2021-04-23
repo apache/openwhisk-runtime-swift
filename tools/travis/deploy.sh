@@ -29,13 +29,13 @@ export OPENWHISK_HOME=$WHISKDIR
 
 # Deploy OpenWhisk
 cd $WHISKDIR/ansible
-ANSIBLE_CMD="ansible-playbook -i environments/local -e runtimes_manifest=$RUNTIMES_MANIFEST -e docker_image_prefix=openwhisk -e docker_image_tag=nightly"
+ANSIBLE_CMD="ansible-playbook -i environments/local -e runtimes_manifest=$RUNTIMES_MANIFEST -e docker_image_prefix=openwhisk -e docker_image_tag=nightly -e controller_protocol=http"
 $ANSIBLE_CMD setup.yml
 $ANSIBLE_CMD prereq.yml
 $ANSIBLE_CMD couchdb.yml
 $ANSIBLE_CMD initdb.yml
 $ANSIBLE_CMD wipe.yml
-$ANSIBLE_CMD openwhisk.yml -e cli_installation_mode=remote -e controllerProtocolForSetup=http
+$ANSIBLE_CMD openwhisk.yml -e cli_installation_mode=remote
 $ANSIBLE_CMD properties.yml
 $ANSIBLE_CMD apigateway.yml
 $ANSIBLE_CMD routemgmt.yml
