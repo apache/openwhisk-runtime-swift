@@ -16,7 +16,10 @@
 # limitations under the License.
 #
 
-set -ex
+# HACK -- DO NOT MERGE
+# set -ex
+set -x
+# END HACK -- DO NOT MERGE
 
 # Build script for Travis-CI.
 
@@ -36,6 +39,11 @@ $ANSIBLE_CMD couchdb.yml
 $ANSIBLE_CMD initdb.yml
 $ANSIBLE_CMD wipe.yml
 $ANSIBLE_CMD openwhisk.yml -e cli_installation_mode=remote
+# HACK -- DO NOT MERGE
+docker ps
+docker logs controller-0
+exit 1
+# END HACK
 $ANSIBLE_CMD properties.yml
 $ANSIBLE_CMD apigateway.yml
 $ANSIBLE_CMD routemgmt.yml
