@@ -41,8 +41,8 @@ $ANSIBLE_CMD wipe.yml
 $ANSIBLE_CMD openwhisk.yml -e cli_installation_mode=remote
 # HACK -- DO NOT MERGE
 docker ps
-find /tmp -name "*controller0*"
-find /tmp -name controller0_logs.log -exec cat {} \;
+find /var/tmp -name "*controller0*"
+find /var/tmp -name controller0_logs.log -exec cat {} \;
 
 ls "$WHISKDIR/logs"
 cat "$WHISKDIR/logs/*"
