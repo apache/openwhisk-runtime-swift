@@ -77,7 +77,7 @@
   "blackboxes": [
     {
       "prefix": "openwhisk",
-      "name": "dockerskeleton"
+      "name": "dockerskeleton",
       "tag": "nightly"
     }
   ]
