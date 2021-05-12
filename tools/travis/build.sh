@@ -43,16 +43,14 @@ docker pull openwhisk/action-nodejs-v10:nightly
 
 TERM=dumb ./gradlew install
 
-# HACK TO DEBUG PROBLEM STARTING OPENWHISK -- DO NOT MERGE!
-# # Build runtime
-# cd $ROOTDIR
-# TERM=dumb ./gradlew \
-# :core:swift42Action:distDocker \
-# :core:swift51Action:distDocker \
-# :core:swift53Action:distDocker \
-# -PdockerImagePrefix=${IMAGE_PREFIX}
+# Build runtime
+cd $ROOTDIR
+TERM=dumb ./gradlew \
+:core:swift42Action:distDocker \
+:core:swift51Action:distDocker \
+:core:swift53Action:distDocker \
+-PdockerImagePrefix=${IMAGE_PREFIX}
 
-# # Compile test files
-# cd $ROOTDIR/tests/dat
-# sh build.sh
-# END HACK TO DEBUG PROBLEM STARTING OPENWHISK -- DO NOT MERGE!
+# Compile test files
+cd $ROOTDIR/tests/dat
+sh build.sh
