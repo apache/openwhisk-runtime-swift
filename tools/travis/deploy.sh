@@ -43,6 +43,7 @@ $ANSIBLE_CMD openwhisk.yml -e cli_installation_mode=remote
 docker ps
 find /var/tmp -name "*controller0*"
 find /var/tmp -name controller0_logs.log -exec cat {} \;
+cat $RUNTIMES_MANIFEST
 
 ls "$WHISKDIR/logs"
 cat "$WHISKDIR/logs/*"
