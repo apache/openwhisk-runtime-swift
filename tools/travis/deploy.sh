@@ -26,13 +26,13 @@ set -x
 SCRIPTDIR=$(cd $(dirname "$0") && pwd)
 ROOTDIR="$SCRIPTDIR/../.."
 WHISKDIR="$ROOTDIR/../openwhisk"
-RUNTIMES_MANIFEST="$ROOTDIR/ansible/files/runtimes.json"
 
 export OPENWHISK_HOME=$WHISKDIR
 
 # Deploy OpenWhisk
 cd $WHISKDIR/ansible
-ANSIBLE_CMD="ansible-playbook -i environments/local -e runtimes_manifest=$RUNTIMES_MANIFEST -e docker_image_prefix=openwhisk -e docker_image_tag=nightly -e controller_protocol=http"
+# NOTE: manifest_file is a relative path appended to OPENWHISK_HOME
+ANSIBLE_CMD="ansible-playbook -i environments/local -e manifest_file=../openwhisk-runtime-swift/ansible/files/runtimes.json -e docker_image_prefix=openwhisk -e docker_image_tag=nightly -e controller_protocol=http"
 $ANSIBLE_CMD setup.yml
 $ANSIBLE_CMD prereq.yml
 $ANSIBLE_CMD couchdb.yml
@@ -43,7 +43,6 @@ $ANSIBLE_CMD openwhisk.yml -e cli_installation_mode=remote
 docker ps
 find /var/tmp -name "*controller0*"
 find /var/tmp -name controller0_logs.log -exec cat {} \;
-cat $RUNTIMES_MANIFEST
 
 ls "$WHISKDIR/logs"
 cat "$WHISKDIR/logs/*"
