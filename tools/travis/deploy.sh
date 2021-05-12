@@ -32,7 +32,7 @@ export OPENWHISK_HOME=$WHISKDIR
 # Deploy OpenWhisk
 cd $WHISKDIR/ansible
 # NOTE: manifest_file is a relative path appended to OPENWHISK_HOME
-ANSIBLE_CMD="ansible-playbook -i environments/local -e manifest_file=../openwhisk-runtime-swift/ansible/files/runtimes.json -e docker_image_prefix=openwhisk -e docker_image_tag=nightly -e controller_protocol=http"
+ANSIBLE_CMD="ansible-playbook -i environments/local -e manifest_file=/../openwhisk-runtime-swift/ansible/files/runtimes.json -e docker_image_prefix=openwhisk -e docker_image_tag=nightly -e controller_protocol=http"
 $ANSIBLE_CMD setup.yml
 $ANSIBLE_CMD prereq.yml
 $ANSIBLE_CMD couchdb.yml
