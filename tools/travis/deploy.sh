@@ -35,7 +35,7 @@ $ANSIBLE_CMD prereq.yml
 $ANSIBLE_CMD couchdb.yml
 $ANSIBLE_CMD initdb.yml
 $ANSIBLE_CMD wipe.yml
-$ANSIBLE_CMD openwhisk.yml -e cli_installation_mode=remote
+$ANSIBLE_CMD openwhisk.yml -e cli_installation_mode=remote -e skip_pull_runtimes=true
 $ANSIBLE_CMD properties.yml
 $ANSIBLE_CMD apigateway.yml
 $ANSIBLE_CMD routemgmt.yml
