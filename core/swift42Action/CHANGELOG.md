@@ -19,6 +19,9 @@
 
 # Apache OpenWhisk Swift 4.2 Runtime Container
 
+## 1.16.0
+  - Use 1.17.0 release of openwhisk-runtime-go
+
 ## 1.15.0
   - Move from golang:1.12 to golang:1.15 to build the runtime proxy. (#121)
   - Build proxy from openwhisk-runtime-go 1.16.0 release (#122)

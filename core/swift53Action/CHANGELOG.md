@@ -19,5 +19,5 @@
 
 # Apache OpenWhisk Swift 5.3 Runtime Container
 
-## NEXT RELEASE
+## 1.16.0
  - Initial Release
