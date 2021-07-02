@@ -36,6 +36,8 @@ elif [ ${RUNTIME_VERSION} == "5.1" ]; then
   RUNTIME="swift51Action"
 elif [ ${RUNTIME_VERSION} == "5.3" ]; then
   RUNTIME="swift53Action"
+elif [ ${RUNTIME_VERSION} == "5.4" ]; then
+  RUNTIME="swift54Action"
 fi
 
 if [[ ! -z ${DOCKER_USER} ]] && [[ ! -z ${DOCKER_PASSWORD} ]]; then

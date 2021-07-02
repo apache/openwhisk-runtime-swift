@@ -32,3 +32,8 @@ set -e
 ../../tools/build/compile5.sh  action-swift-v5.3 HelloSwift5Codable swift5.3 "-v"
 ../../tools/build/compile5.sh  action-swift-v5.3 SwiftyRequest5 swift5.3 "-v"
 ../../tools/build/compile5.sh  action-swift-v5.3 SwiftyRequestCodable5 swift5.3 "-v"
+
+../../tools/build/compile5.sh  action-swift-v5.4 HelloSwift5 swift5.4 "-v"
+../../tools/build/compile5.sh  action-swift-v5.4 HelloSwift5Codable swift5.4 "-v"
+../../tools/build/compile5.sh  action-swift-v5.4 SwiftyRequest5 swift5.4 "-v"
+../../tools/build/compile5.sh  action-swift-v5.4 SwiftyRequestCodable5 swift5.4 "-v"
