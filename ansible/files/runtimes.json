@@ -71,6 +71,20 @@
           "attachmentName": "codefile",
           "attachmentType": "text/plain"
         }
+      },
+      {
+        "kind": "swift:5.4",
+        "default": false,
+        "image": {
+          "prefix": "testing",
+          "name": "action-swift-v5.4",
+          "tag": "latest"
+        },
+        "deprecated": false,
+        "attached": {
+          "attachmentName": "codefile",
+          "attachmentType": "text/plain"
+        }
       }
     ]
   },
