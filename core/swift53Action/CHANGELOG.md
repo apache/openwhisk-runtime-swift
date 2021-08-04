@@ -19,5 +19,9 @@
 
 # Apache OpenWhisk Swift 5.3 Runtime Container
 
+## 1.17.0
+- Build actionloop from 1.16@1.18.0 (#143)
+- Resolve akka versions explicitly. (#141, #139)
+
 ## 1.16.0
  - Initial Release
