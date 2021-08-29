@@ -17,14 +17,11 @@
 
 include 'tests'
 
-include 'core:swift42Action'
-
 include 'core:swift51Action'
 
 include 'core:swift53Action'
 
 include 'core:swift54Action'
-
 
 rootProject.name = 'runtime-swift'
 

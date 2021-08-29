@@ -16,12 +16,12 @@
 #
 
 OW_USER?=whisk
-OW_RUNTIME?=$(OW_USER)/action-swift-v4.2
-OW_COMPILER?=$(OW_USER)/action-swift-v4.2
+OW_RUNTIME?=$(OW_USER)/action-swift-v5.3
+OW_COMPILER?=$(OW_USER)/action-swift-v5.3
 WSK?=wsk -i
 MAIN=main
 PACKAGE=test
-SRCS=HelloSwift4/Sources/$(MAIN).swift HelloSwift4/Package.swift
+SRCS=HelloSwift5/Sources/$(MAIN).swift HelloSwift5/Package.swift
 NAME=swift-$(MAIN)-zip
 BINZIP=$(MAIN)-bin.zip
 SRCZIP=$(MAIN)-src.zip
@@ -33,10 +33,10 @@ devel: package.done $(SRCZIP)
 	$(WSK) action update $(PACKAGE)/$(NAME) $(SRCZIP) --main $(MAIN) --docker $(OW_COMPILER)
 
 $(BINZIP): $(SRCS)
-	cd HelloSwift4 ; zip - -r * | docker run -i $(OW_COMPILER) -compile $(MAIN) >../$(BINZIP)
+	cd HelloSwift5 ; zip - -r * | docker run -i $(OW_COMPILER) -compile $(MAIN) >../$(BINZIP)
 
 $(SRCZIP): $(SRCS)
-	cd HelloSwift4 ; zip ../$(SRCZIP) -r *
+	cd HelloSwift5 ; zip ../$(SRCZIP) -r *
 
 clean:
 	-$(WSK) action delete $(PACKAGE)/$(NAME)

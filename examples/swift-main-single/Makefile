@@ -16,8 +16,8 @@
 #
 
 OW_USER?=whisk
-OW_RUNTIME?=$(OW_USER)/action-swift-v4.2
-OW_COMPILER?=$(OW_USER)/action-swift-v4.2
+OW_RUNTIME?=$(OW_USER)/action-swift-v5.3
+OW_COMPILER?=$(OW_USER)/action-swift-v5.3
 WSK?=wsk -i
 MAIN=main
 PACKAGE=test

@@ -16,8 +16,8 @@
 #
 
 OW_USER?=whisk
-OW_COMPILER?=$(OW_USER)/action-swift-v4.2
-OUT?=../../build/swift4.2
+OW_COMPILER?=$(OW_USER)/action-swift-v5.3
+OUT?=../../build/swift5.3
 define Build
 	cd $(1); \
 	docker run -i $(OW_COMPILER) -compile main <./Sources/main.swift >$(OUT)/$(1).zip
@@ -29,12 +29,6 @@ define BuildWithLib
 	zip - -r Package.swift Sources/main.swift | docker run -i $(OW_COMPILER) -compile main >$(OUT)/$(1).zip; \
 	mv Package.swift.bak Package.swift
 endef
-
-Hello:
-	$(call Build,HelloSwift4)
-
-HelloCodable:
-	$(call Build,HelloSwift4Codable)
 
 Swifty:
 	$(call BuildWithLib,SwiftyRequest)
