@@ -46,7 +46,6 @@ TERM=dumb ./gradlew install
 # Build runtime
 cd $ROOTDIR
 TERM=dumb ./gradlew \
-:core:swift42Action:distDocker \
 :core:swift51Action:distDocker \
 :core:swift53Action:distDocker \
 :core:swift54Action:distDocker \

@@ -33,7 +33,7 @@ abstract class SwiftCodableActionContainerTests extends BasicActionRunnerTests w
   // note: "out" will likely not be empty in some swift build as the compiler
   // prints status messages and there doesn't seem to be a way to quiet them
   val enforceEmptyOutputStream = false
-  lazy val swiftContainerImageName = "action-swift-v4.0"
+  lazy val swiftContainerImageName = "???"
   lazy val swiftBinaryName = "tests/dat/build/swift4.0/HelloCodable.zip"
 
   behavior of s"Codable $swiftContainerImageName"
