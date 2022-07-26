@@ -15,15 +15,16 @@
  * limitations under the License.
  */
 
-func main(args: [String:Any]) -> [String:Any] {
-    if let name = args["name"] as? String {
+func main(args: Any) -> Any {
+    let newArgs = args as! [String:Any]
+    if let name = newArgs["name"] as? String {
         return [ "greeting" : "Hello \(name)!" ]
     } else {
         return [ "greeting" : "Hello swif4.2!" ]
     }
 }
 
-func mainenv(args: [String: Any]) -> [String: Any] {
+func mainenv(args: Any) -> Any {
      let env = ProcessInfo.processInfo.environment
      var a = "???"
      var b = "???"

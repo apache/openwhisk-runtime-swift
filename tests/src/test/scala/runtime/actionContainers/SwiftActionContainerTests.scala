@@ -50,7 +50,7 @@ abstract class SwiftActionContainerTests extends BasicActionRunnerTests with Wsk
 
   override val testInitCannotBeCalledMoreThanOnce = {
     TestConfig("""
-        | func main(args: [String: Any]) -> [String: Any] {
+        | func main(args: Any) -> Any {
         |     return args
         | }
       """.stripMargin)
@@ -59,7 +59,7 @@ abstract class SwiftActionContainerTests extends BasicActionRunnerTests with Wsk
   override val testEntryPointOtherThanMain = {
     TestConfig(
       """
-        | func niam(args: [String: Any]) -> [String: Any] {
+        | func niam(args: Any) -> Any {
         |     return args
         | }
       """.stripMargin,
@@ -78,7 +78,7 @@ abstract class SwiftActionContainerTests extends BasicActionRunnerTests with Wsk
         |     }
         | }
         |
-        | func main(args: [String: Any]) -> [String: Any] {
+        | func main(args: Any) -> Any {
         |     print("hello stdout")
         |     var standardError = FileHandle.standardError
         |     print("hello stderr", to: &standardError)
@@ -89,8 +89,9 @@ abstract class SwiftActionContainerTests extends BasicActionRunnerTests with Wsk
 
   override val testUnicode = {
     TestConfig("""
-        | func main(args: [String: Any]) -> [String: Any] {
-        |     if let str = args["delimiter"] as? String {
+        | func main(args: Any) -> Any {
+        |     let newArgs = args as! [String:Any]
+        |     if let str = newArgs["delimiter"] as? String {
         |         let msg = "\(str) ☃ \(str)"
         |         print(msg)
         |         return [ "winter" : msg ]
@@ -104,7 +105,7 @@ abstract class SwiftActionContainerTests extends BasicActionRunnerTests with Wsk
   override val testEnv = {
     TestConfig(
       """
-        | func main(args: [String: Any]) -> [String: Any] {
+        | func main(args: Any) -> Any {
         |     let env = ProcessInfo.processInfo.environment
         |     var a = "???"
         |     var b = "???"
@@ -142,7 +143,7 @@ abstract class SwiftActionContainerTests extends BasicActionRunnerTests with Wsk
 
   override val testLargeInput = {
     TestConfig("""
-        | func main(args: [String: Any]) -> [String: Any] {
+        | func main(args: Any) -> Any {
         |     return args
         | }
       """.stripMargin)
@@ -151,7 +152,7 @@ abstract class SwiftActionContainerTests extends BasicActionRunnerTests with Wsk
   it should "support application errors" in {
     val (out, err) = withActionContainer() { c =>
       val code = """
-                   | func main(args: [String: Any]) -> [String: Any] {
+                   | func main(args: Any) -> Any {
                    |     return [ "error": "sorry" ]
                    | }
                  """.stripMargin
@@ -218,6 +219,24 @@ abstract class SwiftActionContainerTests extends BasicActionRunnerTests with Wsk
         if (enforceEmptyOutputStream) o shouldBe empty
         e shouldBe empty
     })
+  }
+
+  it should "support array result" in {
+    val (out, err) = withActionContainer() { c =>
+      val code = """
+                   | func main(args: Any) -> Any {
+                   |     var arr = ["a", "b"]
+                   |     return arr
+                   | }
+                 """.stripMargin
+
+      val (initCode, _) = c.init(initPayload(code))
+      initCode should be(200)
+
+      val (runCode, runRes) = c.runForJsArray(runPayload(JsObject()))
+      runCode should be(200)
+      runRes shouldBe Some(JsArray(JsString("a"), JsString("b")))
+    }
   }
 
   // Helpers specific to swift actions

@@ -17,8 +17,9 @@
 
 import Foundation
 
-func main(args: [String:Any]) -> [String:Any] {
-    if let name = args["name"] as? String {
+func main(args: Any) -> Any {
+    let newArgs = args as! [String:Any]
+    if let name = newArgs["name"] as? String {
         return [ "greeting" : "Hello \(name)!" ]
     } else {
         return [ "greeting" : "Hello stranger!" ]

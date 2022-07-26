@@ -17,12 +17,13 @@
 
 import Foundation
 
-func main(args: [String:Any]) -> [String:Any] {
-  if let baseUrl = args["baseUrl"] as? String {
+func main(args: Any) -> Any {
+  let newArgs = args as! [String:Any]
+  if let baseUrl = newArgs["baseUrl"] as? String {
     //Overriding WHISK API HOST using baseUrl, only applicable in testing with self sign ssl certs"
     Whisk.baseUrl = baseUrl
   }
-  guard let triggerName = args["triggerName"] as? String else {
+  guard let triggerName = newArgs["triggerName"] as? String else {
     return ["error": "You must specify a triggerName parameter!"]
   }
   print("Trigger Name: \(triggerName)")

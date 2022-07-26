@@ -198,7 +198,7 @@ abstract class SwiftCodableActionContainerTests extends BasicActionRunnerTests w
       """.stripMargin
     } else {
       """
-        | func main(args: [String: Any]) -> [String: Any] {
+        | func main(args: Any) -> Any {
         |     return args
         | }
       """.stripMargin
