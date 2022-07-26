@@ -33,8 +33,9 @@ The traditional support for the dictionary still works:
 ```swift
 import Foundation
 
-func main(args: [String:Any]) -> [String:Any] {
-    if let name = args["name"] as? String {
+func main(args: Any) -> Any {
+    let dict = args as! [String:Any]
+    if let name = dict["name"] as? String {
         return [ "greeting" : "Hello \(name)!" ]
     } else {
         return [ "greeting" : "Hello stranger!" ]
