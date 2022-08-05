@@ -98,7 +98,8 @@ abstract class SwiftSDKTests extends TestHelpers with WskTestHelpers with WskAct
       val run = wsk.action.invoke(actionName, params)
       withActivation(wsk.activation, run, initialWait = 5 seconds, totalWait = activationPollDuration) { activation =>
         // should not have a "response"
-        org.apache.openwhisk.utils.JsHelpers.fieldPathExists(activation.response.result.get.asJsObject, "response") shouldBe false
+        org.apache.openwhisk.utils.JsHelpers
+          .fieldPathExists(activation.response.result.get.asJsObject, "response") shouldBe false
 
         // should have a field named "activationId" which is the date action's activationId
         activation.response.result.get.asJsObject.fields("activationId").toString.length should be >= 32
@@ -237,10 +238,16 @@ abstract class SwiftSDKTests extends TestHelpers with WskTestHelpers with WskAct
       activation.response.success shouldBe true
 
       // should have a field named "trigger" which is the name of the trigger associated with the rule
-      activation.response.result.get.asJsObject.fields("trigger").asJsObject.fields("name") shouldBe ruleTriggerName.toJson
+      activation.response.result.get.asJsObject
+        .fields("trigger")
+        .asJsObject
+        .fields("name") shouldBe ruleTriggerName.toJson
 
       // should have a field named "action" which is the name of the action associated with the rule
-      activation.response.result.get.asJsObject.fields("action").asJsObject.fields("name") shouldBe ruleActionName.toJson
+      activation.response.result.get.asJsObject
+        .fields("action")
+        .asJsObject
+        .fields("name") shouldBe ruleActionName.toJson
     }
   }
 
