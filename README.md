@@ -43,6 +43,28 @@ func main(args: Any) -> Any {
 }
 ```
 
+For the return result, not only support `dictionary`, but also support `array`
+
+So a very simple `hello array` function woule be:
+
+```swift
+func main(args: Any) -> Any {
+    var arr = ["a", "b"]
+    return arr
+}
+```
+
+And support array result for sequence action as well, the first action's array result can be used as next action's input parameter.
+
+So the function can be:
+
+```swift
+ func main(args: Any) -> Any {
+     return args
+ }
+```
+When invokes above action, we can pass an array object as the input parameter.
+
 ## Swift 5.x support
 
 Some examples of using Codable In and Out
