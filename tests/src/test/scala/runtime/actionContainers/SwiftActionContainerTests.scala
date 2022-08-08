@@ -221,7 +221,7 @@ abstract class SwiftActionContainerTests extends BasicActionRunnerTests with Wsk
     })
   }
 
-  it should "support array result" in {
+  it should "support return array result" in {
     val (out, err) = withActionContainer() { c =>
       val code = """
                    | func main(args: Any) -> Any {
@@ -234,6 +234,23 @@ abstract class SwiftActionContainerTests extends BasicActionRunnerTests with Wsk
       initCode should be(200)
 
       val (runCode, runRes) = c.runForJsArray(runPayload(JsObject()))
+      runCode should be(200)
+      runRes shouldBe Some(JsArray(JsString("a"), JsString("b")))
+    }
+  }
+
+  it should "support array as input param" in {
+    val (out, err) = withActionContainer() { c =>
+      val code = """
+                   | func main(args: Any) -> Any {
+                   |     return args
+                   | }
+                 """.stripMargin
+
+      val (initCode, _) = c.init(initPayload(code))
+      initCode should be(200)
+
+      val (runCode, runRes) = c.runForJsArray(runPayload(JsArray(JsString("a"), JsString("b"))))
       runCode should be(200)
       runRes shouldBe Some(JsArray(JsString("a"), JsString("b")))
     }
