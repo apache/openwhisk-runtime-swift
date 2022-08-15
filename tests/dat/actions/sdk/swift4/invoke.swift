@@ -26,8 +26,9 @@ struct Activation: Decodable {
   let activationId: String
 }
 
-func main(args: [String:Any]) -> [String:Any] {
-  if let baseUrl = args["baseUrl"] as? String {
+func main(args: Any) -> Any {
+  let newArgs = args as! [String:Any]
+  if let baseUrl = newArgs["baseUrl"] as? String {
     //Overriding WHISK API HOST using baseUrl, only applicable in testing with self sign ssl certs"
     Whisk.baseUrl = baseUrl
   }

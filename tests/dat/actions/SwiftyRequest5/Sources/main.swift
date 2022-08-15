@@ -19,12 +19,12 @@ import SwiftyRequest
 import Dispatch
 import Foundation
 
-func main(args: [String:Any]) -> [String:Any] {
+func main(args: Any) -> Any {
     var resp :[String:Any] = ["error":"Action failed"]
     let echoURL = "http://httpbin.org/post"
 
     // setting body data to {"Data":"string"}
-    let origJson: [String: Any] = args
+    let origJson = args as! [String:Any]
     guard let data = try? JSONSerialization.data(withJSONObject: origJson, options: []) else {
         return ["error": "Could not encode json"]
     }

@@ -33,14 +33,37 @@ The traditional support for the dictionary still works:
 ```swift
 import Foundation
 
-func main(args: [String:Any]) -> [String:Any] {
-    if let name = args["name"] as? String {
+func main(args: Any) -> Any {
+    let dict = args as! [String:Any]
+    if let name = dict["name"] as? String {
         return [ "greeting" : "Hello \(name)!" ]
     } else {
         return [ "greeting" : "Hello stranger!" ]
     }
 }
 ```
+
+For the return result, not only support `dictionary`, but also support `array`
+
+So a very simple `hello array` function woule be:
+
+```swift
+func main(args: Any) -> Any {
+    var arr = ["a", "b"]
+    return arr
+}
+```
+
+And support array result for sequence action as well, the first action's array result can be used as next action's input parameter.
+
+So the function can be:
+
+```swift
+ func main(args: Any) -> Any {
+     return args
+ }
+```
+When invokes above action, we can pass an array object as the input parameter.
 
 ## Swift 5.x support
 

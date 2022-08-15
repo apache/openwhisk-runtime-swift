@@ -43,9 +43,9 @@ func _whisk_print_buffer(jsonString: String){
 }
 
 // snippet of code "injected" (wrapper code for invoking traditional main)
-func _run_main(mainFunction: ([String: Any]) -> [String: Any], json: Data) -> Void {
+func _run_main(mainFunction: (Any) -> Any, json: Data) -> Void {
     do {
-        let parsed = try JSONSerialization.jsonObject(with: json, options: []) as! [String: Any]
+        let parsed = try JSONSerialization.jsonObject(with: json, options: [])
         let result = mainFunction(parsed)
         if JSONSerialization.isValidJSONObject(result) {
             do {

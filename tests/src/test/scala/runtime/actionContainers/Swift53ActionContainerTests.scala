@@ -37,9 +37,10 @@ class Swift53ActionContainerTests extends SwiftActionContainerTests {
                    | #if canImport(FoundationNetworking)
                    |  import FoundationNetworking
                    | #endif
-                   | func main(args:[String: Any]) -> [String:Any] {
+                   | func main(args: Any) -> Any {
                    |     var resp :[String:Any] = ["error":"getUrl failed"]
-                   |     guard let urlStr = args["getUrl"] as? String else {
+                   |     let newArgs = args as! [String:Any]
+                   |     guard let urlStr = newArgs["getUrl"] as? String else {
                    |         return ["error":"getUrl not found in action input"]
                    |     }
                    |     guard let url = URL(string: urlStr) else {
