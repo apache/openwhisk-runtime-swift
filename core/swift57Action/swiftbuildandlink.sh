@@ -1,4 +1,4 @@
-<!--
+#!/bin/sh
 #
 # Licensed to the Apache Software Foundation (ASF) under one or more
 # contributor license agreements.  See the NOTICE file distributed with
@@ -15,9 +15,4 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
--->
-
-# Apache OpenWhisk Swift 5.7 Runtime Container
-
-## 1.17.0
- - Initial Release
+swift build -c release

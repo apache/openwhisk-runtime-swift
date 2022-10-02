@@ -26,6 +26,7 @@
 - [Swift 5.1   CHANGELOG.md](core/swift51Action/CHANGELOG.md)
 - [Swift 5.3   CHANGELOG.md](core/swift53Action/CHANGELOG.md)
 - [Swift 5.4   CHANGELOG.md](core/swift54Action/CHANGELOG.md)
+- [Swift 5.7   CHANGELOG.md](core/swift54Action/CHANGELOG.md)
 
 ## Quick Swift Action
 ### Simple swift action hello.swift
