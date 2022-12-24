@@ -38,9 +38,8 @@ FROM swift:5.7.2
 # select the builder to use
 ARG GO_PROXY_BUILD_FROM=release
 
-RUN rm -rf /var/lib/apt/lists/* && apt-get clean && apt-get -qq update \
+RUN apt-get clean && apt-get -qq update \
 	&& apt-get install -y --no-install-recommends locales python3 vim libssl-dev libicu-dev \
-	&& rm -rf /var/lib/apt/lists/* \
 	&& locale-gen en_US.UTF-8
 
 ENV LANG="en_US.UTF-8" \
