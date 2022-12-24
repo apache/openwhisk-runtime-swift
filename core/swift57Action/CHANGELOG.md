@@ -17,7 +17,9 @@
 #
 -->
 
-# Apache OpenWhisk Swift 5.4 Runtime Container
+# Apache OpenWhisk Swift 5.7 Runtime Container
+
+- Support for swift async/await
 
 ## 1.17.0
  - Initial Release

@@ -22,9 +22,6 @@ import PackageDescription
 
 let package = Package(
     name: "Action",
-    platforms: [
-        .macOS(.v12),
-    ],
     products: [
       .executable(
         name: "Action",
@@ -32,7 +29,7 @@ let package = Package(
       )
     ],
     targets: [
-      .executableTarget(
+      .target(
         name: "Action",
         path: "."
       )

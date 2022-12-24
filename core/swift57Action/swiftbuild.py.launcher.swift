@@ -17,116 +17,342 @@
 
 // Imports
 import Foundation
+import _Concurrency
 #if os(Linux)
-    import Glibc
+import Glibc
 #else
-    import Darwin
+import Darwin
 #endif
 
-func _whisk_print_error(message: String, error: Error?){
-    var errStr =  "{\"error\":\"\(message)\"}\n"
-    if let error = error {
-        errStr = "{\"error\":\"\(message) \(error.localizedDescription)\"\n}"
+public struct _WhiskRuntime {
+    
+    private enum WhiskRuntimeErrorMessage: String {
+        case actionHandlerCallbackError = "Action handler callback returned an error:"
+        case actionHandlerCallbackNullOrError = "Action handler callback did not return response or error."
+        case failToEncodeDictionary = "Failed to encode Dictionary type to JSON string:"
+        case failToEncodeCodableToJson = "JSONEncoder failed to encode Codable type to JSON string:"
+        case errorSerializingJSON = "Error serializing JSON, data does not appear to be valid JSON"
+        case failedToExecuteActionHandler = "Failed to execute action handler with error:"
     }
-    _whisk_print_buffer(jsonString: errStr)
-}
-func _whisk_print_result(jsonData: Data){
-    let jsonString = String(data: jsonData, encoding: .utf8)!
-    _whisk_print_buffer(jsonString: jsonString)
-}
-func _whisk_print_buffer(jsonString: String){
-    var buf : [UInt8] = Array(jsonString.utf8)
-    buf.append(10)
-    fflush(stdout)
-    fflush(stderr)
-    write(3, buf, buf.count)
-}
-
-// snippet of code "injected" (wrapper code for invoking traditional main)
-func _run_main(mainFunction: (Any) -> Any, json: Data) -> Void {
-    do {
-        let parsed = try JSONSerialization.jsonObject(with: json, options: [])
-        let result = mainFunction(parsed)
-        if JSONSerialization.isValidJSONObject(result) {
-            do {
-                let jsonData = try JSONSerialization.data(withJSONObject: result, options: [])
-                 _whisk_print_result(jsonData: jsonData)
-            } catch {
-                _whisk_print_error(message: "Failed to encode Dictionary type to JSON string:", error: error)
+    
+    public static func wiskRunLoop(actionMain: ((Data) async -> Void)) async throws {
+        while let inputStr: String = readLine() {
+            let json = inputStr.data(using: .utf8, allowLossyConversion: true)!
+            let parsed = try JSONSerialization.jsonObject(with: json, options: []) as! [String: Any]
+            for (key, value) in parsed {
+                if key != "value" {
+                    setenv("__OW_\(key.uppercased())",value as! String,1)
+                }
             }
-        } else {
-            _whisk_print_error(message: "Error serializing JSON, data does not appear to be valid JSON", error: nil)
+            let jsonData = try JSONSerialization.data(withJSONObject: parsed["value"] as Any, options: [])
+            await actionMain(jsonData)
         }
-    } catch {
-        _whisk_print_error(message: "Failed to execute action handler with error:", error: error)
-        return
     }
-}
+    
+    private static func whiskPrintJSONDecoderError(json: Data, error: Error?) {
+        let jsonString = String(
+            data: json,
+            encoding: .utf8
+        ) ?? ""
+        let fixedJSONString = jsonString.replacingOccurrences(of: "\"", with: "\\\"")
+            
+        let message = "JSONDecoder failed to decode JSON string \(fixedJSONString) to Codable type:"
+        var errStr =  "{\"error\":\"\(message)\"}\n"
+        if let error = error {
+            errStr = "{\"error\":\"\(message) \(error.localizedDescription)\"\n}"
+        }
+        whiskPrintBuffer(jsonString: errStr)
+    }
+    
+    private static func whiskPrintError(message: WhiskRuntimeErrorMessage, error: Error?){
+        var errStr =  "{\"error\":\"\(message.rawValue)\"}\n"
+        if let error = error {
+            errStr = "{\"error\":\"\(message.rawValue) \(error.localizedDescription)\"\n}"
+        }
+        whiskPrintBuffer(jsonString: errStr)
+    }
+    
+    private static func whiskPrintResult(jsonData: Data){
+        let jsonString = String(data: jsonData, encoding: .utf8)!
+        whiskPrintBuffer(jsonString: jsonString)
+    }
+    
+    private static func whiskPrintBuffer(jsonString: String){
+        var buf : [UInt8] = Array(jsonString.utf8)
+        buf.append(10)
+        fflush(stdout)
+        fflush(stderr)
+        write(3, buf, buf.count)
+    }
+    
+    /**
+     Execute an async throwing Action with Any Input and Any Output
+    
+     Example:
+     
+     ```
+     func action(args: Any) async throws -> Any {
+         //async code sleep for 1 sec
+         try await Task.sleep(nanoseconds: 1_000_000_000)
+         
+         let newArgs = args as! [String:Any]
+         if let name = newArgs["name"] as? String {
+             return [ "greeting" : "Hello \(name)!" ]
+         } else {
+             return [ "greeting" : "Hello stranger!" ]
+         }
+     }
+     ```
+    
+     - Parameters:
+        - mainFunction: action
+        - json: action parameters
+        - Returns: Void
+    */
+    public static func runAsyncMain(mainFunction: (Any) async throws -> Any, json: Data) async -> Void {
+        do {
+            let parsed = try JSONSerialization.jsonObject(with: json, options: [])
+            let result = try await mainFunction(parsed)
+            if JSONSerialization.isValidJSONObject(result) {
+                do {
+                    let jsonData = try JSONSerialization.data(withJSONObject: result, options: [])
+                    whiskPrintResult(jsonData: jsonData)
+                } catch {
+                    whiskPrintError(message: .failToEncodeDictionary, error: error)
+                }
+            } else {
+                whiskPrintError(message: .errorSerializingJSON, error: nil)
+            }
+        } catch let error as DecodingError {
+            whiskPrintJSONDecoderError(json: json, error: error)
+            return
+        } catch {
+            whiskPrintError(message: .failedToExecuteActionHandler, error: error)
+            return
+        }
+    }
+    
+    /**
+     Execute an Action with Codable Input and completion with Codable Output and Error
+    
+     Example:
+     
+     ```
+     struct Input: Codable {
+         let name: String?
+     }
 
-// Codable main signature input Codable
-func _run_main<In: Decodable, Out: Encodable>(mainFunction: (In, @escaping (Out?, Error?) -> Void) -> Void, json: Data) {
-    do {
-        let input = try Whisk.jsonDecoder.decode(In.self, from: json)
+     struct Output: Codable {
+         let count: Int
+     }
+
+     func action(input: Input, completion: @escaping (Output?, Error?) -> Void) -> Void {
+         if let name = input.name {
+             let output = Output(count: name.count)
+             completion(output, nil)
+         } else {
+             let output = Output(count: 0)
+             completion(output, nil)
+         }
+     }
+     ```
+    
+     - Parameters:
+        - mainFunction: action
+        - json: action parameters
+        - Returns: Void
+    */
+    public static func runAsyncMain<In: Decodable, Out: Encodable>(mainFunction: (In, @escaping (Out?, Error?) -> Void) -> Void, json: Data) {
+        do {
+            let input = try Whisk.jsonDecoder.decode(In.self, from: json)
+            let resultHandler = { (out: Out?, error: Error?) in
+                if let error = error {
+                    whiskPrintError(message: .actionHandlerCallbackError, error: error)
+                    return
+                }
+                guard let out = out else {
+                    whiskPrintError(message: .actionHandlerCallbackNullOrError, error: nil)
+                    return
+                }
+                do {
+                    let jsonData = try Whisk.jsonEncoder.encode(out)
+                    whiskPrintResult(jsonData: jsonData)
+                } catch let error as EncodingError {
+                    whiskPrintError(message: .failToEncodeCodableToJson, error: error)
+                    return
+                } catch {
+                    whiskPrintError(message: .failedToExecuteActionHandler, error: error)
+                    return
+                }
+            }
+            let _ = mainFunction(input, resultHandler)
+        } catch let error as DecodingError {
+            whiskPrintJSONDecoderError(json: json, error: error)
+            return
+        } catch {
+            whiskPrintError(message: .failedToExecuteActionHandler, error: error)
+            return
+        }
+    }
+    
+    /**
+     Execute an async throwing Action with a Codable Input and a Codable Output
+    
+     Example:
+     
+     ```
+     struct Input: Codable {
+         let name: String?
+     }
+
+     struct Output: Codable {
+         let count: Int
+     }
+
+     func action(input: Input) async throws -> Output? {
+         try await Task.sleep(nanoseconds: 1_000_000_000)
+         if let name = input.name {
+             return Output(count: name.count)
+         } else {
+             return Output(count: 0)
+         }
+     }
+     ```
+    
+     - Parameters:
+        - mainFunction: action
+        - json: action parameters
+        - Returns: Void
+    */
+    public static func runAsyncMain<In: Decodable, Out: Encodable>(mainFunction: (In) async throws -> Out?, json: Data) async {
+        do {
+            let input = try Whisk.jsonDecoder.decode(In.self, from: json)
+            do {
+                let out = try await mainFunction(input)
+                guard let out = out else {
+                    whiskPrintError(message: .actionHandlerCallbackNullOrError, error: nil)
+                    return
+                }
+                do {
+                    let jsonData = try Whisk.jsonEncoder.encode(out)
+                    whiskPrintResult(jsonData: jsonData)
+                } catch let error as EncodingError {
+                    whiskPrintError(message: .failToEncodeCodableToJson, error: error)
+                    return
+                } catch {
+                    whiskPrintError(message: .failedToExecuteActionHandler, error: error)
+                    return
+                }
+            } catch {
+                whiskPrintError(message: .actionHandlerCallbackError, error: error)
+                return
+            }
+        } catch let error as DecodingError {
+            whiskPrintJSONDecoderError(json: json, error: error)
+            return
+        } catch {
+            whiskPrintError(message: .failedToExecuteActionHandler, error: error)
+            return
+        }
+    }
+    
+    /**
+     Execute an Action with Codable Input and completion with Codable Output and Error
+    
+     Example:
+     
+     ```
+     struct Input: Codable {
+         let name: String?
+     }
+
+     struct Output: Codable {
+         let count: Int
+     }
+
+     func action(completion: @escaping (Output?, Error?) -> Void) -> Void {
+         let output = Output(count: 0)
+         completion(output, nil)
+     }
+     ```
+    
+     - Parameters:
+        - mainFunction: action
+        - json: action parameters
+        - Returns: Void
+    */
+    public static func runAsyncMain<Out: Encodable>(mainFunction: ( @escaping (Out?, Error?) -> Void) -> Void, json: Data) {
         let resultHandler = { (out: Out?, error: Error?) in
             if let error = error {
-                _whisk_print_error(message: "Action handler callback returned an error:", error: error)
+                whiskPrintError(message: .actionHandlerCallbackError, error: error)
                 return
             }
             guard let out = out else {
-                _whisk_print_error(message: "Action handler callback did not return response or error.", error: nil)
+                whiskPrintError(message: .actionHandlerCallbackNullOrError, error: nil)
                 return
             }
             do {
                 let jsonData = try Whisk.jsonEncoder.encode(out)
-                _whisk_print_result(jsonData: jsonData)
+                whiskPrintResult(jsonData: jsonData)
             } catch let error as EncodingError {
-                _whisk_print_error(message: "JSONEncoder failed to encode Codable type to JSON string:", error: error)
+                whiskPrintError(message: .failToEncodeCodableToJson, error: error)
                 return
             } catch {
-                _whisk_print_error(message: "Failed to execute action handler with error:", error: error)
+                whiskPrintError(message: .failedToExecuteActionHandler, error: error)
                 return
             }
         }
-        let _ = mainFunction(input, resultHandler)
-    } catch let error as DecodingError {
-        _whisk_print_error(message: "JSONDecoder failed to decode JSON string \(String(data: json, encoding: .utf8)!.replacingOccurrences(of: "\"", with: "\\\"")) to Codable type:", error: error)
-        return
-    } catch {
-        _whisk_print_error(message: "Failed to execute action handler with error:", error: error)
-        return
+        let _ = mainFunction(resultHandler)
     }
-}
+    
+    /**
+     Execute an async throwing Action with Codable Output
+    
+     Example:
+     
+     ```
+     struct Input: Codable {
+         let name: String?
+     }
 
-// Codable main signature no input
-func _run_main<Out: Encodable>(mainFunction: ( @escaping (Out?, Error?) -> Void) -> Void, json: Data) {
-    let resultHandler = { (out: Out?, error: Error?) in
-        if let error = error {
-            _whisk_print_error(message: "Action handler callback returned an error:", error: error)
-            return
-        }
-        guard let out = out else {
-            _whisk_print_error(message: "Action handler callback did not return response or error.", error: nil)
-            return
-        }
+     struct Output: Codable {
+         let count: Int
+     }
+
+     func action() async throws -> Output? {
+         try await Task.sleep(nanoseconds: 1_000_000_000)
+         return Output(count: 0)
+     }
+     ```
+    
+     - Parameters:
+        - mainFunction: action
+        - json: action parameters
+        - Returns: Void
+    */
+    public static func runAsyncMain<Out: Encodable>(mainFunction: () async throws -> Out?, json: Data) async {
         do {
-            let jsonData = try Whisk.jsonEncoder.encode(out)
-            _whisk_print_result(jsonData: jsonData)
-        } catch let error as EncodingError {
-            _whisk_print_error(message: "JSONEncoder failed to encode Codable type to JSON string:", error: error)
-            return
+            let out = try await mainFunction()
+            guard let out = out else {
+                whiskPrintError(message: .actionHandlerCallbackNullOrError, error: nil)
+                return
+            }
+            do {
+                let jsonData = try Whisk.jsonEncoder.encode(out)
+                whiskPrintResult(jsonData: jsonData)
+            } catch let error as EncodingError {
+                whiskPrintError(message: .failToEncodeCodableToJson, error: error)
+                return
+            } catch {
+                whiskPrintError(message: .failedToExecuteActionHandler, error: error)
+                return
+            }
         } catch {
-            _whisk_print_error(message: "Failed to execute action handler with error:", error: error)
+            whiskPrintError(message: .actionHandlerCallbackError, error: error)
             return
         }
     }
-    let _ = mainFunction(resultHandler)
 }
-
-// snippets of code "injected", depending on the type of function the developer
-// wants to use traditional vs codable
-
-
-
 
 
 

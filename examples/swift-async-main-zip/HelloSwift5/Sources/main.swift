@@ -1,6 +1,3 @@
-// swift-tools-version:5.7
-// The swift-tools-version declares the minimum version of Swift required to build this package.
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements.  See the NOTICE file distributed with
@@ -18,23 +15,16 @@
  * limitations under the License.
  */
 
-import PackageDescription
-
-let package = Package(
-    name: "Action",
-    platforms: [
-        .macOS(.v12),
-    ],
-    products: [
-      .executable(
-        name: "Action",
-        targets:  ["Action"]
-      )
-    ],
-    targets: [
-      .executableTarget(
-        name: "Action",
-        path: "."
-      )
-    ]
-)
+func main(args: Any) async -> Any {
+    do {
+        try await Task.sleep(nanoseconds: 1_000_000_000)
+        let newArgs = args as! [String:Any]
+        if let name = newArgs["name"] as? String {
+            return [ "greeting" : "Hello \(name)!" ]
+        } else {
+            return [ "greeting" : "Hello stranger!" ]
+        }   
+    } catch {
+        return ["error:" : String(describing: error)]
+    }
+}

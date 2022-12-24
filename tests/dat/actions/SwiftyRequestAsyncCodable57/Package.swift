@@ -31,9 +31,13 @@ let package = Package(
         targets:  ["Action"]
       )
     ],
+    dependencies: [
+      .package(url: "https://github.com/swift-server/async-http-client.git", from: "1.9.0")
+    ],
     targets: [
       .executableTarget(
         name: "Action",
+        dependencies: [.product(name: "AsyncHTTPClient", package: "async-http-client")],
         path: "."
       )
     ]

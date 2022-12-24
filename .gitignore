@@ -81,3 +81,6 @@ test.json
 *.done
 examples/*/*.zip
 ActionLoop/
+
+#Swift
+**/.swiftpm/
