@@ -26,7 +26,7 @@ func main(args: Any) async -> Any {
             return [ "greeting" : "Hello \(name)!" ]
         } else {
             return [ "greeting" : "Hello stranger!" ]
-        }   
+        }
     } catch {
         return ["error:" : String(describing: error)]
     }

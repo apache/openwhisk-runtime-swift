@@ -172,17 +172,17 @@ zip - -r * | docker run -i openwhisk/action-swift-v5.1 -compile main >../action.
 
 For more build examples see [here](./examples/)
 
-# Swift 5.7 
+# Swift 5.7
 
 In addition to previous ways of defining an action is now possible to use throwing async/await inside the action.
 
 ### Async throwing Action with Any Input and Any Output
-    
+
 ```swift
 func action(args: Any) async throws -> Any {
     //async code sleep for 1 sec
     try await Task.sleep(nanoseconds: 1_000_000_000)
-    
+
     let newArgs = args as! [String:Any]
     if let name = newArgs["name"] as? String {
         return [ "greeting" : "Hello \(name)!" ]
@@ -261,7 +261,7 @@ let httpClient = HTTPClient(eventLoopGroupProvider: .createNew)
 let decoder = JSONDecoder()
 
 func main(param: AnInput) async throws -> AnOutput {
-  
+
     let echoURL = param.url ?? "https://httpbin.org/get"
     let request = HTTPClientRequest(url: echoURL)
     let response = try await httpClient.execute(request, timeout: .seconds(3))

@@ -25,7 +25,7 @@ import Darwin
 #endif
 
 public struct _WhiskRuntime {
-    
+
     private enum WhiskRuntimeErrorMessage: String {
         case actionHandlerCallbackError = "Action handler callback returned an error:"
         case actionHandlerCallbackNullOrError = "Action handler callback did not return response or error."
@@ -34,7 +34,7 @@ public struct _WhiskRuntime {
         case errorSerializingJSON = "Error serializing JSON, data does not appear to be valid JSON"
         case failedToExecuteActionHandler = "Failed to execute action handler with error:"
     }
-    
+
     public static func wiskRunLoop(actionMain: ((Data) async -> Void)) async throws {
         while let inputStr: String = readLine() {
             let json = inputStr.data(using: .utf8, allowLossyConversion: true)!
@@ -48,14 +48,14 @@ public struct _WhiskRuntime {
             await actionMain(jsonData)
         }
     }
-    
+
     private static func whiskPrintJSONDecoderError(json: Data, error: Error?) {
         let jsonString = String(
             data: json,
             encoding: .utf8
         ) ?? ""
         let fixedJSONString = jsonString.replacingOccurrences(of: "\"", with: "\\\"")
-            
+
         let message = "JSONDecoder failed to decode JSON string \(fixedJSONString) to Codable type:"
         var errStr =  "{\"error\":\"\(message)\"}\n"
         if let error = error {
@@ -63,7 +63,7 @@ public struct _WhiskRuntime {
         }
         whiskPrintBuffer(jsonString: errStr)
     }
-    
+
     private static func whiskPrintError(message: WhiskRuntimeErrorMessage, error: Error?){
         var errStr =  "{\"error\":\"\(message.rawValue)\"}\n"
         if let error = error {
@@ -71,12 +71,12 @@ public struct _WhiskRuntime {
         }
         whiskPrintBuffer(jsonString: errStr)
     }
-    
+
     private static func whiskPrintResult(jsonData: Data){
         let jsonString = String(data: jsonData, encoding: .utf8)!
         whiskPrintBuffer(jsonString: jsonString)
     }
-    
+
     private static func whiskPrintBuffer(jsonString: String){
         var buf : [UInt8] = Array(jsonString.utf8)
         buf.append(10)
@@ -84,17 +84,17 @@ public struct _WhiskRuntime {
         fflush(stderr)
         write(3, buf, buf.count)
     }
-    
+
     /**
      Execute an async throwing Action with Any Input and Any Output
-    
+
      Example:
-     
+
      ```
      func action(args: Any) async throws -> Any {
          //async code sleep for 1 sec
          try await Task.sleep(nanoseconds: 1_000_000_000)
-         
+
          let newArgs = args as! [String:Any]
          if let name = newArgs["name"] as? String {
              return [ "greeting" : "Hello \(name)!" ]
@@ -103,7 +103,7 @@ public struct _WhiskRuntime {
          }
      }
      ```
-    
+
      - Parameters:
         - mainFunction: action
         - json: action parameters
@@ -131,12 +131,12 @@ public struct _WhiskRuntime {
             return
         }
     }
-    
+
     /**
      Execute an Action with Codable Input and completion with Codable Output and Error
-    
+
      Example:
-     
+
      ```
      struct Input: Codable {
          let name: String?
@@ -156,7 +156,7 @@ public struct _WhiskRuntime {
          }
      }
      ```
-    
+
      - Parameters:
         - mainFunction: action
         - json: action parameters
@@ -194,12 +194,12 @@ public struct _WhiskRuntime {
             return
         }
     }
-    
+
     /**
      Execute an async throwing Action with a Codable Input and a Codable Output
-    
+
      Example:
-     
+
      ```
      struct Input: Codable {
          let name: String?
@@ -218,7 +218,7 @@ public struct _WhiskRuntime {
          }
      }
      ```
-    
+
      - Parameters:
         - mainFunction: action
         - json: action parameters
@@ -255,12 +255,12 @@ public struct _WhiskRuntime {
             return
         }
     }
-    
+
     /**
      Execute an Action with Codable Input and completion with Codable Output and Error
-    
+
      Example:
-     
+
      ```
      struct Input: Codable {
          let name: String?
@@ -275,7 +275,7 @@ public struct _WhiskRuntime {
          completion(output, nil)
      }
      ```
-    
+
      - Parameters:
         - mainFunction: action
         - json: action parameters
@@ -304,12 +304,12 @@ public struct _WhiskRuntime {
         }
         let _ = mainFunction(resultHandler)
     }
-    
+
     /**
      Execute an async throwing Action with Codable Output
-    
+
      Example:
-     
+
      ```
      struct Input: Codable {
          let name: String?
@@ -324,7 +324,7 @@ public struct _WhiskRuntime {
          return Output(count: 0)
      }
      ```
-    
+
      - Parameters:
         - mainFunction: action
         - json: action parameters

@@ -28,10 +28,10 @@ enum MainActionError: LocalizedError {
 }
 
 func main(args: Any) async throws -> Any {
-    
+
     //async code sleep for 1 microsecond
     try await Task.sleep(nanoseconds: 1_000)
-    
+
     guard let newArgs = args as? [String:Any] else {
         throw MainActionError.invalidArgs
     }
@@ -54,13 +54,13 @@ func main(args: Any) -> Any {
         return [ "greeting" : "Hello stranger!" ]
     }
 }
- 
+
 // Async Action with Any Input and Any Output
 func mainAsync(args: Any) async -> Any {
     do {
         //async code sleep for 1 sec
         try await Task.sleep(nanoseconds: 1_000_000_000)
-        
+
         let newArgs = args as! [String:Any]
         if let name = newArgs["name"] as? String {
             return [ "greeting" : "Hello \(name)!" ]
@@ -76,7 +76,7 @@ func mainAsync(args: Any) async -> Any {
 func mainAsyncThrows(args: Any) async throws -> Any {
     //async code sleep for 1 sec
     try await Task.sleep(nanoseconds: 1_000_000_000)
-    
+
     let newArgs = args as! [String:Any]
     if let name = newArgs["name"] as? String {
         return [ "greeting" : "Hello \(name)!" ]

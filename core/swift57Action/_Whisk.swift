@@ -157,13 +157,12 @@ class Whisk {
         let params = ["trigger":triggerName, "action":actionName]
         return try await postUrlSession(uriPath: path, params: params, method: "PUT")
     }
-        
+
     private static func postUrlSession(uriPath: String, params : [String:Any], method: String) async throws -> Data {
-        
+
         guard let encodedPath = uriPath.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed) else {
             throw WhiskError.invalidURIPath
         }
-        
         guard let baseUrl = baseUrl,
               let url = URL(string: "\(baseUrl)\(encodedPath)") else {
             throw WhiskError.invalidURL
@@ -171,13 +170,13 @@ class Whisk {
         var request = URLRequest(url: url)
         request.httpMethod = method
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-        
+
         do {
             request.httpBody = try JSONSerialization.data(withJSONObject: params)
         } catch {
             throw WhiskError.invalidParams(error)
         }
-    
+
         guard let loginData: Data = apiKey?.data(using: String.Encoding.utf8, allowLossyConversion: false) else {
             throw WhiskError.invalidLogin
         }
@@ -186,7 +185,7 @@ class Whisk {
         let session = URLSession(configuration: URLSessionConfiguration.default)
         return try await session.asyncWhiskData(with: request)
     }
-    
+
     static func decodeWhiskResponse(data: Data) -> [String: Any] {
         do {
             let respJson = try JSONSerialization.jsonObject(with: data)
@@ -218,7 +217,6 @@ class Whisk {
             return (defaultNamespace, segments[0])
         }
     }
-
 }
 
 enum WhiskError: LocalizedError {
@@ -230,7 +228,7 @@ enum WhiskError: LocalizedError {
     case invalidParams(Error)
     case jsonIsNotDictionary
     case noData
-    
+
     var errorDescription: String {
         switch self {
         case .noData:
@@ -251,17 +249,17 @@ enum WhiskError: LocalizedError {
             return "Invalid __OW_API_KEY"
         }
     }
-    
+
     var body: [String: String] {
         return ["error": errorDescription]
     }
 }
 
 extension URLSession {
-    
+
     // The async version of it, it's not supported
     // See: https://github.com/apple/swift-corelibs-foundation/blob/main/Docs/Status.md#entities
-    
+
     func asyncWhiskData(with request: URLRequest) async throws -> Data {
         let taskResult = await withCheckedContinuation { continuation in
             self.dataTask(with: request) { data, response, error in

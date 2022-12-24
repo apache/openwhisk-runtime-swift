@@ -39,7 +39,7 @@ let httpClient = HTTPClient(eventLoopGroupProvider: .createNew)
 let decoder = JSONDecoder()
 
 func main(param: AnInput) async throws -> AnOutput {
-  
+
     let echoURL = param.url ?? "https://httpbin.org/get"
     let request = HTTPClientRequest(url: echoURL)
     let response = try await httpClient.execute(request, timeout: .seconds(3))
