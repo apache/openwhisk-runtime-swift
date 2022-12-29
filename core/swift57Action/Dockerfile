@@ -31,7 +31,7 @@ RUN curl -sL https://github.com/apache/openwhisk-runtime-go/archive/{$GO_PROXY_R
   && cd openwhisk-runtime-go-*/main \
   && GO111MODULE=on CGO_ENABLED=0 go build -o /bin/proxy
 
-FROM swift:5.7.2-bionic
+FROM swift:5.7.2
 
 # select the builder to use
 ARG GO_PROXY_BUILD_FROM=release
