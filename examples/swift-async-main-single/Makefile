@@ -18,7 +18,7 @@
 OW_USER?=whisk
 OW_RUNTIME?=$(OW_USER)/action-swift-v5.7
 OW_COMPILER?=$(OW_USER)/action-swift-v5.7
-WSK?=nuv
+WSK?=wsk -i
 MAIN=async_main
 PACKAGE=test
 SRC=$(MAIN).swift
