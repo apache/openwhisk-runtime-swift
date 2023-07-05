@@ -101,6 +101,8 @@ jobs:
           ./gradlew :core:swift53Action:distDocker -PdockerRegistry=docker.io -PdockerImagePrefix=openwhisk -PdockerImageTag=$SHORT_COMMIT
           ./gradlew :core:swift54Action:distDocker -PdockerRegistry=docker.io -PdockerImagePrefix=openwhisk -PdockerImageTag=nightly
           ./gradlew :core:swift54Action:distDocker -PdockerRegistry=docker.io -PdockerImagePrefix=openwhisk -PdockerImageTag=$SHORT_COMMIT
+          ./gradlew :core:swift57Action:distDocker -PdockerRegistry=docker.io -PdockerImagePrefix=openwhisk -PdockerImageTag=nightly
+          ./gradlew :core:swift57Action:distDocker -PdockerRegistry=docker.io -PdockerImagePrefix=openwhisk -PdockerImageTag=$SHORT_COMMIT
       - name: Push Release Images
         if: ${{ env.PUSH_RELEASE == 'true' }}
         working-directory: runtime
@@ -113,5 +115,7 @@ jobs:
             RUNTIME="swift53Action"
           elif [ ${RUNTIME_VERSION} == "5.4" ]; then
             RUNTIME="swift54Action"
+          elif [ ${RUNTIME_VERSION} == "5.7" ]; then
+            RUNTIME="swift57Action"
           fi
           ./gradlew :core:$RUNTIME:distDocker -PdockerRegistry=docker.io -PdockerImagePrefix=openwhisk -PdockerImageTag=$IMAGE_TAG

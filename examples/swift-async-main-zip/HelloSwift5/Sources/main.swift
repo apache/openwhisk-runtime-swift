@@ -15,33 +15,16 @@
  * limitations under the License.
  */
 
-include 'tests'
-
-include 'core:swift51Action'
-
-include 'core:swift53Action'
-
-include 'core:swift54Action'
-
-include 'core:swift57Action'
-
-rootProject.name = 'runtime-swift'
-
-gradle.ext.openwhisk = [
-        version: '1.0.1-SNAPSHOT'
-]
-
-gradle.ext.scala = [
-    version: '2.12.7',
-    depVersion  : '2.12',
-    compileFlags: ['-feature', '-unchecked', '-deprecation', '-Xfatal-warnings', '-Ywarn-unused-import']
-]
-
-gradle.ext.scalafmt = [
-    version: '1.5.0',
-    config: new File(rootProject.projectDir, '.scalafmt.conf')
-]
-
-gradle.ext.akka = [version : '2.6.12']
-gradle.ext.akka_http = [version : '10.2.4']
-
+func main(args: Any) async -> Any {
+    do {
+        try await Task.sleep(nanoseconds: 1_000_000_000)
+        let newArgs = args as! [String:Any]
+        if let name = newArgs["name"] as? String {
+            return [ "greeting" : "Hello \(name)!" ]
+        } else {
+            return [ "greeting" : "Hello stranger!" ]
+        }
+    } catch {
+        return ["error:" : String(describing: error)]
+    }
+}

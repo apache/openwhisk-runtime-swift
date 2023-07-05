@@ -16,8 +16,8 @@
 #
 
 OW_USER?=whisk
-OW_COMPILER?=$(OW_USER)/action-swift-v5.3
-OUT?=../../build/swift5.3
+OW_COMPILER?=$(OW_USER)/action-swift-v5.7
+OUT?=../../build/swift5.7
 define Build
 	cd $(1); \
 	docker run -i $(OW_COMPILER) -compile main <./Sources/main.swift >$(OUT)/$(1).zip
@@ -47,6 +47,9 @@ Swifty5:
 
 SwiftyCodable5:
 	$(call BuildWithLib,SwiftyRequestCodable5)
+
+SwiftyCodable57:
+	$(call BuildWithLib,SwiftyRequestCodable57)
 
 all: Hello HelloCodable Swifty SwiftyCodable Hello5 HelloCodable5 Swifty5 SwiftyCodable5
 
