@@ -19,8 +19,7 @@
 
 # Apache OpenWhisk runtimes for swift
 [![License](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](http://www.apache.org/licenses/LICENSE-2.0)
-[![Build Status](https://travis-ci.com/apache/openwhisk-runtime-swift.svg?branch=master)](https://travis-ci.com/github/apache/openwhisk-runtime-swift)
-
+[![Continuous Integration](https://github.com/apache/openwhisk-runtime-swift/actions/workflows/ci.yaml/badge.svg)](https://github.com/apache/openwhisk-runtime-swift/actions/workflows/ci.yaml)
 
 ## Changelogs
 - [Swift 5.1   CHANGELOG.md](core/swift51Action/CHANGELOG.md)
