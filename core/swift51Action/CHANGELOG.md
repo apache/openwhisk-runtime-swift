@@ -19,6 +19,13 @@
 
 # Apache OpenWhisk Swift 5.1 Runtime Container
 
+## 1.18.0
+ - Build go proxy from runtime-go 1.22.0 (#155)
+ - Add Support for Swift 5.7 (#153)
+ - Support array result include sequence action (#150)
+ - Update to Gradle 6 (#151)
+ - Remove Swift 4 support (#145)
+
 ## 1.17.0
 - Build actionloop from 1.16@1.18.0 (#143)
 - Resolve akka versions explicitly. (#141, #139)
