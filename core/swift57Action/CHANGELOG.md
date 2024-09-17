@@ -19,5 +19,11 @@
 
 # Apache OpenWhisk Swift 5.7 Runtime Container
 
+## 1.19.0
+ - Upgrade to gradle 6.9.3 (#166)
+ - Update go proxy to 1.23@1.25.0 (#165)
+ - Update scalafmt plugin version to fix build break (#164)
+ - Update async-http-client from 1.13.1 to 1.13.2.
+
 ## 1.18.0
  - Initial Release
